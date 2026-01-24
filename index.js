@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const authRouter = require("./routes/auth");
+const conversationsRouter = require("./routes/conversations");
 
 const app = express();
 // enable CORS for all routes
@@ -14,6 +15,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/auth", authRouter);
+app.use("/conversations", conversationsRouter);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

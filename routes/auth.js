@@ -68,3 +68,17 @@ router.post("/login", async (req, res) => {
 });
 
 module.exports = router;
+
+// JWT 验证中间件，解码后将用户信息写入 req.user
+module.exports.authMiddleware = (req, res, next) => {
+  const authHeader = req.headers.authorization || "";
+  const token = authHeader.replace("Bearer ", "");
+  if (!token) return res.status(401).json({ error: "token required" });
+  try {
+    const payload = jwt.verify(token, JWT_SECRET);
+    req.user = { id: payload.id };
+    next();
+  } catch (err) {
+    return res.status(401).json({ error: "invalid token" });
+  }
+};
