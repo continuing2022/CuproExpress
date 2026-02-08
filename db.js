@@ -115,14 +115,6 @@ async function getUserByEmail(email) {
   return rows[0];
 }
 
-async function getUserByUsername(username) {
-  await ready;
-  const [rows] = await pool.execute("SELECT * FROM users WHERE username = ?", [
-    username,
-  ]);
-  return rows[0];
-}
-
 async function createUser({ email, username, password }) {
   await ready;
   const [result] = await pool.execute(
@@ -239,7 +231,6 @@ testDbConnection();
 
 const userMethods = {
   getUserByEmail,
-  getUserByUsername,
   createUser,
 };
 

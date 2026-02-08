@@ -18,19 +18,19 @@ router.post("/register", async (req, res) => {
     if (await db.getUserByEmail(email)) {
       return sendErr(res, 409, "email already registered");
     }
-    if (await db.getUserByUsername(username)) {
-      return sendErr(res, 409, "username already taken");
-    }
     const hashedPassword = await bcrypt.hash(password, 10);
     const user = await db.createUser({
       email,
       username,
       password: hashedPassword,
     });
+    const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "8h" });
     res.status(201).json({
-      id: user.id,
-      email: user.email,
-      username: user.username,
+      token,
+      user: {
+        id: user.id,
+        username: user.username,
+      },
     });
   } catch (err) {
     console.error(err);
@@ -47,11 +47,11 @@ router.post("/login", async (req, res) => {
     }
     const user = await db.getUserByEmail(email);
     if (!user) {
-      return sendErr(res, 401, "invalid credentials");
+      return sendErr(res, 401, "user invalid credentials");
     }
     const match = await bcrypt.compare(password, user.password);
     if (!match) {
-      return sendErr(res, 401, "invalid credentials");
+      return sendErr(res, 401, "match invalid credentials");
     }
     const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "8h" });
     res.json({
@@ -59,6 +59,7 @@ router.post("/login", async (req, res) => {
       user: {
         id: user.id,
         username: user.username,
+        email: user.email,
       },
     });
   } catch (err) {
