@@ -1,7 +1,7 @@
 const express = require("express");
 const db = require("../db");
 const auth = require("./auth");
-
+const openaiService = require("../openai.js");
 const router = express.Router();
 
 const sendErr = (res, status, msg) => res.status(status).json({ error: msg });
@@ -13,14 +13,12 @@ router.post("/", auth.authMiddleware, async (req, res) => {
     const { conversation_id, title, content } = req.body;
     if (!content) return sendErr(res, 400, "content required");
     let convId = conversation_id;
-    // 如果没有 conversation_id，则创建新对话
     if (!convId) {
       const autoTitle =
         title || (content.length > 60 ? content.slice(0, 60) : content);
       const conv = await db.createConversation(userId, autoTitle);
       convId = conv.conversation_id;
     } else {
-      // 验证用户对该会话的所有权
       const pool = db._pool();
       const [rows] = await pool.execute(
         "SELECT user_id FROM conversations WHERE conversation_id = ?",
@@ -31,22 +29,75 @@ router.post("/", auth.authMiddleware, async (req, res) => {
       if (rows[0].user_id !== userId) return sendErr(res, 403, "forbidden");
     }
 
-    // 存储用户消息
     await db.addMessage(convId, "user", content);
-
-    // TODO: 在此处调用 AI 接口（例如 OpenAI）并将回复存入 messages 表。
-    // 当前实现为简单回显示例；可按需替换为真实 AI 调用。
-    const assistantReply = `已收到: ${content.slice(0, 500)}`;
-    const assistantMsg = await db.addMessage(
-      convId,
-      "assistant",
-      assistantReply,
+    // 获取最近的对话历史（最多 10 条），按时间顺序（老 -> 新）作为上下文
+    const history = await db.getConversationMessages(convId, 10);
+    const messages = history.map((msg) => ({
+      role: msg.role,
+      content: msg.content,
+    }));
+    // 将当前用户输入追加到 messages 末尾
+    messages.push({ role: "user", content });
+    // 设置 SSE 响应头
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache");
+    res.setHeader("Connection", "keep-alive");
+    // 立即发送 headers，避免被代理或框架缓冲
+    if (res.flushHeaders) res.flushHeaders();
+    // 发送初始事件以提示前端连接已建立
+    res.write(
+      `data: ${JSON.stringify({ started: true, conversation_id: convId })}\n\n`,
     );
-
-    res.status(201).json({ conversation_id: convId, assistant: assistantMsg });
+    // 心跳，防止代理/浏览器超时（每15秒一条注释行）
+    const keepAlive = setInterval(() => {
+      try {
+        res.write(": keep-alive\n\n");
+      } catch (e) {
+        // ignore write errors
+      }
+    }, 15000);
+    let fullResponse = "";
+    try {
+      await openaiService.getChatCompletionStream(
+        messages,
+        (chunk) => {
+          fullResponse += chunk;
+          // 发送 SSE 数据
+          res.write(`data: ${JSON.stringify({ chunk })}\n\n`);
+        },
+        { temperature: 0.7, max_tokens: 2000 },
+      );
+      // 存储完整回复
+      const assistantMsg = await db.addMessage(
+        convId,
+        "assistant",
+        fullResponse,
+      );
+      // 发送完成信号
+      res.write(
+        `data: ${JSON.stringify({
+          done: true,
+          conversation_id: convId,
+          message_id: assistantMsg.message_id,
+        })}\n\n`,
+      );
+      clearInterval(keepAlive);
+      res.end();
+    } catch (aiError) {
+      console.error("AI Stream Error:", aiError);
+      res.write(
+        `data: ${JSON.stringify({
+          error: "AI service error",
+        })}\n\n`,
+      );
+      clearInterval(keepAlive);
+      res.end();
+    }
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "internal error" });
+    if (!res.headersSent) {
+      res.status(500).json({ error: "internal error" });
+    }
   }
 });
 

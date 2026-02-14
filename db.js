@@ -215,6 +215,26 @@ const getMessages = async (conversationId, limit = null) => {
 };
 
 /**
+ * 获取会话最近 N 条消息，按时间升序返回（如果未指定 limit 则返回全部）
+ */
+const getConversationMessages = async (conversationId, limit = null) => {
+  await ready;
+  if (limit) {
+    // 先按时间倒序取最近 N 条，再在内存中反转为升序，保证返回时为时间顺序（老 -> 新）
+    const [rows] = await pool.execute(
+      "SELECT role, content, created_at FROM messages WHERE conversation_id = ? ORDER BY created_at DESC LIMIT ?",
+      [conversationId, Number(limit)],
+    );
+    return rows.reverse();
+  }
+  const [rows] = await pool.execute(
+    "SELECT role, content, created_at FROM messages WHERE conversation_id = ? ORDER BY created_at ASC",
+    [conversationId],
+  );
+  return rows;
+};
+
+/**
  * 删除用户的某条对话（级联删除消息）
  */
 const deleteConversation = async (conversationId, userId) => {
@@ -240,6 +260,7 @@ const conversationMethods = {
   listConversations,
   getMessages,
   deleteConversation,
+  getConversationMessages,
 };
 
 module.exports = {
