@@ -50,10 +50,14 @@ const ready = (async () => {
   // 3️⃣ 初始化 users 表
   await pool.query(`
     CREATE TABLE IF NOT EXISTS users (
-      id INT AUTO_INCREMENT PRIMARY KEY,
+      id INT PRIMARY KEY AUTO_INCREMENT,
       email VARCHAR(255) NOT NULL UNIQUE COMMENT '邮箱',
-      username VARCHAR(255) NOT NULL UNIQUE COMMENT '用户名',
-      password VARCHAR(255) NOT NULL COMMENT '密码（加密）'
+      username VARCHAR(100) NOT NULL COMMENT '用户名',
+      password VARCHAR(255) NOT NULL COMMENT '密码（加密）',
+      role ENUM('user','admin') DEFAULT 'user' COMMENT '角色',
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+      last_login TIMESTAMP NULL DEFAULT NULL COMMENT '最后登录时间',
+      login_count INT DEFAULT 0 COMMENT '登录次数'
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
   `);
 
@@ -117,14 +121,130 @@ async function getUserByEmail(email) {
 
 async function createUser({ email, username, password }) {
   await ready;
+  // 向 users 表插入新用户，返回插入后的整行记录
+  const role = arguments[0].role || "user";
   const [result] = await pool.execute(
-    "INSERT INTO users (email, username, password) VALUES (?, ?, ?)",
-    [email, username, password],
+    "INSERT INTO users (email, username, password, role) VALUES (?, ?, ?, ?)",
+    [email, username, password, role],
+  );
+  const [rows] = await pool.execute("SELECT * FROM users WHERE id = ?", [
+    result.insertId,
+  ]);
+  return rows[0];
+}
+
+// 获取单个用户（按 id）
+async function getUserById(id) {
+  await ready;
+  const [rows] = await pool.execute("SELECT * FROM users WHERE id = ?", [id]);
+  return rows[0];
+}
+
+// 更新用户最后登录信息（更新时间、次数自增）
+async function updateUserLoginInfo(userId) {
+  await ready;
+  await pool.execute(
+    "UPDATE users SET last_login = CURRENT_TIMESTAMP, login_count = login_count + 1 WHERE id = ?",
+    [userId],
+  );
+  return true;
+}
+
+// 列表查询用户，支持 search（用户名或邮箱模糊）、role、offset、limit
+async function getUsers({ search, role, offset = 0, limit = 10 } = {}) {
+  await ready;
+  const params = [];
+  let where = "WHERE 1=1";
+  if (search) {
+    where += " AND (username LIKE ? OR email LIKE ? )";
+    params.push(`%${search}%`, `%${search}%`);
+  }
+  if (role) {
+    where += " AND role = ?";
+    params.push(role);
+  }
+
+  const sql = `SELECT * FROM users ${where} ORDER BY created_at DESC LIMIT ${Number(
+    limit,
+  )} OFFSET ${Number(offset)}`;
+  const [rows] = await pool.execute(sql, params);
+  return rows;
+}
+
+async function getUsersCount({ search, role } = {}) {
+  await ready;
+  const params = [];
+  let where = "WHERE 1=1";
+  if (search) {
+    where += " AND (username LIKE ? OR email LIKE ? )";
+    params.push(`%${search}%`, `%${search}%`);
+  }
+  if (role) {
+    where += " AND role = ?";
+    params.push(role);
+  }
+  const sql = `SELECT COUNT(1) AS total FROM users ${where}`;
+  const [rows] = await pool.execute(sql, params);
+  return rows[0] ? rows[0].total : 0;
+}
+
+// 更新用户字段（支持 username, email, password, role）
+async function updateUser(userId, updates = {}) {
+  await ready;
+  const allowed = ["username", "email", "password", "role"];
+  const sets = [];
+  const params = [];
+  for (const k of Object.keys(updates)) {
+    if (!allowed.includes(k)) continue;
+    sets.push(`${k} = ?`);
+    params.push(updates[k]);
+  }
+  if (sets.length === 0) return null;
+  params.push(userId);
+  const sql = `UPDATE users SET ${sets.join(", ")} WHERE id = ?`;
+  await pool.execute(sql, params);
+  return getUserById(userId);
+}
+
+async function deleteUser(userId) {
+  await ready;
+  const [result] = await pool.execute("DELETE FROM users WHERE id = ?", [
+    userId,
+  ]);
+  return result.affectedRows > 0;
+}
+
+async function deleteUsers(userIds = []) {
+  await ready;
+  if (!Array.isArray(userIds) || userIds.length === 0) return 0;
+  const placeholders = userIds.map(() => "?").join(",");
+  const sql = `DELETE FROM users WHERE id IN (${placeholders})`;
+  const [result] = await pool.execute(sql, userIds);
+  return result.affectedRows || 0;
+}
+
+async function getUsersByIds(userIds = []) {
+  await ready;
+  if (!Array.isArray(userIds) || userIds.length === 0) return [];
+  const placeholders = userIds.map(() => "?").join(",");
+  const sql = `SELECT * FROM users WHERE id IN (${placeholders})`;
+  const [rows] = await pool.execute(sql, userIds);
+  return rows;
+}
+
+async function getUserStats() {
+  await ready;
+  const [[summary]] = await pool.execute(
+    `SELECT COUNT(1) AS total, SUM(role='admin') AS admins, SUM(role='user') AS users FROM users`,
+  );
+  const [[recent]] = await pool.execute(
+    `SELECT COUNT(1) AS new_users_7d FROM users WHERE created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)`,
   );
   return {
-    id: result.insertId,
-    email,
-    username,
+    total: summary.total || 0,
+    admins: Number(summary.admins) || 0,
+    users: Number(summary.users) || 0,
+    new_users_7d: recent.new_users_7d || 0,
   };
 }
 
@@ -201,10 +321,16 @@ const listConversations = async (userId, page = 1, pageSize = 20) => {
 const getMessages = async (conversationId, limit = null) => {
   await ready;
   if (limit) {
-    const [rows] = await pool.execute(
-      "SELECT role, content, created_at FROM messages WHERE conversation_id = ? ORDER BY created_at ASC LIMIT ?",
-      [conversationId, Number(limit)],
-    );
+    const n = Number(limit);
+    if (Number.isNaN(n) || n < 1) {
+      const [rows] = await pool.execute(
+        "SELECT role, content, created_at FROM messages WHERE conversation_id = ? ORDER BY created_at ASC",
+        [conversationId],
+      );
+      return rows;
+    }
+    const sql = `SELECT role, content, created_at FROM messages WHERE conversation_id = ? ORDER BY created_at ASC LIMIT ${n}`;
+    const [rows] = await pool.execute(sql, [conversationId]);
     return rows;
   }
   const [rows] = await pool.execute(
@@ -221,10 +347,16 @@ const getConversationMessages = async (conversationId, limit = null) => {
   await ready;
   if (limit) {
     // 先按时间倒序取最近 N 条，再在内存中反转为升序，保证返回时为时间顺序（老 -> 新）
-    const [rows] = await pool.execute(
-      "SELECT role, content, created_at FROM messages WHERE conversation_id = ? ORDER BY created_at DESC LIMIT ?",
-      [conversationId, Number(limit)],
-    );
+    const n = Number(limit);
+    if (Number.isNaN(n) || n < 1) {
+      const [rows] = await pool.execute(
+        "SELECT role, content, created_at FROM messages WHERE conversation_id = ? ORDER BY created_at ASC",
+        [conversationId],
+      );
+      return rows;
+    }
+    const sql = `SELECT role, content, created_at FROM messages WHERE conversation_id = ? ORDER BY created_at DESC LIMIT ${n}`;
+    const [rows] = await pool.execute(sql, [conversationId]);
     return rows.reverse();
   }
   const [rows] = await pool.execute(
@@ -252,6 +384,15 @@ testDbConnection();
 const userMethods = {
   getUserByEmail,
   createUser,
+  getUserById,
+  updateUserLoginInfo,
+  getUsers,
+  getUsersCount,
+  updateUser,
+  deleteUser,
+  deleteUsers,
+  getUsersByIds,
+  getUserStats,
 };
 
 const conversationMethods = {
