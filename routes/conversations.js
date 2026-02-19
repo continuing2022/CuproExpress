@@ -6,6 +6,28 @@ const router = express.Router();
 
 const sendErr = (res, status, msg) => res.status(status).json({ error: msg });
 
+// 简单领域判断：基于关键词匹配判断是否属于铜及铜合金相关问题
+function isCopperQuestion(question) {
+  if (!question || typeof question !== "string") return false;
+  const q = question.toLowerCase();
+  const keywords = [
+    "铜",
+    "铜合金",
+    "黄铜",
+    "青铜",
+    "铜锌",
+    "铜锡",
+    "铜镍",
+    "铜材",
+    "铜基",
+    "brass",
+    "bronze",
+    "copper",
+    "cu",
+  ];
+  return keywords.some((k) => q.includes(k));
+}
+
 // 开始新对话或在已有对话中继续发送消息
 router.post("/", auth.authMiddleware, async (req, res) => {
   try {
@@ -30,6 +52,44 @@ router.post("/", auth.authMiddleware, async (req, res) => {
     }
 
     await db.addMessage(convId, "user", content);
+
+    // 领域判断：若非铜及铜合金相关问题，通过 SSE 把提示以助理消息形式返回并保存，前端可像正常回复展示
+    if (!isCopperQuestion(content)) {
+      // 设置 SSE 响应头
+      res.setHeader("Content-Type", "text/event-stream");
+      res.setHeader("Cache-Control", "no-cache");
+      res.setHeader("Connection", "keep-alive");
+      if (res.flushHeaders) res.flushHeaders();
+      // 发送开始事件
+      res.write(
+        `data: ${JSON.stringify({ started: true, conversation_id: convId })}\n\n`,
+      );
+      const keepAlive = setInterval(() => {
+        try {
+          res.write(": keep-alive\n\n");
+        } catch (e) {
+          // ignore
+        }
+      }, 15000);
+
+      const assistantReply = "本系统仅支持铜及铜合金领域问题";
+      // 存储助理消息
+      const assistantMsg = await db.addMessage(
+        convId,
+        "assistant",
+        assistantReply,
+      );
+      // 发送作为一个 chunk
+      res.write(`data: ${JSON.stringify({ chunk: assistantReply })}\n\n`);
+      // 发送完成信号
+      res.write(
+        `data: ${JSON.stringify({ done: true, conversation_id: convId, message_id: assistantMsg.message_id })}\n\n`,
+      );
+      clearInterval(keepAlive);
+      res.end();
+      return;
+    }
+
     // 获取最近的对话历史（最多 10 条），按时间顺序（老 -> 新）作为上下文
     const history = await db.getConversationMessages(convId, 10);
     const messages = history.map((msg) => ({
