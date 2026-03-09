@@ -4,7 +4,8 @@ const jwt = require("jsonwebtoken");
 const db = require("../db");
 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET || "dev_secret";
+const ACCESS_SECRET = process.env.JWT_SECRET || "dev_secret";
+const REFRESH_SECRET = process.env.REFRESH_SECRET || "dev_refresh_secret";
 
 const sendErr = (res, status, msg) => res.status(status).json({ error: msg });
 
@@ -39,12 +40,7 @@ router.post("/register", async (req, res) => {
       password: hashedPassword,
       role: "user", // 默认角色为普通用户
     });
-
-    const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, {
-      expiresIn: "8h",
-    });
     res.status(201).json({
-      token,
       user: {
         id: user.id,
         username: user.username,
@@ -80,11 +76,22 @@ router.post("/login", async (req, res) => {
     // 更新最后登录时间和登录次数
     await db.updateUserLoginInfo(user.id);
 
-    const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, {
-      expiresIn: "8h",
+    const accessToken = jwt.sign(
+      { id: user.id, role: user.role },
+      ACCESS_SECRET,
+      { expiresIn: "15s" },
+    );
+    const refreshToken = jwt.sign({ id: user.id }, REFRESH_SECRET, {
+      expiresIn: "7d",
+    });
+    // 将 refresh token 存入数据库
+    await db.saveRefreshToken({
+      userId: user.id,
+      token: refreshToken,
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     });
     res.json({
-      token,
+      token: { accessToken, refreshToken },
       user: {
         id: user.id,
         username: user.username,
@@ -97,7 +104,39 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ error: "internal error" });
   }
 });
+// 刷新接口
+router.post("/refresh", async (req, res) => {
+  const { refreshToken } = req.body;
 
+  if (!refreshToken) {
+    return sendErr(res, 401, "refresh token required");
+  }
+  try {
+    // 1. 验证签名和过期时间
+    const payload = jwt.verify(refreshToken, REFRESH_SECRET);
+    // 2. 查数据库确认 token 存在且未被吊销
+    const stored = await db.getRefreshToken(refreshToken);
+    if (!stored || stored.revoked) {
+      return sendErr(res, 401, "invalid refresh token");
+    }
+    // 3. 签发新 access_token
+    const accessToken = jwt.sign(
+      { id: payload.id, role: payload.role },
+      ACCESS_SECRET,
+      { expiresIn: "15s" },
+    );
+    res.json({ accessToken });
+  } catch (err) {
+    // jwt.verify 过期会抛异常
+    return sendErr(res, 401, "refresh token expired");
+  }
+});
+// 登出接口 - 主动吊销 refresh_token
+router.post("/logout", async (req, res) => {
+  const { refreshToken } = req.body;
+  await db.revokeRefreshToken(refreshToken); // 标记为已吊销
+  res.json({ message: "logged out" });
+});
 // ==================== 用户管理接口 ====================
 
 // 获取所有用户列表（仅管理员）
@@ -453,7 +492,7 @@ function authMiddleware(req, res, next) {
   const token = authHeader.replace("Bearer ", "");
   if (!token) return res.status(401).json({ error: "token required" });
   try {
-    const payload = jwt.verify(token, JWT_SECRET);
+    const payload = jwt.verify(token, ACCESS_SECRET);
     req.user = { id: payload.id, role: payload.role };
     next();
   } catch (err) {

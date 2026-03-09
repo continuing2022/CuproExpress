@@ -85,6 +85,22 @@ const ready = (async () => {
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
   `);
 
+  // 6️⃣ 初始化 refresh_tokens 表
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS refresh_tokens (
+      id INT NOT NULL AUTO_INCREMENT,
+      user_id INT NOT NULL,
+      token VARCHAR(500) NOT NULL,
+      expires_at DATETIME NOT NULL,
+      revoked BOOLEAN NOT NULL DEFAULT FALSE,
+      created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (id),
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+      INDEX idx_token (token),
+      INDEX idx_user_id (user_id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `);
+
   console.log(
     `✅ 数据库初始化成功: ${DB_USER}@${DB_HOST}:${DB_PORT}/${DB_NAME}`,
   );
@@ -378,6 +394,36 @@ const deleteConversation = async (conversationId, userId) => {
   return result.affectedRows > 0;
 };
 
+/**
+ * Refresh token 操作
+ */
+async function saveRefreshToken({ userId, token, expiresAt }) {
+  await ready;
+  const [result] = await pool.execute(
+    "INSERT INTO refresh_tokens (user_id, token, expires_at) VALUES (?, ?, ?)",
+    [userId, token, expiresAt],
+  );
+  return result.insertId;
+}
+
+async function getRefreshToken(token) {
+  await ready;
+  const [rows] = await pool.execute(
+    "SELECT * FROM refresh_tokens WHERE token = ? LIMIT 1",
+    [token],
+  );
+  return rows[0];
+}
+
+async function revokeRefreshToken(token) {
+  await ready;
+  const [result] = await pool.execute(
+    "UPDATE refresh_tokens SET revoked = TRUE WHERE token = ?",
+    [token],
+  );
+  return result.affectedRows > 0;
+}
+
 // 启动时测试数据库连接
 testDbConnection();
 
@@ -404,13 +450,21 @@ const conversationMethods = {
   getConversationMessages,
 };
 
+const tokenMethods = {
+  saveRefreshToken,
+  getRefreshToken,
+  revokeRefreshToken,
+};
+
 module.exports = {
   // 兼容原有扁平导出
   ...userMethods,
   ...conversationMethods,
+  ...tokenMethods,
   testDbConnection,
   _pool: () => pool,
   // 新增命名空间导出，便于按功能分组引用
   user: userMethods,
   conversation: conversationMethods,
+  token: tokenMethods,
 };
