@@ -2,7 +2,7 @@ const OpenAI = require("openai");
 
 // 初始化 OpenAI 客户端，配置为阿里云百炼的兼容模式
 const openai = new OpenAI({
-  apiKey: "sk-f65de29228b04076bb062ae6c4153f58", // 替换为你自己的 API Key
+  apiKey: "sk-603a4b09de73429c9c0f18c677622d83", // 替换为你自己的 API Key
   baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1", // 阿里云百炼兼容模式地址
 });
 
