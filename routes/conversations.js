@@ -1,32 +1,12 @@
 const express = require("express");
 const db = require("../db");
 const auth = require("./auth");
-const openaiService = require("../openai.js");
+const openaiService = require("../services/openai.js");
+const ragService = require("../services/ragService");
+const searchTool = require("../searchTool");
 const router = express.Router();
 
 const sendErr = (res, status, msg) => res.status(status).json({ error: msg });
-
-// 简单领域判断：基于关键词匹配判断是否属于铜及铜合金相关问题
-function isCopperQuestion(question) {
-  if (!question || typeof question !== "string") return false;
-  const q = question.toLowerCase();
-  const keywords = [
-    "铜",
-    "铜合金",
-    "黄铜",
-    "青铜",
-    "铜锌",
-    "铜锡",
-    "铜镍",
-    "铜材",
-    "铜基",
-    "brass",
-    "bronze",
-    "copper",
-    "cu",
-  ];
-  return keywords.some((k) => q.includes(k));
-}
 
 // 开始新对话或在已有对话中继续发送消息
 router.post("/", auth.authMiddleware, async (req, res) => {
@@ -53,43 +33,6 @@ router.post("/", auth.authMiddleware, async (req, res) => {
 
     await db.addMessage(convId, "user", content);
 
-    // 领域判断：若非铜及铜合金相关问题，通过 SSE 把提示以助理消息形式返回并保存，前端可像正常回复展示
-    if (!isCopperQuestion(content)) {
-      // 设置 SSE 响应头
-      res.setHeader("Content-Type", "text/event-stream");
-      res.setHeader("Cache-Control", "no-cache");
-      res.setHeader("Connection", "keep-alive");
-      if (res.flushHeaders) res.flushHeaders();
-      // 发送开始事件
-      res.write(
-        `data: ${JSON.stringify({ started: true, conversation_id: convId })}\n\n`,
-      );
-      const keepAlive = setInterval(() => {
-        try {
-          res.write(": keep-alive\n\n");
-        } catch (e) {
-          // ignore
-        }
-      }, 15000);
-
-      const assistantReply = "本系统仅支持铜及铜合金领域问题";
-      // 存储助理消息
-      const assistantMsg = await db.addMessage(
-        convId,
-        "assistant",
-        assistantReply,
-      );
-      // 发送作为一个 chunk
-      res.write(`data: ${JSON.stringify({ chunk: assistantReply })}\n\n`);
-      // 发送完成信号
-      res.write(
-        `data: ${JSON.stringify({ done: true, conversation_id: convId, message_id: assistantMsg.message_id })}\n\n`,
-      );
-      clearInterval(keepAlive);
-      res.end();
-      return;
-    }
-
     // 获取最近的对话历史（最多 10 条），按时间顺序（老 -> 新）作为上下文
     const history = await db.getConversationMessages(convId, 10);
     const messages = history.map((msg) => ({
@@ -98,7 +41,8 @@ router.post("/", auth.authMiddleware, async (req, res) => {
     }));
     // 将当前用户输入追加到 messages 末尾
     messages.push({ role: "user", content });
-    // 设置 SSE 响应头
+
+    // 设置 SSE 响应头（提前设置，防止后面写入时 headers 已发送问题）
     res.setHeader("Content-Type", "text/event-stream");
     res.setHeader("Cache-Control", "no-cache");
     res.setHeader("Connection", "keep-alive");
@@ -116,6 +60,54 @@ router.post("/", auth.authMiddleware, async (req, res) => {
         // ignore write errors
       }
     }, 15000);
+
+    // 监听客户端断开，清理心跳，避免句柄泄露
+    req.on("close", () => {
+      clearInterval(keepAlive);
+    });
+
+    // 1) 优先从本地 RAG 检索（默认）
+    // 2) 若请求中包含联网配置则使用联网搜索
+    let retrievedDocs = "";
+    const useNetwork = !!req.body.networkConfig;
+    const modelName = req.body.model || "qwen-plus";
+    console.log(
+      `用户 ${userId} 发起对话 ${convId}，使用模型 ${modelName}，检索模式: ${
+        useNetwork ? "联网" : "本地 RAG"
+      }`,
+    );
+    try {
+      if (useNetwork) {
+        // 使用外部搜索工具（联网模式）
+        const q = content;
+        const web = await searchTool.webSearch(q);
+        retrievedDocs = web || "";
+        // 通知前端已完成检索（可选）
+        res.write(
+          `data: ${JSON.stringify({ retrieved: true, mode: "network" })}\n\n`,
+        );
+      } else {
+        // 本地 RAG 服务（运行在 rag_service）——以 stream 方式获取并累积
+        await ragService.getRagCompletionStream(content, history, (chunk) => {
+          retrievedDocs += chunk;
+        });
+        res.write(
+          `data: ${JSON.stringify({ retrieved: true, mode: "local" })}\n\n`,
+        );
+      }
+    } catch (retrErr) {
+      console.error("检索服务错误:", retrErr);
+      // 继续执行，不阻塞 LLM 回答
+    }
+
+    // 若有检索到的内容，则注入为 system 提示，帮助 LLM 回答（本地优先）
+    if (retrievedDocs && retrievedDocs.trim().length > 0) {
+      messages.unshift({
+        role: "system",
+        content: `检索到的资料：\n${retrievedDocs}`,
+      });
+    }
+
     let fullResponse = "";
     try {
       await openaiService.getChatCompletionStream(
@@ -125,7 +117,7 @@ router.post("/", auth.authMiddleware, async (req, res) => {
           // 发送 SSE 数据
           res.write(`data: ${JSON.stringify({ chunk })}\n\n`);
         },
-        { temperature: 0.7, max_tokens: 2000 },
+        { max_tokens: 2000, model: modelName },
       );
       // 存储完整回复
       const assistantMsg = await db.addMessage(
@@ -179,12 +171,12 @@ router.get("/", auth.authMiddleware, async (req, res) => {
   }
 });
 
-// 获取单个对话的消息，按时间顺序排列。可选 ?limit=10 返回最近 N 条（按 time asc）
+// 获取单个对话的消息，按时间顺序排列。
 router.get("/:id/messages", auth.authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
     const convId = req.params.id;
-    const limit = req.query.limit ? Number(req.query.limit) : null;
+    const limit = req.query.limit ? Number(req.query.limit) : 10;
 
     // 验证所有权
     const pool = db._pool();
@@ -196,7 +188,7 @@ router.get("/:id/messages", auth.authMiddleware, async (req, res) => {
       return sendErr(res, 404, "conversation not found");
     if (rows[0].user_id !== userId) return sendErr(res, 403, "forbidden");
 
-    const messages = await db.getMessages(convId, limit ? limit : null);
+    const messages = await db.getMessages(convId, limit ? limit : 10);
     res.json({ conversation_id: convId, messages });
   } catch (err) {
     console.error(err);

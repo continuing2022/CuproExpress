@@ -36,7 +36,7 @@ async function getChatCompletionStream(messages, onChunk, options = {}) {
     const stream = await client.chat.completions.create({
       model: model,
       messages: messagesWithSystem,
-      temperature: options.temperature || 0.7,
+      temperature: 1,
       max_tokens: options.max_tokens || 2000,
       stream: true,
     });
@@ -52,7 +52,21 @@ async function getChatCompletionStream(messages, onChunk, options = {}) {
 
     return fullContent;
   } catch (error) {
-    console.error("阿里云百炼 Stream API Error:", error);
+    console.error(
+      "getChatCompletionStream 错误（模型：" +
+        (options.model || "default") +
+        "):",
+      error && error.message ? error.message : error,
+    );
+    // 尝试打印 HTTP 响应信息（如果存在），便于定位第三方 API 错误
+    try {
+      if (error && error.response) {
+        console.error("Response status:", error.response.status);
+        console.error("Response data:", error.response.data || error.response);
+      }
+    } catch (e) {
+      // 忽略二次打印错误
+    }
     throw error;
   }
 }

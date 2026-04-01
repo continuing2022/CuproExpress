@@ -119,9 +119,12 @@ router.post("/refresh", async (req, res) => {
     if (!stored || stored.revoked) {
       return sendErr(res, 401, "invalid refresh token");
     }
-    // 3. 签发新 access_token
+    // 3. 获取用户信息以包含 role（refresh token 本身可能未包含 role）
+    const user = await db.getUserById(payload.id);
+    if (!user) return sendErr(res, 401, "invalid refresh token");
+    // 4. 签发新 access_token（包含 role）
     const accessToken = jwt.sign(
-      { id: payload.id, role: payload.role },
+      { id: user.id, role: user.role },
       ACCESS_SECRET,
       { expiresIn: "8h" },
     );
