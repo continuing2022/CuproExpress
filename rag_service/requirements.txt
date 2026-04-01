@@ -1,0 +1,7 @@
+# requirements.txt
+llama-index
+llama-index-llms-dashscope
+llama-index-embeddings-dashscope
+fastapi
+uvicorn
+python-dotenv
