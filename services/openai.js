@@ -1,4 +1,4 @@
-const { getClientForModel } = require("./services/modelRegistry");
+const { getClientForModel } = require("./modelRegistry");
 // 固定专业 system prompt（铜及铜合金领域）
 const SYSTEM_PROMPT = `
 你的名字叫铜博士，是一名铜及铜合金材料领域的专家，擅长：
