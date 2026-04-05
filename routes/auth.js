@@ -1,515 +1,357 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const db = require("../db");
+const { userRepo, tokenRepo } = require("../repositories");
+const {
+  signAccessToken,
+  signRefreshToken,
+  verifyRefreshToken,
+  authMiddleware,
+  adminOnly,
+  requireSelfOrAdmin,
+} = require("../utils/auth");
+const { sendError, sendInternalError } = require("../utils/response");
+const {
+  isValidEmail,
+  isValidRole,
+  validatePasswordLength,
+  normalizePagination,
+} = require("../utils/validators");
+const { toPublicUser, toPublicUsers } = require("../utils/userMapper");
 
 const router = express.Router();
-const ACCESS_SECRET = process.env.JWT_SECRET || "dev_secret";
-const REFRESH_SECRET = process.env.REFRESH_SECRET || "dev_refresh_secret";
 
-const sendErr = (res, status, msg) => res.status(status).json({ error: msg });
-
-// 注册接口 - 默认注册为普通用户
 router.post("/register", async (req, res) => {
   try {
     const { email, username, password } = req.body;
 
     if (!email || !username || !password) {
-      return sendErr(res, 400, "email, username and password required");
+      return sendError(res, 400, "email, username and password required");
     }
-
-    // 验证邮箱格式
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return sendErr(res, 400, "invalid email format");
+    if (!isValidEmail(email)) {
+      return sendError(res, 400, "invalid email format");
     }
-
-    // 验证密码长度
-    if (password.length < 6) {
-      return sendErr(res, 400, "password must be at least 6 characters");
+    if (!validatePasswordLength(password)) {
+      return sendError(res, 400, "password must be at least 6 characters");
     }
-
-    if (await db.getUserByEmail(email)) {
-      return sendErr(res, 409, "email already registered");
+    if (await userRepo.getUserByEmail(email)) {
+      return sendError(res, 409, "email already registered");
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await db.createUser({
+    const user = await userRepo.createUser({
       email,
       username,
       password: hashedPassword,
-      role: "user", // 默认角色为普通用户
+      role: "user",
     });
-    res.status(201).json({
-      user: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        role: user.role,
-      },
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "internal error" });
+
+    return res.status(201).json({ user: toPublicUser(user) });
+  } catch (error) {
+    return sendInternalError(res, error);
   }
 });
 
-// 登录接口
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return sendErr(res, 400, "email and password required");
+      return sendError(res, 400, "email and password required");
     }
 
-    const user = await db.getUserByEmail(email);
+    const user = await userRepo.getUserByEmail(email);
     if (!user) {
-      return sendErr(res, 401, "invalid credentials");
+      return sendError(res, 401, "invalid credentials");
     }
 
-    const match = await bcrypt.compare(password, user.password);
-    if (!match) {
-      return sendErr(res, 401, "invalid credentials");
+    const matched = await bcrypt.compare(password, user.password);
+    if (!matched) {
+      return sendError(res, 401, "invalid credentials");
     }
 
-    // 更新最后登录时间和登录次数
-    await db.updateUserLoginInfo(user.id);
+    await userRepo.updateUserLoginInfo(user.id);
 
-    const accessToken = jwt.sign(
-      { id: user.id, role: user.role },
-      ACCESS_SECRET,
-      { expiresIn: "8h" },
-    );
-    const refreshToken = jwt.sign({ id: user.id }, REFRESH_SECRET, {
-      expiresIn: "7d",
-    });
-    // 将 refresh token 存入数据库
-    await db.saveRefreshToken({
+    const accessToken = signAccessToken(user);
+    const refreshToken = signRefreshToken(user);
+
+    await tokenRepo.saveRefreshToken({
       userId: user.id,
       token: refreshToken,
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     });
-    res.json({
+
+    return res.json({
       token: { accessToken, refreshToken },
-      user: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        role: user.role,
-      },
+      user: toPublicUser(user),
     });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "internal error" });
+  } catch (error) {
+    return sendInternalError(res, error);
   }
 });
-// 刷新接口
+
 router.post("/refresh", async (req, res) => {
   const { refreshToken } = req.body;
-
   if (!refreshToken) {
-    return sendErr(res, 401, "refresh token required");
+    return sendError(res, 401, "refresh token required");
   }
-  try {
-    // 1. 验证签名和过期时间
-    const payload = jwt.verify(refreshToken, REFRESH_SECRET);
-    // 2. 查数据库确认 token 存在且未被吊销
-    const stored = await db.getRefreshToken(refreshToken);
-    if (!stored || stored.revoked) {
-      return sendErr(res, 401, "invalid refresh token");
-    }
-    // 3. 获取用户信息以包含 role（refresh token 本身可能未包含 role）
-    const user = await db.getUserById(payload.id);
-    if (!user) return sendErr(res, 401, "invalid refresh token");
-    // 4. 签发新 access_token（包含 role）
-    const accessToken = jwt.sign(
-      { id: user.id, role: user.role },
-      ACCESS_SECRET,
-      { expiresIn: "8h" },
-    );
-    res.json({ accessToken });
-  } catch (err) {
-    // jwt.verify 过期会抛异常
-    return sendErr(res, 401, "refresh token expired");
-  }
-});
-// 登出接口 - 主动吊销 refresh_token
-router.post("/logout", async (req, res) => {
-  const { refreshToken } = req.body;
-  await db.revokeRefreshToken(refreshToken); // 标记为已吊销
-  res.json({ message: "logged out" });
-});
-// ==================== 用户管理接口 ====================
 
-// 获取所有用户列表（仅管理员）
+  try {
+    const payload = verifyRefreshToken(refreshToken);
+    const stored = await tokenRepo.getRefreshToken(refreshToken);
+    if (!stored || stored.revoked) {
+      return sendError(res, 401, "invalid refresh token");
+    }
+
+    const user = await userRepo.getUserById(payload.id);
+    if (!user) {
+      return sendError(res, 401, "invalid refresh token");
+    }
+
+    return res.json({ accessToken: signAccessToken(user) });
+  } catch (error) {
+    return sendError(res, 401, "refresh token expired");
+  }
+});
+
+router.post("/logout", async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+    if (refreshToken) {
+      await tokenRepo.revokeRefreshToken(refreshToken);
+    }
+    return res.json({ message: "logged out" });
+  } catch (error) {
+    return sendInternalError(res, error);
+  }
+});
+
 router.get("/users", authMiddleware, adminOnly, async (req, res) => {
   try {
-    const { search, role, page = 1, pageSize = 10 } = req.query;
+    const { search, role } = req.query;
+    const { page, pageSize } = normalizePagination(req.query, {
+      page: 1,
+      pageSize: 10,
+      maxPageSize: 100,
+    });
+    const offset = (page - 1) * pageSize;
 
     const filters = {};
     if (search) filters.search = search;
     if (role) filters.role = role;
 
-    const offset = (page - 1) * pageSize;
-    const limit = parseInt(pageSize);
+    const users = await userRepo.getUsers({ ...filters, offset, limit: pageSize });
+    const total = await userRepo.getUsersCount(filters);
 
-    const users = await db.getUsers({ ...filters, offset, limit });
-    const total = await db.getUsersCount(filters);
-
-    // 移除密码字段
-    const sanitizedUsers = users.map((user) => ({
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      role: user.role,
-      createdAt: user.created_at,
-      lastLogin: user.last_login,
-      loginCount: user.login_count,
-    }));
-
-    res.json({
-      users: sanitizedUsers,
+    return res.json({
+      users: toPublicUsers(users),
       total,
-      page: parseInt(page),
-      pageSize: limit,
+      page,
+      pageSize,
     });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "internal error" });
+  } catch (error) {
+    return sendInternalError(res, error);
   }
 });
 
-// 获取用户统计信息（仅管理员）
 router.get("/users/stats", authMiddleware, adminOnly, async (req, res) => {
   try {
-    const stats = await db.getUserStats();
-    res.json(stats);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "internal error" });
+    const stats = await userRepo.getUserStats();
+    return res.json(stats);
+  } catch (error) {
+    return sendInternalError(res, error);
   }
 });
 
-// 获取单个用户详情（仅管理员或本人）
-router.get("/users/:id", authMiddleware, async (req, res) => {
+router.get("/users/:id", authMiddleware, requireSelfOrAdmin, async (req, res) => {
   try {
-    const userId = parseInt(req.params.id);
-
-    // 只有管理员或用户本人可以查看
-    if (req.user.role !== "admin" && req.user.id !== userId) {
-      return sendErr(res, 403, "permission denied");
-    }
-
-    const user = await db.getUserById(userId);
-    if (!user) {
-      return sendErr(res, 404, "user not found");
-    }
-
-    // 移除密码字段
-    const sanitizedUser = {
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      role: user.role,
-      createdAt: user.created_at,
-      lastLogin: user.last_login,
-      loginCount: user.login_count,
-    };
-
-    res.json(sanitizedUser);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "internal error" });
+    const user = await userRepo.getUserById(Number(req.params.id));
+    if (!user) return sendError(res, 404, "user not found");
+    return res.json(toPublicUser(user));
+  } catch (error) {
+    return sendInternalError(res, error);
   }
 });
 
-// 添加用户（仅管理员）
 router.post("/users", authMiddleware, adminOnly, async (req, res) => {
   try {
     const { email, username, password, role = "user" } = req.body;
 
     if (!email || !username || !password) {
-      return sendErr(res, 400, "email, username and password required");
+      return sendError(res, 400, "email, username and password required");
+    }
+    if (!isValidEmail(email)) {
+      return sendError(res, 400, "invalid email format");
+    }
+    if (!validatePasswordLength(password)) {
+      return sendError(res, 400, "password must be at least 6 characters");
+    }
+    if (!isValidRole(role)) {
+      return sendError(res, 400, "invalid role");
+    }
+    if (await userRepo.getUserByEmail(email)) {
+      return sendError(res, 409, "email already registered");
     }
 
-    // 验证邮箱格式
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return sendErr(res, 400, "invalid email format");
-    }
-
-    // 验证密码长度
-    if (password.length < 6) {
-      return sendErr(res, 400, "password must be at least 6 characters");
-    }
-
-    // 验证角色
-    if (!["user", "admin"].includes(role)) {
-      return sendErr(res, 400, "invalid role");
-    }
-
-    if (await db.getUserByEmail(email)) {
-      return sendErr(res, 409, "email already registered");
-    }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await db.createUser({
+    const user = await userRepo.createUser({
       email,
       username,
-      password: hashedPassword,
+      password: await bcrypt.hash(password, 10),
       role,
     });
 
-    res.status(201).json({
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      role: user.role,
-      createdAt: user.created_at,
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "internal error" });
+    return res.status(201).json(toPublicUser(user));
+  } catch (error) {
+    return sendInternalError(res, error);
   }
 });
 
-// 更新用户信息（仅管理员）
 router.put("/users/:id", authMiddleware, adminOnly, async (req, res) => {
   try {
-    const userId = parseInt(req.params.id);
+    const userId = Number(req.params.id);
     const { username, email, role } = req.body;
-
-    const user = await db.getUserById(userId);
+    const user = await userRepo.getUserById(userId);
     if (!user) {
-      return sendErr(res, 404, "user not found");
+      return sendError(res, 404, "user not found");
     }
 
     const updates = {};
     if (username !== undefined) updates.username = username;
     if (email !== undefined) {
-      // 验证邮箱格式
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        return sendErr(res, 400, "invalid email format");
+      if (!isValidEmail(email)) {
+        return sendError(res, 400, "invalid email format");
       }
-
-      // 检查邮箱是否已被其他用户使用
-      const existingUser = await db.getUserByEmail(email);
+      const existingUser = await userRepo.getUserByEmail(email);
       if (existingUser && existingUser.id !== userId) {
-        return sendErr(res, 409, "email already in use");
+        return sendError(res, 409, "email already in use");
       }
       updates.email = email;
     }
     if (role !== undefined) {
-      if (!["user", "admin"].includes(role)) {
-        return sendErr(res, 400, "invalid role");
+      if (!isValidRole(role)) {
+        return sendError(res, 400, "invalid role");
       }
       updates.role = role;
     }
 
     if (Object.keys(updates).length === 0) {
-      return sendErr(res, 400, "no fields to update");
+      return sendError(res, 400, "no fields to update");
     }
 
-    const updatedUser = await db.updateUser(userId, updates);
-
-    res.json({
-      id: updatedUser.id,
-      username: updatedUser.username,
-      email: updatedUser.email,
-      role: updatedUser.role,
-      createdAt: updatedUser.created_at,
-      lastLogin: updatedUser.last_login,
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "internal error" });
+    const updatedUser = await userRepo.updateUser(userId, updates);
+    return res.json(toPublicUser(updatedUser));
+  } catch (error) {
+    return sendInternalError(res, error);
   }
 });
 
-// 删除用户（仅管理员）
 router.delete("/users/:id", authMiddleware, adminOnly, async (req, res) => {
   try {
-    const userId = parseInt(req.params.id);
-
-    // 不能删除自己
+    const userId = Number(req.params.id);
     if (req.user.id === userId) {
-      return sendErr(res, 403, "cannot delete yourself");
+      return sendError(res, 403, "cannot delete yourself");
     }
 
-    const user = await db.getUserById(userId);
+    const user = await userRepo.getUserById(userId);
     if (!user) {
-      return sendErr(res, 404, "user not found");
+      return sendError(res, 404, "user not found");
     }
 
-    await db.deleteUser(userId);
-
-    res.json({ message: "user deleted successfully" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "internal error" });
+    await userRepo.deleteUser(userId);
+    return res.json({ message: "user deleted successfully" });
+  } catch (error) {
+    return sendInternalError(res, error);
   }
 });
 
-// 批量删除用户（仅管理员）
-router.post(
-  "/users/bulk-delete",
+router.post("/users/bulk-delete", authMiddleware, adminOnly, async (req, res) => {
+  try {
+    const { userIds } = req.body;
+    if (!Array.isArray(userIds) || userIds.length === 0) {
+      return sendError(res, 400, "userIds array required");
+    }
+    if (userIds.includes(req.user.id)) {
+      return sendError(res, 403, "cannot delete yourself");
+    }
+
+    const deletedCount = await userRepo.deleteUsers(userIds);
+    return res.json({
+      message: "users deleted successfully",
+      deletedCount,
+    });
+  } catch (error) {
+    return sendInternalError(res, error);
+  }
+});
+
+router.put(
+  "/users/:id/password",
   authMiddleware,
-  adminOnly,
+  requireSelfOrAdmin,
   async (req, res) => {
     try {
-      const { userIds } = req.body;
+      const userId = Number(req.params.id);
+      const { currentPassword, newPassword } = req.body;
 
-      if (!Array.isArray(userIds) || userIds.length === 0) {
-        return sendErr(res, 400, "userIds array required");
+      if (!newPassword) {
+        return sendError(res, 400, "new password required");
+      }
+      if (!validatePasswordLength(newPassword)) {
+        return sendError(res, 400, "password must be at least 6 characters");
       }
 
-      // 不能删除自己
-      if (userIds.includes(req.user.id)) {
-        return sendErr(res, 403, "cannot delete yourself");
+      const user = await userRepo.getUserById(userId);
+      if (!user) {
+        return sendError(res, 404, "user not found");
       }
 
-      const deletedCount = await db.deleteUsers(userIds);
+      if (req.user.role !== "admin") {
+        if (!currentPassword) {
+          return sendError(res, 400, "current password required");
+        }
+        const matched = await bcrypt.compare(currentPassword, user.password);
+        if (!matched) {
+          return sendError(res, 401, "current password incorrect");
+        }
+      }
 
-      res.json({
-        message: "users deleted successfully",
-        deletedCount,
+      await userRepo.updateUser(userId, {
+        password: await bcrypt.hash(newPassword, 10),
       });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: "internal error" });
+      return res.json({ message: "password updated successfully" });
+    } catch (error) {
+      return sendInternalError(res, error);
     }
   },
 );
 
-// 修改密码（用户本人或管理员）
-router.put("/users/:id/password", authMiddleware, async (req, res) => {
-  try {
-    const userId = parseInt(req.params.id);
-    const { currentPassword, newPassword } = req.body;
-
-    // 只有管理员或用户本人可以修改密码
-    if (req.user.role !== "admin" && req.user.id !== userId) {
-      return sendErr(res, 403, "permission denied");
-    }
-
-    if (!newPassword) {
-      return sendErr(res, 400, "new password required");
-    }
-
-    if (newPassword.length < 6) {
-      return sendErr(res, 400, "password must be at least 6 characters");
-    }
-
-    const user = await db.getUserById(userId);
-    if (!user) {
-      return sendErr(res, 404, "user not found");
-    }
-
-    // 如果不是管理员，需要验证当前密码
-    if (req.user.role !== "admin") {
-      if (!currentPassword) {
-        return sendErr(res, 400, "current password required");
-      }
-      const match = await bcrypt.compare(currentPassword, user.password);
-      if (!match) {
-        return sendErr(res, 401, "current password incorrect");
-      }
-    }
-
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    await db.updateUser(userId, { password: hashedPassword });
-
-    res.json({ message: "password updated successfully" });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "internal error" });
-  }
-});
-
-// 导出用户数据（仅管理员）
 router.post("/users/export", authMiddleware, adminOnly, async (req, res) => {
   try {
     const { userIds } = req.body;
+    const users =
+      userIds && Array.isArray(userIds) && userIds.length > 0
+        ? await userRepo.getUsersByIds(userIds)
+        : await userRepo.getUsers({ offset: 0, limit: 10000 });
 
-    let users;
-    if (userIds && Array.isArray(userIds) && userIds.length > 0) {
-      // 导出指定用户
-      users = await db.getUsersByIds(userIds);
-    } else {
-      // 导出所有用户
-      users = await db.getUsers({ offset: 0, limit: 10000 });
-    }
-
-    // 移除敏感信息
-    const exportData = users.map((user) => ({
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      role: user.role,
-      createdAt: user.created_at,
-      lastLogin: user.last_login,
-      loginCount: user.login_count,
-    }));
-
-    res.json({
-      data: exportData,
-      count: exportData.length,
+    return res.json({
+      data: toPublicUsers(users),
+      count: users.length,
       exportedAt: new Date().toISOString(),
     });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "internal error" });
+  } catch (error) {
+    return sendInternalError(res, error);
   }
 });
 
-// 获取当前登录用户信息
 router.get("/me", authMiddleware, async (req, res) => {
   try {
-    const user = await db.getUserById(req.user.id);
-    if (!user) {
-      return sendErr(res, 404, "user not found");
-    }
-
-    res.json({
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      role: user.role,
-      createdAt: user.created_at,
-      lastLogin: user.last_login,
-      loginCount: user.login_count,
-    });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "internal error" });
+    const user = await userRepo.getUserById(req.user.id);
+    if (!user) return sendError(res, 404, "user not found");
+    return res.json(toPublicUser(user));
+  } catch (error) {
+    return sendInternalError(res, error);
   }
 });
 
 module.exports = router;
-
-// JWT 验证中间件，解码后将用户信息写入 req.user
-function authMiddleware(req, res, next) {
-  const authHeader = req.headers.authorization || "";
-  const token = authHeader.replace("Bearer ", "");
-  if (!token) return res.status(401).json({ error: "token required" });
-  try {
-    const payload = jwt.verify(token, ACCESS_SECRET);
-    req.user = { id: payload.id, role: payload.role };
-    next();
-  } catch (err) {
-    return res.status(401).json({ error: "invalid token" });
-  }
-}
-
-// 管理员权限中间件
-function adminOnly(req, res, next) {
-  if (req.user.role !== "admin") {
-    return res.status(403).json({ error: "admin access required" });
-  }
-  next();
-}
-
 module.exports.authMiddleware = authMiddleware;
 module.exports.adminOnly = adminOnly;

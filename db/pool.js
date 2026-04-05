@@ -1,0 +1,118 @@
+const mysql = require("mysql2/promise");
+require("dotenv").config();
+
+const {
+  DB_HOST = "localhost",
+  DB_USER = "root",
+  DB_PASSWORD = "123456",
+  DB_NAME = "orangeai",
+  DB_PORT = 3306,
+} = process.env;
+
+let pool;
+
+async function ensureDatabase() {
+  const conn = await mysql.createConnection({
+    host: DB_HOST,
+    user: DB_USER,
+    password: DB_PASSWORD,
+    port: Number(DB_PORT),
+  });
+
+  await conn.query(
+    `CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\`
+     DEFAULT CHARACTER SET utf8mb4
+     COLLATE utf8mb4_unicode_ci;`,
+  );
+  await conn.end();
+}
+
+async function ensureTables() {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id INT PRIMARY KEY AUTO_INCREMENT,
+      email VARCHAR(255) NOT NULL UNIQUE,
+      username VARCHAR(100) NOT NULL,
+      password VARCHAR(255) NOT NULL,
+      role ENUM('user','admin') DEFAULT 'user',
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      last_login TIMESTAMP NULL DEFAULT NULL,
+      login_count INT DEFAULT 0
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS conversations (
+      conversation_id CHAR(36) PRIMARY KEY,
+      user_id INT NOT NULL,
+      title VARCHAR(255) DEFAULT '新对话',
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      CONSTRAINT fk_user_conversation
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS messages (
+      message_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+      conversation_id CHAR(36) NOT NULL,
+      role ENUM('user','assistant') NOT NULL,
+      content TEXT NOT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      CONSTRAINT fk_conversation_message
+        FOREIGN KEY (conversation_id) REFERENCES conversations(conversation_id)
+        ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS refresh_tokens (
+      id INT NOT NULL AUTO_INCREMENT,
+      user_id INT NOT NULL,
+      token VARCHAR(500) NOT NULL,
+      expires_at DATETIME NOT NULL,
+      revoked BOOLEAN NOT NULL DEFAULT FALSE,
+      created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      PRIMARY KEY (id),
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+      INDEX idx_token (token),
+      INDEX idx_user_id (user_id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `);
+}
+
+const ready = (async () => {
+  await ensureDatabase();
+
+  pool = mysql.createPool({
+    host: DB_HOST,
+    user: DB_USER,
+    password: DB_PASSWORD,
+    database: DB_NAME,
+    port: Number(DB_PORT),
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0,
+  });
+
+  await ensureTables();
+})();
+
+async function getPool() {
+  await ready;
+  return pool;
+}
+
+async function testDbConnection() {
+  await ready;
+  const currentPool = await getPool();
+  const [rows] = await currentPool.execute("SELECT VERSION() AS mysql_version");
+  return rows[0];
+}
+
+module.exports = {
+  ready,
+  getPool,
+  testDbConnection,
+};

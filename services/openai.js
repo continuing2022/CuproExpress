@@ -1,41 +1,30 @@
 const { getClientForModel } = require("./modelRegistry");
-// 固定专业 system prompt（铜及铜合金领域）
-const SYSTEM_PROMPT = `
-你的名字叫铜博士，是一名铜及铜合金材料领域的专家，擅长：
 
-- 铜合金牌号分类
-- 化学成分分析
-- 力学性能对比
-- 热处理工艺解释
-- 应用场景推荐
-- 成分与性能关系分析
+const SYSTEM_PROMPT = `
+你是 CuproAgent 的企业助手。
 
 回答要求：
-1. 使用专业术语
-2. 回答结构清晰
-3. 尽量给出具体数据
-4. 避免泛泛而谈
-5. 如果问题超出铜及铜合金领域，请说明本系统仅支持铜及铜合金相关问题
-`;
-/**
- * 流式调用阿里云百炼 API
- * @param {Array} messages - 消息历史
- * @param {Function} onChunk - 接收每个chunk的回调函数
- * @param {Object} options - 可选配置
- */
+- 优先给出直接结论，再补充关键依据。
+- 如果上下文不足，要明确说明不确定点。
+- 使用检索内容时，不要把未出现的信息编造成事实。
+- 语言尽量清晰、专业、可执行。
+`.trim();
+
 async function getChatCompletionStream(messages, onChunk, options = {}) {
   try {
     const modelName = options.model || "qwen-plus";
     const { client, model } = getClientForModel(modelName);
-    const messagesWithSystem = Array.isArray(messages)
-      ? messages.some((m) => m.role === "system")
-        ? messages
-        : [{ role: "system", content: SYSTEM_PROMPT }, ...messages]
-      : [{ role: "system", content: SYSTEM_PROMPT }];
+    const hasSystem = Array.isArray(messages)
+      ? messages.some((item) => item.role === "system")
+      : false;
+
+    const finalMessages = hasSystem
+      ? messages
+      : [{ role: "system", content: SYSTEM_PROMPT }, ...(messages || [])];
 
     const stream = await client.chat.completions.create({
-      model: model,
-      messages: messagesWithSystem,
+      model,
+      messages: finalMessages,
       temperature: 1,
       max_tokens: options.max_tokens || 2000,
       stream: true,
@@ -44,33 +33,22 @@ async function getChatCompletionStream(messages, onChunk, options = {}) {
     let fullContent = "";
     for await (const chunk of stream) {
       const content = chunk.choices[0]?.delta?.content || "";
-      if (content) {
-        fullContent += content;
-        onChunk(content);
-      }
+      if (!content) continue;
+      fullContent += content;
+      onChunk(content);
     }
 
     return fullContent;
   } catch (error) {
     console.error(
-      "getChatCompletionStream 错误（模型：" +
-        (options.model || "default") +
-        "):",
-      error && error.message ? error.message : error,
+      `getChatCompletionStream failed for model ${options.model || "qwen-plus"}:`,
+      error?.message || error,
     );
-    // 尝试打印 HTTP 响应信息（如果存在），便于定位第三方 API 错误
-    try {
-      if (error && error.response) {
-        console.error("Response status:", error.response.status);
-        console.error("Response data:", error.response.data || error.response);
-      }
-    } catch (e) {
-      // 忽略二次打印错误
-    }
     throw error;
   }
 }
 
 module.exports = {
+  SYSTEM_PROMPT,
   getChatCompletionStream,
 };
