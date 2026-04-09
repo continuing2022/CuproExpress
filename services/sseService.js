@@ -1,3 +1,4 @@
+// SSE 服务相关的工具函数，提供初始化 SSE 连接、发送事件、保持连接活跃和清理资源等功能。
 function initSse(res) {
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
@@ -6,11 +7,11 @@ function initSse(res) {
     res.flushHeaders();
   }
 }
-
+// writeEvent 函数用于向 SSE 客户端发送事件，事件数据会被 JSON.stringify 序列化后发送。
 function writeEvent(res, type, payload = {}) {
   res.write(`data: ${JSON.stringify({ type, ...payload })}\n\n`);
 }
-
+// startKeepAlive 函数会定期发送一个注释行（以冒号开头）来保持 SSE 连接活跃，防止被代理服务器或浏览器关闭。
 function startKeepAlive(res, intervalMs = 15000) {
   return setInterval(() => {
     try {
@@ -20,7 +21,7 @@ function startKeepAlive(res, intervalMs = 15000) {
     }
   }, intervalMs);
 }
-
+// attachCloseCleanup 函数用于在请求或响应关闭时执行清理操作，确保资源得到正确释放。
 function attachCloseCleanup(req, res, ...cleanups) {
   let cleaned = false;
 

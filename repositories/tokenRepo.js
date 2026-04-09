@@ -1,5 +1,6 @@
 const { getPool, ready } = require("../db/pool");
-
+// tokenRepo.js - 处理令牌相关的数据库操作
+// 刷新令牌数据访问对象
 async function saveRefreshToken({ userId, token, expiresAt }) {
   await ready;
   const pool = await getPool();
@@ -9,7 +10,7 @@ async function saveRefreshToken({ userId, token, expiresAt }) {
   );
   return result.insertId;
 }
-
+// 根据令牌获取刷新令牌信息
 async function getRefreshToken(token) {
   await ready;
   const pool = await getPool();
@@ -19,7 +20,7 @@ async function getRefreshToken(token) {
   );
   return rows[0] || null;
 }
-
+// 撤销刷新令牌
 async function revokeRefreshToken(token) {
   await ready;
   const pool = await getPool();

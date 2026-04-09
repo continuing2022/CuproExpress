@@ -69,8 +69,10 @@ router.post("/login", async (req, res) => {
       return sendError(res, 401, "invalid credentials");
     }
 
+    // 同步登录观测字段，便于后续统计与审计。
     await userRepo.updateUserLoginInfo(user.id);
 
+    // accessToken 用于接口鉴权，refreshToken 用于长会话续期。
     const accessToken = signAccessToken(user);
     const refreshToken = signRefreshToken(user);
 
@@ -96,6 +98,9 @@ router.post("/refresh", async (req, res) => {
   }
 
   try {
+    // 刷新流程必须同时通过两层校验：
+    // 1) JWT 签名与过期校验
+    // 2) 服务端 token 记录未被撤销
     const payload = verifyRefreshToken(refreshToken);
     const stored = await tokenRepo.getRefreshToken(refreshToken);
     if (!stored || stored.revoked) {
@@ -139,9 +144,14 @@ router.get("/users", authMiddleware, adminOnly, async (req, res) => {
     if (search) filters.search = search;
     if (role) filters.role = role;
 
-    const users = await userRepo.getUsers({ ...filters, offset, limit: pageSize });
+    const users = await userRepo.getUsers({
+      ...filters,
+      offset,
+      limit: pageSize,
+    });
     const total = await userRepo.getUsersCount(filters);
 
+    // 统一映射为公开 DTO，避免内部字段泄漏。
     return res.json({
       users: toPublicUsers(users),
       total,
@@ -304,6 +314,7 @@ router.put(
         return sendError(res, 404, "user not found");
       }
 
+      // 普通用户需校验旧密码；管理员可直接重置。
       if (req.user.role !== "admin") {
         if (!currentPassword) {
           return sendError(res, 400, "current password required");

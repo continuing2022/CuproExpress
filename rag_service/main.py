@@ -19,6 +19,7 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent
+# 先加载 rag_service 本地 .env，再回退到后端目录 .env。
 load_dotenv(BASE_DIR / ".env")
 load_dotenv(BASE_DIR.parent / ".env")
 PERSIST_DIR = Path(os.getenv("RAG_PERSIST_DIR", BASE_DIR / "storage"))
@@ -57,6 +58,7 @@ class RagIndexManager:
         )
 
     def get_data_hash(self):
+        # 基于文件名 + mtime 生成哈希，用于判断是否需要重建索引。
         digest = hashlib.md5()
         if not DATA_DIR.exists():
             return ""
@@ -72,6 +74,7 @@ class RagIndexManager:
         self.configure_models()
         self.current_hash = self.get_data_hash()
 
+        # 快路径：源数据哈希未变化时，直接复用持久化索引。
         if (
             not force_rebuild
             and PERSIST_DIR.exists()
@@ -83,6 +86,7 @@ class RagIndexManager:
             )
             self.index = load_index_from_storage(storage_context)
         else:
+            # 慢路径：从源文件重新构建向量索引。
             documents = SimpleDirectoryReader(
                 str(DATA_DIR),
                 recursive=True,
@@ -106,6 +110,7 @@ class RagIndexManager:
             self.load_or_build_index()
 
     def retrieve(self, query: str):
+        # 轻量检索接口：供 Node 编排层获取上下文。
         self.ensure_ready()
         retriever = self.index.as_retriever(similarity_top_k=RAG_TOP_K)
         nodes = retriever.retrieve(query)
@@ -126,6 +131,7 @@ class RagIndexManager:
         }
 
     def stream_answer(self, query: str):
+        # 流式生成接口：Python 侧直接负责生成时使用。
         self.ensure_ready()
         return self.query_engine.query(query)
 
