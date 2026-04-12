@@ -1,6 +1,7 @@
 const { randomUUID } = require("crypto");
 const { getPool, ready } = require("../db/pool");
-
+// conversationRepo.js - 处理对话相关的数据库操作
+// 创建新对话
 async function createConversation(userId, title = "新对话") {
   await ready;
   const pool = await getPool();
@@ -11,7 +12,7 @@ async function createConversation(userId, title = "新对话") {
   );
   return { conversation_id: conversationId, user_id: userId, title };
 }
-
+// 根据对话ID获取对话信息
 async function getConversationById(conversationId) {
   await ready;
   const pool = await getPool();
@@ -21,7 +22,7 @@ async function getConversationById(conversationId) {
   );
   return rows[0] || null;
 }
-
+// 验证用户是否是对话的所有者
 async function assertConversationOwner(userId, conversationId) {
   const conversation = await getConversationById(conversationId);
   if (!conversation) {
@@ -32,7 +33,7 @@ async function assertConversationOwner(userId, conversationId) {
   }
   return { ok: true, conversation };
 }
-
+// 添加消息到对话中
 async function addMessage(conversationId, role, content) {
   await ready;
   const pool = await getPool();
@@ -51,7 +52,7 @@ async function addMessage(conversationId, role, content) {
     content,
   };
 }
-
+// 列出用户的对话列表，支持分页
 async function listConversations(userId, page = 1, pageSize = 20) {
   await ready;
   const pool = await getPool();
@@ -86,7 +87,7 @@ async function listConversations(userId, page = 1, pageSize = 20) {
     total: countRows[0]?.total || 0,
   };
 }
-
+// 获取对话中的消息列表，支持限制返回最近的N条消息
 async function getMessages(conversationId, limit = null) {
   await ready;
   const pool = await getPool();
@@ -119,6 +120,91 @@ async function getMessages(conversationId, limit = null) {
   return rows;
 }
 
+async function getMessagesAfter(conversationId, afterMessageId = 0, options = {}) {
+  await ready;
+  const pool = await getPool();
+  const params = [conversationId, Number(afterMessageId) || 0];
+  const where = ["conversation_id = ?", "message_id > ?"];
+
+  if (Number.isFinite(options.beforeMessageId)) {
+    where.push("message_id < ?");
+    params.push(Number(options.beforeMessageId));
+  }
+
+  const limit = Number(options.limit);
+  const limitSql =
+    Number.isFinite(limit) && limit > 0
+      ? ` LIMIT ${Math.min(500, Math.floor(limit))}`
+      : "";
+
+  const [rows] = await pool.execute(
+    `SELECT message_id, role, content, created_at
+       FROM messages
+      WHERE ${where.join(" AND ")}
+      ORDER BY created_at ASC, message_id ASC${limitSql}`,
+    params,
+  );
+
+  return rows;
+}
+
+async function countMessagesAfter(conversationId, afterMessageId = 0, options = {}) {
+  await ready;
+  const pool = await getPool();
+  const params = [conversationId, Number(afterMessageId) || 0];
+  const where = ["conversation_id = ?", "message_id > ?"];
+
+  if (Number.isFinite(options.beforeMessageId)) {
+    where.push("message_id < ?");
+    params.push(Number(options.beforeMessageId));
+  }
+
+  const [rows] = await pool.execute(
+    `SELECT COUNT(1) AS total
+       FROM messages
+      WHERE ${where.join(" AND ")}`,
+    params,
+  );
+
+  return Number(rows[0]?.total) || 0;
+}
+
+async function getLatestMessageId(conversationId, options = {}) {
+  await ready;
+  const pool = await getPool();
+  const params = [conversationId];
+  const where = ["conversation_id = ?"];
+
+  if (Number.isFinite(options.beforeMessageId)) {
+    where.push("message_id < ?");
+    params.push(Number(options.beforeMessageId));
+  }
+
+  const [rows] = await pool.execute(
+    `SELECT MAX(message_id) AS latest_message_id
+       FROM messages
+      WHERE ${where.join(" AND ")}`,
+    params,
+  );
+
+  return Number(rows[0]?.latest_message_id) || 0;
+}
+// 更新对话标题
+async function updateConversationTitle(conversationId, userId, title) {
+  await ready;
+  const pool = await getPool();
+  const [result] = await pool.execute(
+    "UPDATE conversations SET title = ?, updated_at = CURRENT_TIMESTAMP WHERE conversation_id = ? AND user_id = ?",
+    [title, conversationId, userId],
+  );
+
+  if (result.affectedRows < 1) {
+    return null;
+  }
+
+  return getConversationById(conversationId);
+}
+// 删除对话
 async function deleteConversation(conversationId, userId) {
   await ready;
   const pool = await getPool();
@@ -136,5 +222,9 @@ module.exports = {
   addMessage,
   listConversations,
   getMessages,
+  getMessagesAfter,
+  countMessagesAfter,
+  getLatestMessageId,
+  updateConversationTitle,
   deleteConversation,
 };
