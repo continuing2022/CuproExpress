@@ -99,7 +99,7 @@ async function maybeRefreshConversationSummary({
         { beforeMessageId },
       );
     }
-
+    // 返回摘要刷新结果，包括是否刷新、最新的会话状态和剩余未摘要的消息数量等信息
     return {
       refreshed,
       state: latestState,

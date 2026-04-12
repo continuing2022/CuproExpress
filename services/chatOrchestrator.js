@@ -12,6 +12,8 @@ async function run({
   onChunk,
 }) {
   const startedAt = Date.now();
+  // 首先调用buildContext函数构建发送给OpenAI模型的上下文，获取对话摘要、近期消息、
+  // 召回的记忆和外部检索上下文等内容，并进行预算管理。
   const context = await buildContext({
     conversationId,
     content,
@@ -34,7 +36,8 @@ async function run({
     onChunk, // 将onChunk回调函数传递给OpenAI服务，以便在接收到每个流式响应块时调用它。
     { max_tokens: 2000, model },
   );
-
+  // 在整个聊天完成流程结束后，构建一个包含会话ID、模型名称、输入输出token数、
+  // 摘要使用情况、检索模式等信息的遥测对象，并记录到日志中。
   const telemetry = buildTelemetry({
     conversationId,
     model,
@@ -79,7 +82,7 @@ function buildTelemetry({
     latency_ms: latencyMs,
   };
 }
-
+// 日志
 function logTelemetry(telemetry) {
   console.info("[chat_telemetry]", JSON.stringify(telemetry));
 }

@@ -90,6 +90,7 @@ async function buildContext({
     retrievalResult,
   };
 }
+// 这个函数用于在每次用户发送消息后，判断是否需要刷新会话摘要，并返回刷新结果和最新的会话状态等信息。
 function buildModelMessages(context) {
   const messages = [{ role: "system", content: context.systemPrompt }];
 

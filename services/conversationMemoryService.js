@@ -1,3 +1,5 @@
+// 这个模块负责处理会话记忆的持久化和召回功能，
+// 主要包括将对话消息分块存储为记忆碎片，以及根据用户查询从存储的记忆中召回相关内容。
 const {
   conversationMemoryRepo,
   conversationStateRepo,
@@ -20,14 +22,18 @@ async function recallConversationMemories({
   topK = 3,
   beforeMessageId,
 }) {
-  const state = await conversationStateRepo.ensureConversationState(conversationId);
+  const state =
+    await conversationStateRepo.ensureConversationState(conversationId);
   if (!state || !state.last_summarized_message_id) return [];
 
-  const candidates = await conversationMemoryRepo.listMemoryChunks(conversationId, {
-    beforeMessageId,
-    maxSourceMessageId: state.last_summarized_message_id,
-    limit: 200,
-  });
+  const candidates = await conversationMemoryRepo.listMemoryChunks(
+    conversationId,
+    {
+      beforeMessageId,
+      maxSourceMessageId: state.last_summarized_message_id,
+      limit: 200,
+    },
+  );
   if (candidates.length === 0) return [];
 
   const queryTerms = extractKeywords(query);
@@ -66,7 +72,10 @@ function scoreMemoryCandidate(candidate, queryTerms = [], rawQuery = "") {
     score += 6;
   }
 
-  if (candidate.memory_type === "preference" || candidate.memory_type === "fact") {
+  if (
+    candidate.memory_type === "preference" ||
+    candidate.memory_type === "fact"
+  ) {
     score += 1;
   }
 

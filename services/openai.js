@@ -21,7 +21,8 @@ async function getChatCompletionStream(messages, onChunk, options = {}) {
     const finalMessages = hasSystem
       ? messages
       : [{ role: "system", content: SYSTEM_PROMPT }, ...(messages || [])];
-
+    // 调用createStreamingCompletion函数创建一个流式聊天完成请求，
+    // 传递最终的消息列表、onChunk回调函数以及一些选项参数，如温度和最大token数等。
     const stream = await createStreamingCompletion(client, {
       model,
       messages: finalMessages,
@@ -54,7 +55,7 @@ async function getChatCompletionStream(messages, onChunk, options = {}) {
     throw error;
   }
 }
-
+// 这个模块负责协调聊天的整体流程，包括构建上下文、调用OpenAI服务、处理流式响应以及记录相关的遥测数据。
 async function getChatCompletion(messages, options = {}) {
   try {
     const modelName = options.model || "qwen-plus";
@@ -86,7 +87,8 @@ async function getChatCompletion(messages, options = {}) {
     throw error;
   }
 }
-
+// 这个函数负责构建发送给OpenAI模型的上下文，
+// 包括系统提示、对话摘要、近期消息、召回的记忆和外部检索上下文等内容，并根据模型的token限制进行预算管理。
 async function createStreamingCompletion(client, payload) {
   try {
     return await client.chat.completions.create({
