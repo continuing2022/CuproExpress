@@ -28,7 +28,8 @@ async function maybeRefreshConversationSummary({
   force = false,
 }) {
   return withConversationSummaryLock(conversationId, async () => {
-    const state = await getConversationState(conversationId);
+    const state = await getConversationState(conversationId); // 获取会话状态
+    // 获取未总结的数量
     const unsummarizedCount = await conversationRepo.countMessagesAfter(
       conversationId,
       state.last_summarized_message_id,

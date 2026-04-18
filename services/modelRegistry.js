@@ -64,8 +64,8 @@ function getModelMetadata(modelName = "qwen-plus") {
   const config = MODEL_REGISTRY[modelName] || MODEL_REGISTRY["qwen-plus"];
   return {
     name: modelName,
-    contextWindow: Number(config.contextWindow) || 32768,
-    preferredOutputTokens: Number(config.preferredOutputTokens) || 4000,
+    contextWindow: Number(config.contextWindow) || 32768, // 上下文窗口大小
+    preferredOutputTokens: Number(config.preferredOutputTokens) || 4000, // token预算中预留给输出的部分
   };
 }
 

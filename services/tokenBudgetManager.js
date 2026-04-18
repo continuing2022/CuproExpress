@@ -5,10 +5,12 @@ const {
   trimMessagesToTokenBudget,
   trimTextToTokenBudget,
 } = require("./messageTokenEstimator");
-
+// 这个模块负责管理与令牌预算相关的逻辑，包括根据模型的上下文窗口大小计算输入和输出的令牌预算，
 function buildBudgetProfile(modelName) {
+  // 以及根据预算限制对会话摘要、近期消息、召回的记忆和检索上下文等内容进行裁剪和调
   const metadata = getModelMetadata(modelName);
   const contextWindow = metadata.contextWindow;
+  // 计算输出部分的预留token数
   const reservedOutputTokens = Math.max(
     2000,
     Math.min(
@@ -16,15 +18,33 @@ function buildBudgetProfile(modelName) {
       metadata.preferredOutputTokens || 4000,
     ),
   );
+  // 计算输入部分的总预算token数
   const inputBudgetTokens = Math.max(
     4096,
-    Math.floor(Math.min(contextWindow * 0.8, contextWindow - reservedOutputTokens)),
+    Math.floor(
+      Math.min(contextWindow * 0.8, contextWindow - reservedOutputTokens),
+    ),
   );
 
   const summaryBudgetTokens = clampByInputBudget(inputBudgetTokens, 1000, 0.08);
-  const recentBudgetTokens = clampByInputBudget(inputBudgetTokens, 3000, 0.28, 1500);
-  const memoryBudgetTokens = clampByInputBudget(inputBudgetTokens, 1200, 0.1, 800);
-  const retrievalBudgetTokens = clampByInputBudget(inputBudgetTokens, 2000, 0.16, 1200);
+  const recentBudgetTokens = clampByInputBudget(
+    inputBudgetTokens,
+    3000,
+    0.28,
+    1500,
+  );
+  const memoryBudgetTokens = clampByInputBudget(
+    inputBudgetTokens,
+    1200,
+    0.1,
+    800,
+  );
+  const retrievalBudgetTokens = clampByInputBudget(
+    inputBudgetTokens,
+    2000,
+    0.16,
+    1200,
+  );
 
   return {
     modelName,
@@ -104,7 +124,10 @@ function applyTokenBudget({
     });
   }
 
-  if (totalEstimate > budget.inputBudgetTokens && trimmedRecentMessages.length > 0) {
+  if (
+    totalEstimate > budget.inputBudgetTokens &&
+    trimmedRecentMessages.length > 0
+  ) {
     diagnostics.truncated = true;
     diagnostics.truncationSteps.push("recent_messages");
     trimmedRecentMessages = shrinkMessagesToFit({
@@ -261,12 +284,18 @@ function shrinkMessagesToFit({
 
 function formatMemoryItems(items = []) {
   return (items || [])
-    .map((item, index) => `${index + 1}. [${item.memory_type || "general"}] ${item.content || ""}`)
+    .map(
+      (item, index) =>
+        `${index + 1}. [${item.memory_type || "general"}] ${item.content || ""}`,
+    )
     .join("\n");
 }
 
 function clampByInputBudget(inputBudgetTokens, preferred, ratio, minimum = 0) {
-  return Math.max(minimum, Math.min(preferred, Math.floor(inputBudgetTokens * ratio)));
+  return Math.max(
+    minimum,
+    Math.min(preferred, Math.floor(inputBudgetTokens * ratio)),
+  );
 }
 
 module.exports = {

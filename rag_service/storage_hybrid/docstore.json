@@ -1,0 +1,2999 @@
+{
+  "docstore/metadata": {
+    "bc26d4b9-5f03-4e03-aca7-0442d688ff3a": {
+      "doc_hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b"
+    },
+    "2c4309e1-dc6d-4004-8612-89db6ab48f31": {
+      "doc_hash": "6613bad995ea7208dd3d308aa08425f205411e4d754652eff69edf67bd59a5f4",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "627fc5d1-1979-4e4b-b015-13120637a066": {
+      "doc_hash": "db4f03dd00d2d2e5bd7e88dbcfde18dc440676f4cda6e3a82a8b633cfd941889",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "ce9fe9cf-8c7e-46d1-a525-7e4794abd2d5": {
+      "doc_hash": "408b07288df77561ede17f72603e1d61d51b99045cb4ff880ddc84b4fd0a8c5e",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "519f4e6d-e3ac-45e1-8437-ab714bb0a069": {
+      "doc_hash": "a5b156fc990f74c3db1be411b1bb6a1f92f5c6412094b50e00064899b2702ccc",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "bd1dcb2e-aeab-47b7-a70e-914f8c510aad": {
+      "doc_hash": "58ee77921c34462de469569ee9d96bb15125960835b33655d7a3ec2c0899053d",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "158a2321-d5b4-45c3-a6b5-66c4276fb8c0": {
+      "doc_hash": "6ee92263699e5bf641e67b4eec6d7aa0155e1fd49ef4969a7c844f77cfe0a7db",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "d7676189-328e-41ba-b205-4e7565b81c30": {
+      "doc_hash": "ac34a060c3def541f6634687a81834c65d22f7495356ac21ee367f2dcd1cb5df",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "8ae43935-3d0b-4b55-a359-745ea3a556e1": {
+      "doc_hash": "686f3c97966c322cea106b40815df74b37884b1fd5a5d1693d584a3976ef52ad",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "6922057c-5c9c-4c7b-bcca-4ad770f8f5c9": {
+      "doc_hash": "e13362b083f40a38b30c5739ca19020e48d585aaf5ba051444e2534eee919eca",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "f0d2cbf2-2e19-4914-8c9a-f8691fae2610": {
+      "doc_hash": "ef0a14bfea338df5bf2afca997655e6792a3901f94359cdea9ab8a0a7816f53e",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "0bc678c4-1c0d-41cb-bd61-be5a8f1dd347": {
+      "doc_hash": "c0f7a63c41eae2304a86bd1b7b6e9313979aa9e28bae5dc61482575f4aa2f329",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "ca559428-849b-4d17-bea9-1927b53b95da": {
+      "doc_hash": "39f37a8870b2d076c2842671786f72d5b0f7170d3bfb512a2a547b173e29e202",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "5db097b4-628c-471d-991f-fb95d5e3255e": {
+      "doc_hash": "604e2ca208ca2ecef216fcfa7f73771f52dc0a91eff3281c1d16463672e3b276",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "3492172e-eb2b-4f93-b524-c9a70ce38323": {
+      "doc_hash": "b443b884e4dff13a35ae183457c1699d4d60bb9a87573e8b02b736a0d5b04d28",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "3bc98012-94bc-4944-a9b3-0b340c4d67d7": {
+      "doc_hash": "49807ffc938193c55403278ec68dc2223316891a6f2d7a18ffbb1a295ddb3b4c",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "91a68175-3afc-4534-b68c-e2f85f484e29": {
+      "doc_hash": "62eef425dbb5e6db94cd2d158558119c0f1f66f779197edaa8501b4501c16dc2",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "ca146b0d-ee5c-419f-acb8-78f1c7983322": {
+      "doc_hash": "92d2fd250e92095ea84099d527d809854b6983cfff16ed4de4d3f1e2c00d1129",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "c39ba772-686b-4fa4-aecf-17927cb898a9": {
+      "doc_hash": "87f64f7df6cb250fb97dc038bc5d7c3398c613a6daa2d13b572a0e09fd849e11",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "3fbcc52a-4540-4705-9059-f0221eb98155": {
+      "doc_hash": "4737765ff3c6466828d616233b35bf3b3fa5f069016d7044f063cee4e9ef29b6",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "f1c341ca-433b-4fc7-a525-284824e0b2ea": {
+      "doc_hash": "8acceeaa024df9b5ccfce5a321797a531fb0b465f5ff779cc70a52a388c27d54",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "cdd07556-f144-48dc-b625-ec12862dfc23": {
+      "doc_hash": "30ceb6139ae274c60f7fa949acaf17d0c6215a712aab5111d1307bb742729e84",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "36dd4a46-b642-4159-a35b-85f01536e9fd": {
+      "doc_hash": "c2acc3536b566f1fa3453c20ddb0b961be60b0bfefd85758031048aebbdfc54c",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "71513b8f-3b81-4df6-814a-3194ddbf2038": {
+      "doc_hash": "a5802442f0659c5244e4030874d6b9df96532953502896b3cebbabebc53547a8",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "bf1ec1e4-d53a-4550-b844-259ddc239bee": {
+      "doc_hash": "a336d7b5437f6b0d16a24de4875e6857baea63a99f337925154daef5b3d8886e",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "afff1920-ad83-46a8-a7d9-fd880944975e": {
+      "doc_hash": "f6871d363e107627af406d3b908f014191c84ae790a7d253b5987a63fab20c84",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "d10b82a1-51a1-413f-ba7b-dfca774bb45a": {
+      "doc_hash": "a3ba49f6a4477226ce949b622c61058805411b65801e38764917c768aa98b603",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "0a2f0cd4-3251-4448-9213-4db3f7a9c841": {
+      "doc_hash": "dcdece39a76a6ec00be2e0288cb8f404981930dd808d34f5c2eb2103cf9f5d76",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "712ef603-8a19-4745-a824-ca3abf85fc8f": {
+      "doc_hash": "3b51399b5de398ef12fce9e7fc8a69363cab7a643eb7dcc0b0af921589dcf29e",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "173d6fc2-9c04-4c1b-9a3e-f93acd16b8ca": {
+      "doc_hash": "3797122361367756df7996600a29e5a7be8d172724d1f798cf4d329096030aab",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "72b29dcc-ca70-46f8-832f-f5ecdb57bed8": {
+      "doc_hash": "487f67021967141cac2c696a23abe8bde158f345373ebf29a541b2de8aef5904",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "d4e14004-189e-44e9-9daf-79a8b4224f0b": {
+      "doc_hash": "e7ca0199755112a2ca3ca51baa4a29b7193a1d6e05398e6fd5655bca4968c134",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "7d54cffd-d999-4bf8-89bb-0ff6492beb66": {
+      "doc_hash": "2cbed769a5c1af3082513c4fa791df68341c8919c032da28e1124347decdfdc1",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "c6b66a6b-25cc-43df-a184-6de72c426129": {
+      "doc_hash": "2e9e270ea0414a08b3b74a8352c9081950ec897179b5453322776089f3b93fcb",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "43e45292-f471-4b0b-a7bb-8088d7523fcb": {
+      "doc_hash": "a213129c3910bf73ed42aa4d84625ee3b6460e1bedfd7f204db2b7daca332199",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "66033f20-03a6-4afd-95d9-316b3370a1fa": {
+      "doc_hash": "8bcd3e049a2f130e9a9611c24c7980e61de678b5ff84742dbbb21c0da3e70df8",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "d7773422-f50c-4831-a00c-df7372354a40": {
+      "doc_hash": "08fe5d748ea1ae3e4dc032f17016a9010be3059b993c2d606361d48e21ded818",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    },
+    "c47d8e44-2f49-4056-b911-40dcb6c2b50f": {
+      "doc_hash": "9a1ba990bd9729b877871451f1b16988fdf0d851c92b3a7730f84eb5d250d7d7",
+      "ref_doc_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a"
+    }
+  },
+  "docstore/ref_doc_info": {
+    "bc26d4b9-5f03-4e03-aca7-0442d688ff3a": {
+      "node_ids": [
+        "2c4309e1-dc6d-4004-8612-89db6ab48f31",
+        "627fc5d1-1979-4e4b-b015-13120637a066",
+        "ce9fe9cf-8c7e-46d1-a525-7e4794abd2d5",
+        "519f4e6d-e3ac-45e1-8437-ab714bb0a069",
+        "bd1dcb2e-aeab-47b7-a70e-914f8c510aad",
+        "158a2321-d5b4-45c3-a6b5-66c4276fb8c0",
+        "d7676189-328e-41ba-b205-4e7565b81c30",
+        "8ae43935-3d0b-4b55-a359-745ea3a556e1",
+        "6922057c-5c9c-4c7b-bcca-4ad770f8f5c9",
+        "f0d2cbf2-2e19-4914-8c9a-f8691fae2610",
+        "0bc678c4-1c0d-41cb-bd61-be5a8f1dd347",
+        "ca559428-849b-4d17-bea9-1927b53b95da",
+        "5db097b4-628c-471d-991f-fb95d5e3255e",
+        "3492172e-eb2b-4f93-b524-c9a70ce38323",
+        "3bc98012-94bc-4944-a9b3-0b340c4d67d7",
+        "91a68175-3afc-4534-b68c-e2f85f484e29",
+        "ca146b0d-ee5c-419f-acb8-78f1c7983322",
+        "c39ba772-686b-4fa4-aecf-17927cb898a9",
+        "3fbcc52a-4540-4705-9059-f0221eb98155",
+        "f1c341ca-433b-4fc7-a525-284824e0b2ea",
+        "cdd07556-f144-48dc-b625-ec12862dfc23",
+        "36dd4a46-b642-4159-a35b-85f01536e9fd",
+        "71513b8f-3b81-4df6-814a-3194ddbf2038",
+        "bf1ec1e4-d53a-4550-b844-259ddc239bee",
+        "afff1920-ad83-46a8-a7d9-fd880944975e",
+        "d10b82a1-51a1-413f-ba7b-dfca774bb45a",
+        "0a2f0cd4-3251-4448-9213-4db3f7a9c841",
+        "712ef603-8a19-4745-a824-ca3abf85fc8f",
+        "173d6fc2-9c04-4c1b-9a3e-f93acd16b8ca",
+        "72b29dcc-ca70-46f8-832f-f5ecdb57bed8",
+        "d4e14004-189e-44e9-9daf-79a8b4224f0b",
+        "7d54cffd-d999-4bf8-89bb-0ff6492beb66",
+        "c6b66a6b-25cc-43df-a184-6de72c426129",
+        "43e45292-f471-4b0b-a7bb-8088d7523fcb",
+        "66033f20-03a6-4afd-95d9-316b3370a1fa",
+        "d7773422-f50c-4831-a00c-df7372354a40",
+        "c47d8e44-2f49-4056-b911-40dcb6c2b50f"
+      ],
+      "metadata": {
+        "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+        "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+        "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "file_size": 34823,
+        "creation_date": "2026-04-18",
+        "last_modified_date": "2026-04-18"
+      }
+    }
+  },
+  "docstore/data": {
+    "2c4309e1-dc6d-4004-8612-89db6ab48f31": {
+      "__data__": {
+        "id_": "2c4309e1-dc6d-4004-8612-89db6ab48f31",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "627fc5d1-1979-4e4b-b015-13120637a066",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "73325897cc209683d64e209c43c5b8f1c0c4324acea0c96e21cf3037159ce864",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c\n\n\u94dc\u53ca\u94dc\u5408\u91d1\n\n\u57fa\u7840\u77e5\u8bc6\u624b\u518c\n\n\u5b9a\u4e49 \u00b7 \u5206\u7c7b \u00b7 \u6027\u80fd \u00b7 \u724c\u53f7 \u00b7 \u5e94\u7528 \u00b7 \u52a0\u5de5\n\n\n\n\u672c\u624b\u518c\u5185\u5bb9\u6db5\u76d6\u94dc\u53ca\u94dc\u5408\u91d1\u7684\u6838\u5fc3\u57fa\u7840\u77e5\u8bc6\uff0c\n\n\u9002\u5408\u6750\u6599\u5de5\u7a0b\u3001\u673a\u68b0\u5236\u9020\u3001\u7535\u6c14\u5de5\u7a0b\u7b49\u76f8\u5173\u9886\u57df\u4eba\u5458\u53c2\u8003\u4f7f\u7528\u3002\n\n\n\n\n\u7b2c\u4e00\u7ae0  \u94dc\u7684\u57fa\u672c\u6982\u5ff5\u4e0e\u5386\u53f2",
+        "mimetype": "text/plain",
+        "start_char_idx": 0,
+        "end_char_idx": 128,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "627fc5d1-1979-4e4b-b015-13120637a066": {
+      "__data__": {
+        "id_": "627fc5d1-1979-4e4b-b015-13120637a066",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "2c4309e1-dc6d-4004-8612-89db6ab48f31",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "6613bad995ea7208dd3d308aa08425f205411e4d754652eff69edf67bd59a5f4",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "ce9fe9cf-8c7e-46d1-a525-7e4794abd2d5",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "a22287c750fae140cc966f2f8d72e3420b65f9d24022229b8e43c924557e8feb",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "\u7b2c\u4e00\u7ae0  \u94dc\u7684\u57fa\u672c\u6982\u5ff5\u4e0e\u5386\u53f2\n\n\n\n1.1 \u94dc\u7684\u53d1\u73b0\u4e0e\u5386\u53f2\n\n\u94dc\uff08Cu\uff0c\u82f1\u6587 Copper\uff09\u662f\u4eba\u7c7b\u6700\u65e9\u53d1\u73b0\u5e76\u4f7f\u7528\u7684\u91d1\u5c5e\u4e4b\u4e00\uff0c\u5176\u4f7f\u7528\u5386\u53f2\u53ef\u8ffd\u6eaf\u81f3\u516c\u5143\u524d8000\u5e74\u5de6\u53f3\u3002\u65e9\u5728\u65b0\u77f3\u5668\u65f6\u4ee3\u665a\u671f\uff0c\u4eba\u7c7b\u5df2\u5f00\u59cb\u4f7f\u7528\u5929\u7136\u94dc\u5236\u4f5c\u5de5\u5177\u548c\u88c5\u9970\u54c1\u3002\u516c\u5143\u524d3500\u5e74\u81f31200\u5e74\uff0c\u4eba\u7c7b\u8fdb\u5165\u9752\u94dc\u65f6\u4ee3\uff0c\u94dc\u4e0e\u9521\u7684\u5408\u91d1\u2014\u2014\u9752\u94dc\uff0c\u6210\u4e3a\u5236\u9020\u6b66\u5668\u3001\u519c\u5177\u548c\u5668\u76bf\u7684\u4e3b\u8981\u6750\u6599\uff0c\u6781\u5927\u63a8\u52a8\u4e86\u4eba\u7c7b\u6587\u660e\u7684\u53d1\u5c55\u3002\n\n\u94dc\u7684\u62c9\u4e01\u540d\u79f0\"Cuprum\"\u6765\u6e90\u4e8e\u5730\u4e2d\u6d77\u585e\u6d66\u8def\u65af\u5c9b\uff08Cyprus\uff09\uff0c\u56e0\u4e3a\u53e4\u4ee3\u7f57\u9a6c\u4eba\u4e3b\u8981\u4ece\u90a3\u91cc\u83b7\u53d6\u94dc\u77ff\u77f3\u3002\u5316\u5b66\u5143\u7d20\u5468\u671f\u8868\u4e2d\u94dc\u7684\u7b26\u53f7\"Cu\"\u5373\u6765\u6e90\u4e8e\u6b64\u3002\n\n1.2 \u94dc\u7684\u57fa\u672c\u5b9a\u4e49\n\n\u94dc\u662f\u4e00\u79cd\u5316\u5b66\u5143\u7d20\uff0c\u539f\u5b50\u5e8f\u6570\u4e3a29\uff0c\u539f\u5b50\u91cf\u7ea6\u4e3a63.546 g/mol\uff0c\u5c5e\u4e8e\u7b2c\u56db\u5468\u671f\u7b2cIB\u65cf\u8fc7\u6e21\u91d1\u5c5e\u3002\u7eaf\u94dc\u5448\u73ab\u7470\u7ea2\u8272\uff08\u7d2b\u7ea2\u8272\uff09\uff0c\u5177\u6709\u826f\u597d\u7684\u5ef6\u5c55\u6027\u3001\u5bfc\u7535\u6027\u548c\u5bfc\u70ed\u6027\uff0c\u662f\u5de5\u4e1a\u4e2d\u5e94\u7528\u6700\u5e7f\u6cdb\u7684\u6709\u8272\u91d1\u5c5e\u4e4b\u4e00\u3002\n\n\u5de5\u4e1a\u7eaf\u94dc\uff08\u5373\u7d2b\u94dc\uff09\u662f\u6307\u94dc\u542b\u91cf\u572899.5%\u4ee5\u4e0a\u7684\u94dc\uff0c\u5176\u4f18\u5f02\u7684\u7269\u7406\u5316\u5b66\u6027\u80fd\u4f7f\u5176\u5728\u7535\u6c14\u3001\u5efa\u7b51\u3001\u673a\u68b0\u7b49\u4f17\u591a\u9886\u57df\u4e2d\u4e0d\u53ef\u66ff\u4ee3\u3002\n\n\n\n\n\u7b2c\u4e8c\u7ae0  \u94dc\u7684\u7269\u7406\u4e0e\u5316\u5b66\u6027\u8d28",
+        "mimetype": "text/plain",
+        "start_char_idx": 114,
+        "end_char_idx": 556,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "ce9fe9cf-8c7e-46d1-a525-7e4794abd2d5": {
+      "__data__": {
+        "id_": "ce9fe9cf-8c7e-46d1-a525-7e4794abd2d5",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "627fc5d1-1979-4e4b-b015-13120637a066",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "db4f03dd00d2d2e5bd7e88dbcfde18dc440676f4cda6e3a82a8b633cfd941889",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "519f4e6d-e3ac-45e1-8437-ab714bb0a069",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "e64fc1af4aac5956b2c728e42d6561006bc5f48dbbd1ab619b3ec91045934efb",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "\u7b2c\u4e8c\u7ae0  \u94dc\u7684\u7269\u7406\u4e0e\u5316\u5b66\u6027\u8d28\n\n\n\n2.1 \u7269\u7406\u6027\u8d28\n\n2.1.1 \u57fa\u672c\u7269\u7406\u53c2\u6570\n\n\u7269\u7406\u6027\u8d28\n\n\u6570\u503c / \u63cf\u8ff0\n\n\u989c\u8272\n\n\u73ab\u7470\u7ea2\u8272\uff08\u7d2b\u7ea2\u8272\uff09\uff0c\u8868\u9762\u6c27\u5316\u540e\u5448\u6697\u7ea2\u6216\u68d5\u9ed1\u8272\n\n\u6676\u4f53\u7ed3\u6784\n\n\u9762\u5fc3\u7acb\u65b9\uff08FCC\uff09\n\n\u5bc6\u5ea6\n\n8.96 g/cm\u00b3\uff0820\u00b0C\uff09\n\n\u7194\u70b9\n\n1083.4\u00b0C\uff081356.55 K\uff09\n\n\u6cb8\u70b9\n\n2567\u00b0C\n\n\u5bfc\u7535\u7387\uff08\u76f8\u5bf9\u503c\uff09\n\n100% IACS\uff08\u56fd\u9645\u9000\u706b\u94dc\u6807\u51c6\uff09\n\n\u5bfc\u7535\u7387\uff08\u7edd\u5bf9\u503c\uff09\n\n5.81 \u00d7 10\u2077 S/m\uff0820\u00b0C\uff09\n\n\u5bfc\u70ed\u7cfb\u6570\n\n\u7ea6 401 W/(m\u00b7K)\uff08\u5ba4\u6e29\uff09\n\n\u7ebf\u81a8\u80c0\u7cfb\u6570\n\n17 \u00d7 10\u207b\u2076 /\u00b0C\uff0820~200\u00b0C\uff09\n\n\u5f39\u6027\u6a21\u91cf\n\n\u7ea6 120~130 GPa\n\n\u6cca\u677e\u6bd4\n\n\u7ea6 0.34\n\n\u78c1\u6027\n\n\u6297\u78c1\u6027\uff08\u975e\u78c1\u6027\u6750\u6599\uff09\n\n\u53cd\u5c04\u7387\n\n\u5bf9\u7ea2\u5149\u7ea695%\uff0c\u5bf9\u7d2b\u5916\u5149\u8f83\u4f4e\n\n\n\n2.1.2 \u529b\u5b66\u6027\u80fd\uff08\u9000\u706b\u7eaf\u94dc\uff09\n\n\u529b\u5b66\u6027\u80fd\n\n\u5178\u578b\u503c\n\n\u6297\u62c9\u5f3a\u5ea6 (Rm)\n\n\u2265220 MPa\n\n\u5c48\u670d\u5f3a\u5ea6 (Rp0.2)\n\n\u7ea6 70 MPa\uff08\u9000\u706b\u6001\uff09\n\n\u65ad\u88c2\u4f38\u957f\u7387 (A)\n\n\u226545%\uff08\u9000\u706b\u6001\uff09\n\n\u5e03\u6c0f\u786c\u5ea6 (HB)\n\n\u7ea6 35~45 HB\uff08\u9000\u706b\u6001\uff09\n\n\u7ef4\u6c0f\u786c\u5ea6 (HV)\n\n\u7ea6 40~50 HV\uff08\u9000\u706b\u6001\uff09\n\n\u51b2\u51fb\u97e7\u6027\n\n\u6781\u597d\uff0c\u4e0d\u6613\u53d1\u751f\u8106\u65ad\n\n\n\n2.2 \u5316\u5b66\u6027\u8d28\n\n2.2.",
+        "mimetype": "text/plain",
+        "start_char_idx": 542,
+        "end_char_idx": 1085,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "519f4e6d-e3ac-45e1-8437-ab714bb0a069": {
+      "__data__": {
+        "id_": "519f4e6d-e3ac-45e1-8437-ab714bb0a069",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "ce9fe9cf-8c7e-46d1-a525-7e4794abd2d5",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "408b07288df77561ede17f72603e1d61d51b99045cb4ff880ddc84b4fd0a8c5e",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "bd1dcb2e-aeab-47b7-a70e-914f8c510aad",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "61a985fc5a7b388cfb55ddf2ffec5dce5e3b83edc1803a85e7058a3f10111f88",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "2.2 \u5316\u5b66\u6027\u8d28\n\n2.2.1 \u5e38\u6e29\u5316\u5b66\u7a33\u5b9a\u6027\n\n\u94dc\u5728\u5e72\u71e5\u7a7a\u6c14\u4e2d\u5316\u5b66\u6027\u8d28\u8f83\u4e3a\u7a33\u5b9a\uff0c\u4e0d\u4e0e\u6c27\u6c14\u76f4\u63a5\u53cd\u5e94\u751f\u6210\u6c27\u5316\u7269\uff08\u4e0e\u94c1\u4e0d\u540c\uff0c\u4e0d\u53d1\u751f\u7ea2\u9508\uff09\u3002\u4f46\u5728\u542b\u6709\u6c34\u5206\u548cCO\u2082\u7684\u6f6e\u6e7f\u7a7a\u6c14\u4e2d\uff0c\u94dc\u8868\u9762\u4f1a\u7f13\u6162\u5f62\u6210\u4e00\u5c42\u7eff\u8272\u7684\u78b1\u5f0f\u78b3\u9178\u94dc\uff0c\u79f0\u4e3a\u94dc\u7eff\uff08\u94dc\u9508\uff09\uff0c\u5316\u5b66\u5f0f\u4e3a Cu\u2082(OH)\u2082CO\u2083\u3002\u94dc\u7eff\u662f\u4e00\u79cd\u81f4\u5bc6\u7684\u4fdd\u62a4\u5c42\uff0c\u80fd\u963b\u6b62\u5185\u90e8\u94dc\u7ee7\u7eed\u88ab\u8150\u8680\u3002\n\n2.2.2 \u94dc\u4e0e\u9178\u7684\u53cd\u5e94\n\n\u94dc\u4e0d\u4e0e\u7a00\u76d0\u9178\u6216\u7a00\u786b\u9178\u53cd\u5e94\uff08\u94dc\u5728\u91d1\u5c5e\u6d3b\u52a8\u6027\u5e8f\u5217\u4e2d\u4f4d\u4e8e\u6c22\u4e4b\u540e\uff09\u3002\n\n\u94dc\u4e0e\u7a00\u785d\u9178\u53cd\u5e94\uff1a3Cu + 8HNO\u2083(\u7a00) \u2192 3Cu(NO\u2083)\u2082 + 2NO\u2191 + 4H\u2082O\n\n\u94dc\u4e0e\u6d53\u785d\u9178\u53cd\u5e94\uff1aCu + 4HNO\u2083(\u6d53) \u2192 Cu(NO\u2083)\u2082 + 2NO\u2082\u2191 + 2H\u2082O\n\n\u94dc\u4e0e\u70ed\u6d53\u786b\u9178\u53cd\u5e94\uff1aCu + 2H\u2082SO\u2084(\u6d53\uff0c\u70ed) \u2192 CuSO\u2084 + SO\u2082\u2191 + 2H\u2082O\n\n2.2.3 \u94dc\u7684\u6c27\u5316\u7269\n\n\u6c27\u5316\u4e9a\u94dc\uff08Cu\u2082O\uff09\uff1a\u7ea2\u8272\u56fa\u4f53\uff0c\u662f\u94dc\u5728\u8f83\u4f4e\u6e29\u5ea6\u4e0b\u6c27\u5316\u7684\u4ea7\u7269\uff0c\u4e5f\u662f\u94dc\u9508\u7684\u6210\u5206\u4e4b\u4e00\u3002",
+        "mimetype": "text/plain",
+        "start_char_idx": 1071,
+        "end_char_idx": 1473,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "bd1dcb2e-aeab-47b7-a70e-914f8c510aad": {
+      "__data__": {
+        "id_": "bd1dcb2e-aeab-47b7-a70e-914f8c510aad",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "519f4e6d-e3ac-45e1-8437-ab714bb0a069",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "a5b156fc990f74c3db1be411b1bb6a1f92f5c6412094b50e00064899b2702ccc",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "158a2321-d5b4-45c3-a6b5-66c4276fb8c0",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "7b1c1085de1f76a6a8dbcadb14f25a7a3d5ef3af17e7e426d359ce0064adb876",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "\u6c27\u5316\u94dc\uff08CuO\uff09\uff1a\u9ed1\u8272\u56fa\u4f53\uff0c\u94dc\u5728\u9ad8\u6e29\uff08>300\u00b0C\uff09\u4e0b\u6301\u7eed\u6c27\u5316\u751f\u6210\uff0c\u7194\u70b91201\u00b0C\u3002\n\n2.2.4 \u8010\u8150\u8680\u6027\n\n\u94dc\u5177\u6709\u826f\u597d\u7684\u8010\u8150\u8680\u6027\u80fd\uff0c\u80fd\u62b5\u6297\u5927\u591a\u6570\u7a00\u9178\u3001\u78b1\u548c\u76d0\u6eb6\u6db2\u7684\u8150\u8680\u3002\u94dc\u5bf9\u6d77\u6c34\u8150\u8680\u4e5f\u6709\u8f83\u5f3a\u7684\u62b5\u6297\u529b\uff0c\u8fd9\u662f\u94dc\u5408\u91d1\uff08\u5982\u6d77\u519b\u9ec4\u94dc\uff09\u88ab\u5e7f\u6cdb\u7528\u4e8e\u8239\u8236\u5de5\u4e1a\u7684\u91cd\u8981\u539f\u56e0\u3002\u4f46\u94dc\u5bf9\u542b\u6c28\u6c34\u6eb6\u6db2\u3001\u6c30\u5316\u7269\u6eb6\u6db2\u3001\u5364\u65cf\u5143\u7d20\uff08\u6c1f\u3001\u6c2f\u3001\u6eb4\u3001\u7898\uff09\u53ca\u5176\u5316\u5408\u7269\u7b49\u8f83\u4e3a\u654f\u611f\uff0c\u5bb9\u6613\u53d1\u751f\u8150\u8680\u3002\n\n\n\n\n\u7b2c\u4e09\u7ae0  \u94dc\u53ca\u94dc\u5408\u91d1\u7684\u5206\u7c7b\u4f53\u7cfb",
+        "mimetype": "text/plain",
+        "start_char_idx": 1475,
+        "end_char_idx": 1670,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "158a2321-d5b4-45c3-a6b5-66c4276fb8c0": {
+      "__data__": {
+        "id_": "158a2321-d5b4-45c3-a6b5-66c4276fb8c0",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "bd1dcb2e-aeab-47b7-a70e-914f8c510aad",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "58ee77921c34462de469569ee9d96bb15125960835b33655d7a3ec2c0899053d",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "d7676189-328e-41ba-b205-4e7565b81c30",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "40d1c7308ba585c4d08a539c393f99ba98f2a3680b21d5291c0f2fb61efcd76c",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "\u7b2c\u4e09\u7ae0  \u94dc\u53ca\u94dc\u5408\u91d1\u7684\u5206\u7c7b\u4f53\u7cfb\n\n\n\n3.1 \u603b\u4f53\u5206\u7c7b\u6846\u67b6\n\n\u94dc\u53ca\u94dc\u5408\u91d1\u6309\u7167\u6210\u5206\u548c\u7528\u9014\u53ef\u5206\u4e3a\u4e24\u5927\u7c7b\uff1a\u7eaf\u94dc\uff08\u5de5\u4e1a\u7eaf\u94dc\uff09\u548c\u94dc\u5408\u91d1\u3002\u94dc\u5408\u91d1\u53c8\u53ef\u6309\u4e3b\u8981\u5408\u91d1\u5143\u7d20\u8fdb\u4e00\u6b65\u5206\u4e3a\u9ec4\u94dc\u3001\u767d\u94dc\u3001\u9752\u94dc\u4e09\u5927\u7cfb\u5217\u53ca\u5176\u4ed6\u7279\u6b8a\u94dc\u5408\u91d1\u3002\n\n\u4e00\u7ea7\u5206\u7c7b\n\n\u4e8c\u7ea7\u5206\u7c7b\n\n\u4e3b\u8981\u5408\u91d1\u5143\u7d20\n\n\u5178\u578b\u4ee3\u8868\n\n\u7eaf\u94dc\uff08\u7d2b\u94dc\uff09\n\n\u5de5\u4e1a\u7eaf\u94dc\n\nCu \u226599.5%\n\nT1\u3001T2\u3001T3\n\n\u9ec4\u94dc\n\n\u666e\u901a\u9ec4\u94dc\n\nCu-Zn\n\nH80\u3001H68\u3001H62\u3001H59\n\n\u9ec4\u94dc\n\n\u7279\u6b8a\u9ec4\u94dc\n\nCu-Zn+\u5176\u4ed6\u5143\u7d20\n\nHPb59-1\u3001HSn70-1\u3001HMn58-2\n\n\u9752\u94dc\n\n\u9521\u9752\u94dc\n\nCu-Sn\n\nQSn4-3\u3001QSn6.5-0.1\n\n\u9752\u94dc\n\n\u94dd\u9752\u94dc\n\nCu-Al\n\nQAl9-4\u3001QAl10-3-1.5\n\n\u9752\u94dc\n\n\u94cd\u9752\u94dc\n\nCu-Be\n\nQBe2\u3001QBe1.9\n\n\u9752\u94dc\n\n\u7845\u9752\u94dc\n\nCu-Si\n\nQSi3-1\n\n\u9752\u94dc\n\n\u9530\u9752\u94dc\n\nCu-Mn\n\nQMn5\n\n\u767d\u94dc\n\n\u666e\u901a\u767d\u94dc\n\nCu-Ni\n\nB5\u3001B19\u3001B30\n\n\u767d\u94dc\n\n\u950c\u767d\u94dc\n\nCu-Ni-Zn\n\nBZn15-20\n\n\u767d\u94dc\n\n\u94c1\u767d\u94dc\n\nCu-Ni-Fe-Mn\n\nBFe10-1-1\n\n\n\n3.",
+        "mimetype": "text/plain",
+        "start_char_idx": 1655,
+        "end_char_idx": 2141,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "d7676189-328e-41ba-b205-4e7565b81c30": {
+      "__data__": {
+        "id_": "d7676189-328e-41ba-b205-4e7565b81c30",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "158a2321-d5b4-45c3-a6b5-66c4276fb8c0",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "6ee92263699e5bf641e67b4eec6d7aa0155e1fd49ef4969a7c844f77cfe0a7db",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "8ae43935-3d0b-4b55-a359-745ea3a556e1",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "f97d5852e8a68eb3bed823a368ce132d2943b0e6e58efac79cae39bcf97685e2",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "3.2 \u7eaf\u94dc\uff08\u7d2b\u94dc\uff09\n\n\u7eaf\u94dc\u56e0\u5176\u65ad\u9762\u5448\u7d2b\u7ea2\u8272\u800c\u4fd7\u79f0\u7d2b\u94dc\u3002\u5de5\u4e1a\u7eaf\u94dc\u6309\u7eaf\u5ea6\u5206\u4e3a\u51e0\u4e2a\u724c\u53f7\uff0c\u94dc\u542b\u91cf\u8d8a\u9ad8\uff0c\u5bfc\u7535\u6027\u80fd\u8d8a\u597d\uff0c\u4f46\u5f3a\u5ea6\u76f8\u5bf9\u8f83\u4f4e\u3002\u7eaf\u94dc\u5851\u6027\u6781\u597d\uff0c\u4fbf\u4e8e\u51b7\u3001\u70ed\u53d8\u5f62\u52a0\u5de5\uff0c\u5e7f\u6cdb\u7528\u4e8e\u5236\u9020\u5bfc\u7ebf\u3001\u5bfc\u7535\u6392\u3001\u94dc\u7ba1\u3001\u94dc\u5e26\u3001\u94dc\u68d2\u7b49\u3002\n\n3.3 \u9ec4\u94dc\n\n\u9ec4\u94dc\u662f\u4ee5\u950c\uff08Zn\uff09\u4e3a\u4e3b\u8981\u5408\u91d1\u5143\u7d20\u7684\u94dc\u5408\u91d1\uff0c\u56e0\u5176\u91d1\u9ec4\u8272\u5916\u89c2\u800c\u5f97\u540d\u3002\u9ec4\u94dc\u5177\u6709\u6bd4\u7eaf\u94dc\u66f4\u9ad8\u7684\u5f3a\u5ea6\u548c\u786c\u5ea6\uff0c\u540c\u65f6\u4fdd\u6301\u826f\u597d\u7684\u5851\u6027\u548c\u52a0\u5de5\u6027\uff0c\u4ef7\u683c\u4e5f\u4f4e\u4e8e\u7eaf\u94dc\uff0c\u662f\u5de5\u4e1a\u4e0a\u7528\u91cf\u6700\u5927\u7684\u94dc\u5408\u91d1\u3002\n\n\u666e\u901a\u9ec4\u94dc\uff1a\u53ea\u542b\u94dc\u548c\u950c\u4e24\u79cd\u5143\u7d20\uff0c\u5982 H68\uff08\u542b\u950c\u7ea632%\uff09\u5177\u6709\u6781\u597d\u7684\u51b7\u52a0\u5de5\u6027\uff0c\u5e38\u7528\u4e8e\u5f39\u58f3\u3002\n\n\u7279\u6b8a\u9ec4\u94dc\uff1a\u5728\u94dc\u950c\u57fa\u7840\u4e0a\u52a0\u5165\u94c5\u3001\u9521\u3001\u94dd\u3001\u9530\u3001\u94c1\u3001\u954d\u3001\u7845\u7b49\u4e00\u79cd\u6216\u591a\u79cd\u5408\u91d1\u5143\u7d20\uff0c\u4ee5\u63d0\u9ad8\u7279\u5b9a\u6027\u80fd\uff0c\u5982 HPb59-1\uff08\u94c5\u9ec4\u94dc\uff09\u5177\u6709\u4f18\u826f\u7684\u5207\u524a\u6027\uff0cHAl60-1-1\uff08\u94dd\u9ec4\u94dc\uff09\u8010\u8680\u6027\u66f4\u5f3a\u3002\n\n3.4 \u9752\u94dc\n\n\u9752\u94dc\u539f\u6307\u94dc\u9521\u5408\u91d1\uff0c\u73b0\u5df2\u6269\u5c55\u4e3a\u9664\u9ec4\u94dc\u548c\u767d\u94dc\u5916\u7684\u6240\u6709\u94dc\u5408\u91d1\u7684\u7edf\u79f0\u3002",
+        "mimetype": "text/plain",
+        "start_char_idx": 2139,
+        "end_char_idx": 2512,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "8ae43935-3d0b-4b55-a359-745ea3a556e1": {
+      "__data__": {
+        "id_": "8ae43935-3d0b-4b55-a359-745ea3a556e1",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "d7676189-328e-41ba-b205-4e7565b81c30",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "ac34a060c3def541f6634687a81834c65d22f7495356ac21ee367f2dcd1cb5df",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "6922057c-5c9c-4c7b-bcca-4ad770f8f5c9",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "b26f92709130b2879c94bf6e2b2342ac3ba7801550c09929ff880b943ea6d6c3",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "3.4 \u9752\u94dc\n\n\u9752\u94dc\u539f\u6307\u94dc\u9521\u5408\u91d1\uff0c\u73b0\u5df2\u6269\u5c55\u4e3a\u9664\u9ec4\u94dc\u548c\u767d\u94dc\u5916\u7684\u6240\u6709\u94dc\u5408\u91d1\u7684\u7edf\u79f0\u3002\u9752\u94dc\u5177\u6709\u6bd4\u9ec4\u94dc\u66f4\u597d\u7684\u8010\u78e8\u6027\u3001\u8010\u8680\u6027\u548c\u5f39\u6027\uff0c\u5e7f\u6cdb\u7528\u4e8e\u8f74\u627f\u3001\u5f39\u6027\u5143\u4ef6\u7b49\u9886\u57df\u3002\n\n\u9521\u9752\u94dc\uff08Cu-Sn\uff09\uff1a\u8010\u78e8\u6027\u597d\u3001\u94f8\u9020\u6027\u80fd\u4f18\u826f\uff0c\u9002\u7528\u4e8e\u8f74\u627f\u3001\u8f74\u5957\u3001\u9f7f\u8f6e\u7b49\u3002\n\n\u94dd\u9752\u94dc\uff08Cu-Al\uff09\uff1a\u9ad8\u5f3a\u5ea6\u3001\u9ad8\u8010\u78e8\u3001\u8010\u8150\u8680\uff0c\u53ef\u4ee3\u66ff\u90e8\u5206\u94a2\u6750\u4f7f\u7528\u3002\n\n\u94cd\u9752\u94dc\uff08Cu-Be\uff09\uff1a\u5f39\u6027\u6781\u9650\u9ad8\u3001\u75b2\u52b3\u5f3a\u5ea6\u597d\uff0c\u662f\u5f39\u6027\u5143\u4ef6\u7684\u4f18\u9009\u6750\u6599\u3002\n\n\u7845\u9752\u94dc\uff08Cu-Si\uff09\uff1a\u5f3a\u5ea6\u9ad8\u3001\u8010\u8680\u6027\u597d\u3001\u710a\u63a5\u6027\u80fd\u4f18\u826f\u3002\n\n3.5 \u767d\u94dc\n\n\u767d\u94dc\u662f\u4ee5\u954d\uff08Ni\uff09\u4e3a\u4e3b\u8981\u5408\u91d1\u5143\u7d20\u7684\u94dc\u5408\u91d1\uff0c\u56e0\u5916\u89c2\u5448\u94f6\u767d\u8272\u800c\u5f97\u540d\u3002\u767d\u94dc\u5177\u6709\u8f83\u9ad8\u7684\u7535\u963b\u7387\u3001\u826f\u597d\u7684\u8010\u8150\u8680\u6027\u548c\u52a0\u5de5\u6027\uff0c\u5e38\u7528\u4e8e\u7535\u963b\u5143\u4ef6\u3001\u70ed\u7535\u5076\u3001\u533b\u7597\u5668\u68b0\u53ca\u8d27\u5e01\u7b49\u3002\n\n\n\n\n\u7b2c\u56db\u7ae0  \u5e38\u89c1\u724c\u53f7\u4e0e\u6807\u51c6\u4f53\u7cfb",
+        "mimetype": "text/plain",
+        "start_char_idx": 2473,
+        "end_char_idx": 2791,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "6922057c-5c9c-4c7b-bcca-4ad770f8f5c9": {
+      "__data__": {
+        "id_": "6922057c-5c9c-4c7b-bcca-4ad770f8f5c9",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "8ae43935-3d0b-4b55-a359-745ea3a556e1",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "686f3c97966c322cea106b40815df74b37884b1fd5a5d1693d584a3976ef52ad",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "f0d2cbf2-2e19-4914-8c9a-f8691fae2610",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "268e818078a237eddc26f43292d531f7fe413cfdc9ee9eeea5642210ba65fd68",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "\u7b2c\u56db\u7ae0  \u5e38\u89c1\u724c\u53f7\u4e0e\u6807\u51c6\u4f53\u7cfb\n\n\n\n4.1 \u4e2d\u56fd\u724c\u53f7\u547d\u540d\u89c4\u5219\n\n\u4e2d\u56fd\u94dc\u53ca\u94dc\u5408\u91d1\u7684\u724c\u53f7\u547d\u540d\u6309\u7167 GB/T 5231 \u7b49\u76f8\u5173\u56fd\u5bb6\u6807\u51c6\u6267\u884c\uff0c\u91c7\u7528\u6c49\u8bed\u62fc\u97f3\u5b57\u6bcd\u52a0\u6570\u5b57\u7684\u65b9\u5f0f\u8868\u793a\u3002\n\n\u5408\u91d1\u7c7b\u522b\n\n\u524d\u7f00\u5b57\u6bcd\n\n\u542b\u4e49\n\n\u793a\u4f8b\n\n\u5de5\u4e1a\u7eaf\u94dc\n\nT\n\n\u94dc\uff08Tong\uff09\n\nT1\u3001T2\u3001T3\n\n\u9ec4\u94dc\n\nH\n\n\u9ec4\uff08Huang\uff09\n\nH68\u3001H62\u3001HPb59-1\n\n\u9752\u94dc\n\nQ\n\n\u9752\uff08Qing\uff09\n\nQSn4-3\u3001QAl9-4\n\n\u767d\u94dc\n\nB\n\n\u767d\uff08Bai\uff09\n\nB19\u3001BZn15-20\n\n\u94f8\u9020\u94dc\u5408\u91d1\n\nZ+\u524d\u7f00\n\n\u94f8\uff08Zhu\uff09\n\nZCuSn10P1\u3001ZCuAl10Fe3",
+        "mimetype": "text/plain",
+        "start_char_idx": 2777,
+        "end_char_idx": 3046,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "f0d2cbf2-2e19-4914-8c9a-f8691fae2610": {
+      "__data__": {
+        "id_": "f0d2cbf2-2e19-4914-8c9a-f8691fae2610",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "6922057c-5c9c-4c7b-bcca-4ad770f8f5c9",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "e13362b083f40a38b30c5739ca19020e48d585aaf5ba051444e2534eee919eca",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "0bc678c4-1c0d-41cb-bd61-be5a8f1dd347",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "d581b64b30c74799deee741d842e41696b0c79051966cb42b3c4c475f9842808",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "\u724c\u53f7\u4e2d\u6570\u5b57\u7684\u542b\u4e49\uff1a\u5b57\u6bcd\u540e\u7684\u6570\u5b57\u8868\u793a\u4e3b\u8981\u5143\u7d20\uff08\u94dc\u9664\u5916\u7684\u7b2c\u4e00\u4e3b\u52a0\u5143\u7d20\uff09\u7684\u5e73\u5747\u8d28\u91cf\u5206\u6570\uff08%\uff09\uff0c\u591a\u4e2a\u6570\u5b57\u7528\u77ed\u7ebf\u9694\u5f00\u4f9d\u6b21\u5bf9\u5e94\u5404\u5408\u91d1\u5143\u7d20\u542b\u91cf\uff0c\u5982 HPb59-1 \u8868\u793a\u542b\u94dc\u7ea659%\u3001\u542b\u94c5\u7ea61%\u7684\u94c5\u9ec4\u94dc\u3002\n\n4.2 \u5e38\u89c1\u5de5\u4e1a\u7eaf\u94dc\u724c\u53f7\n\n\u724c\u53f7\n\n\u94dc\u542b\u91cf\n\n\u4e3b\u8981\u7279\u70b9\n\n\u5178\u578b\u7528\u9014\n\nT1\n\n\u226599.95%\n\n\u7eaf\u5ea6\u6781\u9ad8\uff0c\u5bfc\u7535\u6027\u6700\u597d\n\n\u9ad8\u5bfc\u7535\u5bfc\u7ebf\u3001\u7535\u5b50\u5143\u4ef6\n\nT2\n\n\u226599.90%\n\n\u7efc\u5408\u6027\u80fd\u597d\uff0c\u7528\u9014\u6700\u5e7f\n\n\u7535\u7ebf\u7535\u7f06\u3001\u5bfc\u7535\u6392\u3001\u94dc\u7ba1\n\nT3\n\n\u226599.70%\n\n\u7eaf\u5ea6\u7565\u4f4e\uff0c\u6210\u672c\u8f83\u4f4e\n\n\u4e00\u822c\u5bfc\u7535\u5668\u4ef6\u3001\u6563\u70ed\u90e8\u4ef6\n\nTU1\n\n\u226599.97%\uff08\u65e0\u6c27\uff09\n\n\u65e0\u6c27\u94dc\uff0c\u6c27\u542b\u91cf\u6781\u4f4e\n\n\u9ad8\u9891\u5bfc\u7ebf\u3001\u534a\u5bfc\u4f53\u5c01\u88c5\n\nTU2\n\n\u226599.95%\uff08\u65e0\u6c27\uff09\n\n\u65e0\u6c27\u94dc\uff0c\u5bfc\u7535\u5bfc\u70ed\u6027\u597d\n\n\u771f\u7a7a\u5668\u4ef6\u3001\u9ad8\u5bfc\u70ed\u90e8\u4ef6\n\nTP1/TP2\n\n\u226599.90%\uff08\u78f7\u8131\u6c27\uff09\n\n\u826f\u597d\u710a\u63a5\u6027\u548c\u8010\u8680\u6027\n\n\u94dc\u7ba1\u3001\u70ed\u4ea4\u6362\u5668",
+        "mimetype": "text/plain",
+        "start_char_idx": 3050,
+        "end_char_idx": 3417,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "0bc678c4-1c0d-41cb-bd61-be5a8f1dd347": {
+      "__data__": {
+        "id_": "0bc678c4-1c0d-41cb-bd61-be5a8f1dd347",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "f0d2cbf2-2e19-4914-8c9a-f8691fae2610",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "ef0a14bfea338df5bf2afca997655e6792a3901f94359cdea9ab8a0a7816f53e",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "ca559428-849b-4d17-bea9-1927b53b95da",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "1b8e1ede79d0314dcbc5a860aea22b3d7e2150a9ffa751b940a9c9af9c767cc6",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "4.3 \u5e38\u89c1\u9ec4\u94dc\u724c\u53f7\n\n\u724c\u53f7\n\n\u4e3b\u8981\u6210\u5206\uff08%\uff09\n\n\u4e3b\u8981\u7279\u70b9\n\n\u5178\u578b\u7528\u9014\n\nH96\n\nCu96\uff0cZn4\n\n\u5bfc\u7535\u6027\u597d\uff0c\u8272\u6cfd\u8fd1\u4f3c\u7eaf\u94dc\n\n\u5bfc\u7535\u96f6\u4ef6\u3001\u88c5\u9970\u54c1\n\nH90\n\nCu90\uff0cZn10\n\n\u989c\u8272\u91d1\u9ec4\u3001\u5ef6\u5c55\u6027\u597d\n\n\u91d1\u5c5e\u5de5\u827a\u54c1\u3001\u5956\u7ae0\n\nH80\n\nCu80\uff0cZn20\n\n\u5851\u6027\u597d\u3001\u8010\u8680\u6027\u5f3a\n\n\u7eb8\u5f20\u5939\u3001\u5316\u5de5\u7ba1\u9053\n\nH68\n\nCu68\uff0cZn32\n\n\u51b7\u52a0\u5de5\u6027\u6700\u597d\uff08\u4e03\u4e09\u9ec4\u94dc\uff09\n\n\u5f39\u58f3\u3001\u6ce2\u7eb9\u7ba1\u3001\u6563\u70ed\u7247\n\nH62\n\nCu62\uff0cZn38\n\n\u5f3a\u5ea6\u9ad8\u3001\u4ef7\u683c\u8f83\u4f4e\uff08\u516d\u56db\u9ec4\u94dc\uff09\n\n\u673a\u68b0\u96f6\u4ef6\u3001\u87ba\u9489\u3001\u9500\u9489\n\nH59\n\nCu59\uff0cZn41\n\n\u70ed\u52a0\u5de5\u6027\u597d\uff0c\u6210\u672c\u4f4e\n\n\u70ed\u953b\u4ef6\u3001\u673a\u5668\u96f6\u4ef6\n\nHPb59-1\n\nCu59\uff0cPb1\uff0cZn\u4f59\n\n\u5207\u524a\u6027\u6781\u597d\uff08\u6613\u5207\u524a\u9ec4\u94dc\uff09\n\n\u949f\u8868\u96f6\u4ef6\u3001\u7cbe\u5bc6\u87ba\u9489\n\nHSn70-1\n\nCu70\uff0cSn1\uff0cZn\u4f59\n\n\u8010\u8680\u6027\u597d\uff08\u6d77\u519b\u9ec4\u94dc\uff09\n\n\u8239\u8236\u51b7\u51dd\u7ba1\u3001\u6d77\u6c34\u9600\u95e8\n\nHAl60-1-1\n\nCu60\uff0cAl1\uff0cMn1\uff0cZn\u4f59\n\n\u9ad8\u5f3a\u5ea6\u8010\u8150\u8680\n\n\u8239\u8236\u96f6\u4ef6\u3001\u8010\u8680\u7ed3\u6784\u4ef6\n\n\n\n4.",
+        "mimetype": "text/plain",
+        "start_char_idx": 3421,
+        "end_char_idx": 3840,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "ca559428-849b-4d17-bea9-1927b53b95da": {
+      "__data__": {
+        "id_": "ca559428-849b-4d17-bea9-1927b53b95da",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "0bc678c4-1c0d-41cb-bd61-be5a8f1dd347",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "c0f7a63c41eae2304a86bd1b7b6e9313979aa9e28bae5dc61482575f4aa2f329",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "5db097b4-628c-471d-991f-fb95d5e3255e",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "fe76ee7402c87739a6569ca816ce75981e0935455db95c552f21a2537fa9590c",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "4.4 \u5e38\u89c1\u9752\u94dc\u724c\u53f7\n\n\u724c\u53f7\n\n\u4e3b\u8981\u6210\u5206\uff08%\uff09\n\n\u4e3b\u8981\u7279\u70b9\n\n\u5178\u578b\u7528\u9014\n\nQSn4-3\n\nCu96\uff0cSn4\uff0cZn3\n\n\u5f39\u6027\u597d\uff0c\u8010\u8680\u6027\u5f3a\n\n\u5f39\u7c27\u3001\u63a5\u89e6\u7247\u3001\u8010\u78e8\u4ef6\n\nQSn6.5-0.1\n\nCu93.4\uff0cSn6.5\uff0cP0.1\n\n\u786c\u5ea6\u9ad8\uff0c\u8010\u78e8\u6027\u597d\n\n\u9f7f\u8f6e\u3001\u5f39\u7c27\u3001\u8f74\u627f\n\nQAl9-4\n\nCu87\uff0cAl9\uff0cFe4\n\n\u9ad8\u5f3a\u5ea6\u3001\u8010\u78e8\u3001\u8010\u8680\n\n\u9f7f\u8f6e\u3001\u8f74\u627f\u3001\u6469\u64e6\u4ef6\n\nQAl10-3-1.5\n\nCu85.5\uff0cAl10\uff0cFe3\uff0cMn1.5\n\n\u9ad8\u5f3a\u5ea6\uff0c\u53ef\u70ed\u5904\u7406\u5f3a\u5316\n\n\u9ad8\u5f3a\u5ea6\u8010\u78e8\u96f6\u4ef6\n\nQBe2\n\nCu98\uff0cBe2\n\n\u5f39\u6027\u6781\u9650\u9ad8\uff0c\u75b2\u52b3\u5f3a\u5ea6\u597d\n\n\u7cbe\u5bc6\u5f39\u6027\u5143\u4ef6\u3001\u7535\u63a5\u89e6\u7247\n\nQBe1.9-0.1\n\nCu98\uff0cBe1.9\uff0cNi0.",
+        "mimetype": "text/plain",
+        "start_char_idx": 3838,
+        "end_char_idx": 4140,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "5db097b4-628c-471d-991f-fb95d5e3255e": {
+      "__data__": {
+        "id_": "5db097b4-628c-471d-991f-fb95d5e3255e",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "ca559428-849b-4d17-bea9-1927b53b95da",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "39f37a8870b2d076c2842671786f72d5b0f7170d3bfb512a2a547b173e29e202",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "3492172e-eb2b-4f93-b524-c9a70ce38323",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "a1052352b59f9e85740299230ca59996d09ddaa73c39562e92e9fd2458c1786b",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "9-0.1\n\nCu98\uff0cBe1.9\uff0cNi0.1\n\n\u5bfc\u7535\u5bfc\u70ed\u6027\u6bd4QBe2\u597d\n\n\u8fde\u63a5\u5668\u3001\u5f00\u5173\u5f39\u7247\n\nQSi3-1\n\nCu96\uff0cSi3\uff0cMn1\n\n\u5f3a\u5ea6\u9ad8\uff0c\u8010\u8680\u6027\u548c\u710a\u63a5\u6027\u597d\n\n\u5f39\u7c27\u3001\u8010\u8680\u96f6\u4ef6\n\nZCuSn10P1\n\nCu89\uff0cSn10\uff0cP1\uff08\u94f8\u9020\uff09\n\n\u8010\u78e8\u3001\u8010\u538b\uff0c\u94f8\u9020\u6027\u597d\n\n\u8717\u8f6e\u3001\u8f74\u74e6\u3001\u886c\u5957\n\nZCuAl10Fe3\n\nCu87\uff0cAl10\uff0cFe3\uff08\u94f8\u9020\uff09\n\n\u9ad8\u5f3a\u5ea6\uff0c\u8010\u78e8\u8010\u8680\n\n\u87ba\u65cb\u6868\u3001\u9f7f\u8f6e\u3001\u8f74\u627f\u5ea7",
+        "mimetype": "text/plain",
+        "start_char_idx": 4118,
+        "end_char_idx": 4313,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "3492172e-eb2b-4f93-b524-c9a70ce38323": {
+      "__data__": {
+        "id_": "3492172e-eb2b-4f93-b524-c9a70ce38323",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "5db097b4-628c-471d-991f-fb95d5e3255e",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "604e2ca208ca2ecef216fcfa7f73771f52dc0a91eff3281c1d16463672e3b276",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "3bc98012-94bc-4944-a9b3-0b340c4d67d7",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "5f50de2003b4d17c2f4df02098856f56d43c3e188c318da8e4029232c8c35a65",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "4.5 \u5e38\u89c1\u767d\u94dc\u724c\u53f7\n\n\u724c\u53f7\n\n\u4e3b\u8981\u6210\u5206\uff08%\uff09\n\n\u4e3b\u8981\u7279\u70b9\n\n\u5178\u578b\u7528\u9014\n\nB5\n\nCu95\uff0cNi5\n\n\u8010\u8680\u6027\u597d\uff0c\u5bfc\u7535\u6027\u8f83\u597d\n\n\u8239\u8236\u7528\u7ba1\u3001\u4eea\u8868\u96f6\u4ef6\n\nB19\n\nCu81\uff0cNi19\n\n\u7efc\u5408\u6027\u80fd\u597d\uff0c\u6297\u8150\u8680\n\n\u4eea\u5668\u4eea\u8868\u3001\u533b\u7597\u5668\u68b0\n\nB30\n\nCu70\uff0cNi30\n\n\u8010\u8680\u6027\u5f3a\uff0c\u9ad8\u7535\u963b\u7387\n\n\u6d77\u6c34\u7ba1\u9053\u3001\u51b7\u51dd\u7ba1\n\nBZn15-20\n\nCu65\uff0cNi15\uff0cZn20\n\n\u5916\u89c2\u7f8e\u89c2\uff0c\u7c7b\u4f3c\u767d\u94f6\n\n\u88c5\u9970\u54c1\u3001\u773c\u955c\u67b6\u3001\u9910\u5177\n\nBFe10-1-1\n\nCu88\uff0cNi10\uff0cFe1\uff0cMn1\n\n\u4f18\u826f\u8010\u6d77\u6c34\u8150\u8680\u6027\n\n\u8239\u8236\u70ed\u4ea4\u6362\u5668\u3001\u6d77\u6c34\u7ba1\n\nBMn40-1.5\uff08\u9530\u94dc\uff09\n\nCu58.5\uff0cMn40\uff0cNi1.5\n\n\u7535\u963b\u6e29\u5ea6\u7cfb\u6570\u8fd1\u96f6\n\n\u7cbe\u5bc6\u7535\u963b\u5143\u4ef6\u3001\u70ed\u7535\u5076",
+        "mimetype": "text/plain",
+        "start_char_idx": 4317,
+        "end_char_idx": 4621,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "3bc98012-94bc-4944-a9b3-0b340c4d67d7": {
+      "__data__": {
+        "id_": "3bc98012-94bc-4944-a9b3-0b340c4d67d7",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "3492172e-eb2b-4f93-b524-c9a70ce38323",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "b443b884e4dff13a35ae183457c1699d4d60bb9a87573e8b02b736a0d5b04d28",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "91a68175-3afc-4534-b68c-e2f85f484e29",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "99a40acd25998be20f74c8948d07a44b38f586cc999a2125941f862378016ac4",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "4.6 \u56fd\u9645\u5e38\u7528\u6807\u51c6\u4f53\u7cfb\u5bf9\u6bd4\n\n\u6807\u51c6\u4f53\u7cfb\n\n\u56fd\u5bb6/\u5730\u533a\n\n\u4e3b\u8981\u6807\u51c6\u53f7\n\n\u7279\u70b9\n\nGB/T\n\n\u4e2d\u56fd\n\nGB/T 5231\u3001GB/T 2059 \u7b49\n\n\u6309\u6210\u5206\u5206\u7c7b\uff0c\u62fc\u97f3\u5b57\u6bcd\u547d\u540d\n\nASTM\n\n\u7f8e\u56fd\n\nASTM B152\u3001B124 \u7b49\n\n\u6309UNS\u7f16\u53f7\uff08\u5982C11000\u3001C26000\uff09\n\nEN\n\n\u6b27\u76df\n\nEN 1652\u3001EN 1654 \u7b49\n\n\u6309CW+\u6570\u5b57+\u5b57\u6bcd\u547d\u540d\n\nJIS\n\n\u65e5\u672c\n\nJIS H3100\u3001H3250 \u7b49\n\nC+4\u4f4d\u6570\u5b57\uff08\u5982C1100\uff09\n\nISO\n\n\u56fd\u9645\n\nISO 197\u3001ISO 426 \u7b49\n\n\u53c2\u7167\u5404\u5730\u533a\u6807\u51c6\n\n\n\n\n\n\n\u7b2c\u4e94\u7ae0  \u94dc\u53ca\u94dc\u5408\u91d1\u7684\u4e3b\u8981\u6027\u80fd\n\n\n\n5.1 \u5bfc\u7535\u6027\n\n\u94dc\u662f\u9664\u94f6\u4ee5\u5916\u5bfc\u7535\u6027\u6700\u597d\u7684\u91d1\u5c5e\uff0c\u5176\u5bfc\u7535\u7387\u901a\u5e38\u88ab\u5b9a\u4e49\u4e3a\u6807\u51c6\uff08100% IACS\uff09\u3002\u5f71\u54cd\u94dc\u5bfc\u7535\u6027\u7684\u4e3b\u8981\u56e0\u7d20\u5305\u62ec\uff1a\n\n\u7eaf\u5ea6\uff1a\u7eaf\u94dc\u5bfc\u7535\u6027\u6700\u597d\uff0c\u5408\u91d1\u5143\u7d20\u7684\u52a0\u5165\u4f1a\u663e\u8457\u964d\u4f4e\u5bfc\u7535\u7387\u3002\n\n\u51b7\u53d8\u5f62\uff1a\u51b7\u52a0\u5de5\u63d0\u9ad8\u5f3a\u5ea6\u4f46\u4f1a\u4f7f\u5bfc\u7535\u7387\u7565\u6709\u4e0b\u964d\u3002\n\n\u6e29\u5ea6\uff1a\u94dc\u7684\u5bfc\u7535\u7387\u968f\u6e29\u5ea6\u5347\u9ad8\u800c\u964d\u4f4e\uff0c\u5177\u6709\u6b63\u6e29\u5ea6\u7cfb\u6570\u3002\n\n\u6c27\u542b\u91cf\uff1a\u6c27\u7684\u5b58\u5728\u4f1a\u5f62\u6210\u6c27\u5316\u4e9a\u94dc\uff08Cu\u2082O\uff09\uff0c\u964d\u4f4e\u5bfc\u7535\u6027\uff0c\u65e0\u6c27\u94dc\uff08TU\u7c7b\uff09\u5bfc\u7535\u6027\u4f18\u4e8e\u666e\u901a\u7eaf\u94dc\u3002\n\n5.",
+        "mimetype": "text/plain",
+        "start_char_idx": 4625,
+        "end_char_idx": 5103,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "91a68175-3afc-4534-b68c-e2f85f484e29": {
+      "__data__": {
+        "id_": "91a68175-3afc-4534-b68c-e2f85f484e29",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "3bc98012-94bc-4944-a9b3-0b340c4d67d7",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "49807ffc938193c55403278ec68dc2223316891a6f2d7a18ffbb1a295ddb3b4c",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "ca146b0d-ee5c-419f-acb8-78f1c7983322",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "724af51725471cf50497feafcd73ebc159b790ba6aa12ae5412085cbf0dc077a",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "5.2 \u5bfc\u70ed\u6027\n\n\u94dc\u7684\u5bfc\u70ed\u7cfb\u6570\u7ea6\u4e3a 401 W/(m\u00b7K)\uff0c\u4ec5\u6b21\u4e8e\u94f6\uff0c\u8fdc\u9ad8\u4e8e\u94dd\uff08\u7ea6 237 W/(m\u00b7K)\uff09\u548c\u94a2\u94c1\uff08\u7ea6 50 W/(m\u00b7K)\uff09\u3002\u8fd9\u4f7f\u94dc\u6210\u4e3a\u6563\u70ed\u5668\u3001\u70ed\u4ea4\u6362\u5668\u3001\u70ed\u6c89\u7b49\u6563\u70ed\u5143\u4ef6\u7684\u9996\u9009\u6750\u6599\u3002\u94dc\u5408\u91d1\u7684\u5bfc\u70ed\u6027\u867d\u4f4e\u4e8e\u7eaf\u94dc\uff0c\u4f46\u4ecd\u5c5e\u4e8e\u9ad8\u5bfc\u70ed\u91d1\u5c5e\u6750\u6599\u3002\n\n5.3 \u529b\u5b66\u6027\u80fd\n\n\u7eaf\u94dc\u5f3a\u5ea6\u8f83\u4f4e\u4f46\u5851\u6027\u6781\u597d\uff0c\u53ef\u4ee5\u8fdb\u884c\u5927\u53d8\u5f62\u91cf\u7684\u51b7\u3001\u70ed\u52a0\u5de5\u3002\u94dc\u5408\u91d1\u901a\u8fc7\u5408\u91d1\u5316\u53ef\u4ee5\u663e\u8457\u63d0\u9ad8\u5f3a\u5ea6\uff0c\u6ee1\u8db3\u4e0d\u540c\u7684\u5de5\u7a0b\u8981\u6c42\uff1a\n\n\u6750\u6599\n\n\u6297\u62c9\u5f3a\u5ea6 (MPa)\n\n\u5c48\u670d\u5f3a\u5ea6 (MPa)\n\n\u4f38\u957f\u7387 (%)\n\n\u786c\u5ea6 (HV)\n\n\u7eaf\u94dc\uff08\u9000\u706b\uff09\n\n220~240\n\n70~90\n\n45~55\n\n40~50\n\nH62 \u9ec4\u94dc\uff08\u9000\u706b\uff09\n\n320~360\n\n120~150\n\n40~50\n\n80~100\n\nH62 \u9ec4\u94dc\uff08\u51b7\u53d8\u5f62\uff09\n\n520~600\n\n400~480\n\n5~15\n\n150~170\n\nQSn6.5-0.1\uff08\u9000\u706b\uff09\n\n340~400\n\n150~200\n\n40~55\n\n90~110\n\nQBe2\uff08\u56fa\u6eb6+\u65f6\u6548\uff09\n\n1100~1300\n\n950~1100\n\n2~5\n\n350~400\n\nQAl9-4\uff08\u9000\u706b\uff09\n\n580~650\n\n280~350\n\n20~30\n\n150~180",
+        "mimetype": "text/plain",
+        "start_char_idx": 5101,
+        "end_char_idx": 5609,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "ca146b0d-ee5c-419f-acb8-78f1c7983322": {
+      "__data__": {
+        "id_": "ca146b0d-ee5c-419f-acb8-78f1c7983322",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "91a68175-3afc-4534-b68c-e2f85f484e29",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "62eef425dbb5e6db94cd2d158558119c0f1f66f779197edaa8501b4501c16dc2",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "c39ba772-686b-4fa4-aecf-17927cb898a9",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "ec4b642687f01572f8c1db044d3a9d4d92185855366991071a81e0cac6945282",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "5.4 \u8010\u8150\u8680\u6027\n\n\u94dc\u53ca\u94dc\u5408\u91d1\u5728\u5927\u6c14\u3001\u6de1\u6c34\u3001\u6d77\u6c34\u548c\u8bb8\u591a\u5316\u5b66\u4ecb\u8d28\u4e2d\u5177\u6709\u826f\u597d\u7684\u8010\u8150\u8680\u6027\uff0c\u5e38\u89c1\u8150\u8680\u7c7b\u578b\u53ca\u9632\u62a4\u63aa\u65bd\uff1a\n\n\u8150\u8680\u7c7b\u578b\n\n\u6613\u53d1\u751f\u7684\u5408\u91d1\n\n\u6210\u56e0\n\n\u9632\u62a4\u63aa\u65bd\n\n\u8131\u950c\u8150\u8680\n\n\u950c\u542b\u91cf>15%\u7684\u9ec4\u94dc\n\n\u950c\u9009\u62e9\u6027\u6eb6\u89e3\uff0c\u94dc\u9aa8\u67b6\u6b8b\u7559\n\n\u964d\u4f4e\u950c\u542b\u91cf\uff0c\u52a0\u5165\u7837As\uff08\u22480.04%\uff09\n\n\u5e94\u529b\u8150\u8680\u5f00\u88c2\n\n\u9ec4\u94dc\uff08\u5c24\u5176\u542bZn\u9ad8\uff09\n\n\u62c9\u5e94\u529b+\u8150\u8680\u4ecb\u8d28\uff08\u542b\u6c28\u73af\u5883\uff09\u5171\u540c\u4f5c\u7528\n\n\u6d88\u9664\u6b8b\u4f59\u5e94\u529b\uff08\u9000\u706b\uff09\uff0c\u6539\u7528\u4f4e\u950c\u9ec4\u94dc\n\n\u8150\u8680\u75b2\u52b3\n\n\u591a\u79cd\u94dc\u5408\u91d1\n\n\u4ea4\u53d8\u5e94\u529b+\u8150\u8680\u4ecb\u8d28\n\n\u8868\u9762\u9632\u62a4\u5904\u7406\uff0c\u9009\u7528\u8010\u8680\u5408\u91d1\n\n\u7f1d\u9699\u8150\u8680\n\n\u591a\u79cd\u94dc\u5408\u91d1\n\n\u7f1d\u9699\u4e2d\u6c27\u6d53\u5ea6\u5dee\u5f02\u5bfc\u81f4\u7535\u5316\u5b66\u8150\u8680\n\n\u7ed3\u6784\u8bbe\u8ba1\u907f\u514d\u7f1d\u9699\uff0c\u8868\u9762\u6d82\u8986\u4fdd\u62a4\n\n\u94dc\u7eff\uff08\u5747\u5300\u8150\u8680\uff09\n\n\u7eaf\u94dc\u53ca\u94dc\u5408\u91d1\uff08\u5927\u6c14\u4e2d\uff09\n\nCu\u4e0eCO\u2082\u3001H\u2082O\u53cd\u5e94\n\n\u8868\u9762\u6e05\u6d01\uff0c\u9632\u6c34\u9632\u6f6e\u5904\u7406",
+        "mimetype": "text/plain",
+        "start_char_idx": 5613,
+        "end_char_idx": 5939,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "c39ba772-686b-4fa4-aecf-17927cb898a9": {
+      "__data__": {
+        "id_": "c39ba772-686b-4fa4-aecf-17927cb898a9",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "ca146b0d-ee5c-419f-acb8-78f1c7983322",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "92d2fd250e92095ea84099d527d809854b6983cfff16ed4de4d3f1e2c00d1129",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "3fbcc52a-4540-4705-9059-f0221eb98155",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "d454ff4ce5f04a9aa00b073336f17c458aa7811266f0f9ac572b558ef1444e4f",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "5.5 \u52a0\u5de5\u6027\u80fd\n\n\u94dc\u53ca\u94dc\u5408\u91d1\u5177\u6709\u826f\u597d\u7684\u51b7\u3001\u70ed\u5851\u6027\u52a0\u5de5\u6027\u80fd\uff0c\u5207\u524a\u52a0\u5de5\u6027\u80fd\u56e0\u5408\u91d1\u79cd\u7c7b\u800c\u5f02\uff1a\n\n\u51b7\u52a0\u5de5\u6027\uff1a\u7eaf\u94dc\u548c\u9ec4\u94dc\uff08\u5c24\u5176\u662fH68\uff09\u5177\u6709\u4f18\u826f\u7684\u51b7\u52a0\u5de5\u6027\uff0c\u53ef\u8fdb\u884c\u62c9\u62d4\u3001\u8f67\u5236\u3001\u5f2f\u66f2\u3001\u51b2\u538b\u7b49\u5de5\u5e8f\u3002\n\n\u70ed\u52a0\u5de5\u6027\uff1a\u94dc\u5408\u91d1\u666e\u904d\u5177\u6709\u826f\u597d\u7684\u70ed\u953b\u6027\uff0cH59\u3001HPb59-1\u7b49\u5728700~800\u00b0C\u8303\u56f4\u5185\u5177\u6709\u826f\u597d\u7684\u70ed\u52a0\u5de5\u6027\u3002\n\n\u5207\u524a\u52a0\u5de5\u6027\uff1a\u52a0\u94c5\u94dc\u5408\u91d1\uff08\u5982HPb59-1\u3001HPb63-3\uff09\u5207\u524a\u6027\u6700\u4f73\uff0c\u5207\u5c51\u6613\u65ad\uff1b\u7eaf\u94dc\u5207\u524a\u6027\u6700\u5dee\uff0c\u6613\u7c98\u5200\u3002\n\n\u710a\u63a5\u6027\uff1a\u94dc\u5bfc\u70ed\u6027\u5f3a\uff0c\u710a\u63a5\u65f6\u70ed\u91cf\u6563\u5931\u5feb\uff0c\u9700\u8981\u5927\u529f\u7387\u70ed\u6e90\u6216\u9884\u70ed\uff1b\u65e0\u6c27\u94dc\u3001\u8131\u6c27\u94dc\u710a\u63a5\u6027\u4f18\u4e8e\u542b\u6c27\u94dc\u3002\n\n5.6 \u94dc\u7684\u6297\u83cc\u6027\u80fd\n\n\u94dc\u53ca\u94dc\u5408\u91d1\u5177\u6709\u5929\u7136\u7684\u6297\u83cc\u7279\u6027\uff0c\u80fd\u6709\u6548\u6740\u706d\u6216\u6291\u5236\u5927\u80a0\u6746\u83cc\u3001\u91d1\u9ec4\u8272\u8461\u8404\u7403\u83cc\u3001\u6d41\u611f\u75c5\u6bd2\u7b49\u591a\u79cd\u75c5\u539f\u4f53\u3002\u8fd9\u4e00\u7279\u6027\u5df2\u5728\u533b\u7597\u673a\u6784\u7684\u95e8\u628a\u624b\u3001\u680f\u6746\u3001\u6c34\u9f99\u5934\u7b49\u9ad8\u63a5\u89e6\u8868\u9762\u7684\u5e94\u7528\u4e2d\u5f97\u5230\u5e7f\u6cdb\u8ba4\u53ef\u3002\u94dc\u7684\u6297\u83cc\u673a\u5236\u4e0e\u94dc\u79bb\u5b50\uff08Cu\u00b2\u207a\uff09\u7834\u574f\u7ec6\u83cc\u7ec6\u80de\u819c\u548cDNA\u6709\u5173\u3002",
+        "mimetype": "text/plain",
+        "start_char_idx": 5943,
+        "end_char_idx": 6322,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "3fbcc52a-4540-4705-9059-f0221eb98155": {
+      "__data__": {
+        "id_": "3fbcc52a-4540-4705-9059-f0221eb98155",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "c39ba772-686b-4fa4-aecf-17927cb898a9",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "87f64f7df6cb250fb97dc038bc5d7c3398c613a6daa2d13b572a0e09fd849e11",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "f1c341ca-433b-4fc7-a525-284824e0b2ea",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "fab7d3970c2a546736ecb14667ad3ec178e694a07fb4b7e51d61b7cfc5874b55",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "\u7b2c\u516d\u7ae0  \u94dc\u53ca\u94dc\u5408\u91d1\u7684\u5e94\u7528\u9886\u57df\n\n\n\n6.1 \u7535\u6c14\u4e0e\u7535\u5b50\u884c\u4e1a\n\n\u7535\u6c14\u7535\u5b50\u884c\u4e1a\u662f\u94dc\u7684\u6700\u5927\u6d88\u8d39\u9886\u57df\uff0c\u7ea6\u5360\u94dc\u603b\u6d88\u8d39\u91cf\u768460%~65%\u3002\u94dc\u53ca\u94dc\u5408\u91d1\u5728\u8be5\u9886\u57df\u7684\u5e94\u7528\u5305\u62ec\uff1a\n\n\u7535\u7ebf\u7535\u7f06\uff1a\u8f93\u7535\u7ebf\u8def\u3001\u5efa\u7b51\u5e03\u7ebf\u3001\u901a\u4fe1\u7535\u7f06\u7684\u5bfc\u4f53\uff0c\u901a\u5e38\u4f7f\u7528T2/T3\u7eaf\u94dc\u6216\u94dc\u5408\u91d1\u3002\n\n\u53d8\u538b\u5668\u548c\u7535\u52a8\u673a\u7ed5\u7ec4\uff1a\u5229\u7528\u94dc\u7684\u9ad8\u5bfc\u7535\u6027\u548c\u5bfc\u70ed\u6027\uff0c\u51cf\u5c11\u80fd\u91cf\u635f\u5931\u3002\n\n\u5370\u5237\u7535\u8def\u677f\uff08PCB\uff09\uff1a\u94dc\u7b94\u4f5c\u4e3a\u5bfc\u7535\u5c42\uff0c\u8fde\u63a5\u5404\u79cd\u7535\u5b50\u5143\u4ef6\u3002\n\n\u8fde\u63a5\u5668\u548c\u63d2\u5934\uff1a\u94dc\u5408\u91d1\uff08\u5982\u94cd\u9752\u94dc\u3001\u78f7\u9752\u94dc\uff09\u7528\u4e8e\u5f39\u6027\u63a5\u89e6\u7247\uff0c\u4fdd\u8bc1\u63a5\u89e6\u53ef\u9760\u6027\u3002\n\n\u96c6\u6210\u7535\u8def\u4e92\u8fde\uff1a\u8d85\u5927\u89c4\u6a21\u96c6\u6210\u7535\u8def\u4e2d\u94dc\u9010\u6b65\u53d6\u4ee3\u94dd\u4f5c\u4e3a\u91d1\u5c5e\u4e92\u8fde\u6750\u6599\uff08\u94dc\u4e92\u8fde\u6280\u672f\uff09\u3002\n\n6.2 \u5efa\u7b51\u884c\u4e1a\n\n\u5efa\u7b51\u884c\u4e1a\u7ea6\u6d88\u8d3910%~15%\u7684\u94dc\uff0c\u4e3b\u8981\u5e94\u7528\u5f62\u5f0f\u5305\u62ec\uff1a\n\n\u7ed9\u6392\u6c34\u7ba1\u9053\uff1a\u94dc\u7ba1\u7528\u4e8e\u996e\u7528\u6c34\u3001\u7a7a\u8c03\u51b7\u5374\u6c34\u548c\u70ed\u6c34\u7cfb\u7edf\uff0c\u8010\u8150\u8680\u3001\u5b89\u5168\u65e0\u6bd2\u3002\n\n\u5c4b\u9876\u548c\u5916\u5899\uff1a\u94dc\u677f\u7528\u4e8e\u9ad8\u6863\u5efa\u7b51\u5c4b\u9876\u3001\u5916\u7acb\u9762\uff0c\u5f62\u6210\u72ec\u7279\u94dc\u7eff\u6548\u679c\uff0c\u8010\u7528\u7f8e\u89c2\u3002\n\n\u536b\u6d74\u4e94\u91d1\uff1a\u6c34\u9f99\u5934\u3001\u9600\u95e8\u7b49\u901a\u5e38\u4f7f\u7528\u9ec4\u94dc\u94f8\u4ef6\uff08HPb59-1\u7b49\uff09\u3002",
+        "mimetype": "text/plain",
+        "start_char_idx": 6327,
+        "end_char_idx": 6731,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "f1c341ca-433b-4fc7-a525-284824e0b2ea": {
+      "__data__": {
+        "id_": "f1c341ca-433b-4fc7-a525-284824e0b2ea",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "3fbcc52a-4540-4705-9059-f0221eb98155",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "4737765ff3c6466828d616233b35bf3b3fa5f069016d7044f063cee4e9ef29b6",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "cdd07556-f144-48dc-b625-ec12862dfc23",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "ad992bdfbc06db1991bd1c1356c242c30d7c910ee8ec6091e7a52520ff7ca37e",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "\u536b\u6d74\u4e94\u91d1\uff1a\u6c34\u9f99\u5934\u3001\u9600\u95e8\u7b49\u901a\u5e38\u4f7f\u7528\u9ec4\u94dc\u94f8\u4ef6\uff08HPb59-1\u7b49\uff09\u3002\n\n\u5efa\u7b51\u88c5\u9970\uff1a\u94dc\u5408\u91d1\u7528\u4e8e\u680f\u6746\u3001\u88c5\u9970\u7ebf\u6761\u3001\u96d5\u5851\u7b49\u3002\n\n6.3 \u673a\u68b0\u4e0e\u5de5\u4e1a\u8bbe\u5907\n\n\u8f74\u627f\u548c\u8f74\u5957\uff1a\u9521\u9752\u94dc\u3001\u94dd\u9752\u94dc\u5177\u6709\u4f18\u826f\u7684\u8010\u78e8\u6027\uff0c\u5e7f\u6cdb\u7528\u4e8e\u8f74\u627f\u3001\u886c\u5957\u7b49\u6ed1\u52a8\u6469\u64e6\u96f6\u4ef6\u3002\n\n\u9f7f\u8f6e\u548c\u8717\u8f6e\uff1a\u94dd\u9752\u94dc\u3001\u94f8\u9020\u9521\u9752\u94dc\u7528\u4e8e\u4e0e\u94a2\u914d\u5bf9\u7684\u51cf\u901f\u9f7f\u8f6e\u548c\u8717\u8f6e\u526f\u3002\n\n\u9600\u95e8\u548c\u6cf5\u4f53\uff1a\u94dc\u5408\u91d1\u94f8\u4ef6\uff08\u5982ZCuSn10P1\u3001ZCuAl10Fe3\uff09\u7528\u4e8e\u9600\u95e8\u3001\u6cf5\u4f53\u3001\u7ba1\u63a5\u5934\u7b49\u538b\u529b\u5bb9\u5668\u3002\n\n\u70ed\u4ea4\u6362\u5668\u548c\u51b7\u51dd\u5668\uff1aB10\uff08BFe10-1-1\uff09\u3001B30\u7b49\u767d\u94dc\u5408\u91d1\u5e7f\u6cdb\u7528\u4e8e\u8239\u8236\u3001\u5316\u5de5\u7b49\u9886\u57df\u7684\u70ed\u4ea4\u6362\u8bbe\u5907\u3002\n\n6.4 \u4ea4\u901a\u8fd0\u8f93\u884c\u4e1a\n\n\u6c7d\u8f66\uff1a\u94dc\u7528\u4e8e\u6563\u70ed\u5668\u3001\u5236\u52a8\u7ba1\u8def\u3001\u7535\u6c14\u7cfb\u7edf\uff0c\u73b0\u4ee3\u6c7d\u8f66\u5e73\u5747\u542b\u94dc\u7ea622.5 kg\uff0c\u7535\u52a8\u6c7d\u8f66\u542b\u94dc\u91cf\u66f4\u9ad8\uff08\u7ea683 kg\uff09\u3002\n\n\u8239\u8236\uff1a\u94dc\u5408\u91d1\u87ba\u65cb\u6868\u3001\u6d77\u6c34\u7ba1\u9053\u3001\u70ed\u4ea4\u6362\u5668\u548c\u8239\u5e95\u5305\u94dc\uff08\u9632\u6b62\u6d77\u6d0b\u751f\u7269\u9644\u7740\uff09\u3002\n\n\u8f68\u9053\u4ea4\u901a\uff1a\u63a5\u89e6\u7f51\u3001\u53d7\u7535\u5f13\u3001\u7535\u673a\u7ed5\u7ec4\u7b49\u3002\n\n6.",
+        "mimetype": "text/plain",
+        "start_char_idx": 6700,
+        "end_char_idx": 7079,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "cdd07556-f144-48dc-b625-ec12862dfc23": {
+      "__data__": {
+        "id_": "cdd07556-f144-48dc-b625-ec12862dfc23",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "f1c341ca-433b-4fc7-a525-284824e0b2ea",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "8acceeaa024df9b5ccfce5a321797a531fb0b465f5ff779cc70a52a388c27d54",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "36dd4a46-b642-4159-a35b-85f01536e9fd",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "06454d012b54b3a07ecab974585c4411e8b2b3a72c0c12655704e09110fe8ff4",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "\u8f68\u9053\u4ea4\u901a\uff1a\u63a5\u89e6\u7f51\u3001\u53d7\u7535\u5f13\u3001\u7535\u673a\u7ed5\u7ec4\u7b49\u3002\n\n6.5 \u56fd\u9632\u4e0e\u822a\u7a7a\u822a\u5929\n\n\u94cd\u9752\u94dc\u5f39\u6027\u5143\u4ef6\uff1a\u7528\u4e8e\u7cbe\u5bc6\u4eea\u5668\u4eea\u8868\u3001\u98de\u673a\u63a7\u5236\u7cfb\u7edf\u7684\u5f39\u6027\u5143\u4ef6\u548c\u819c\u7247\u3002\n\n\u94dc\u5408\u91d1\u5f39\u58f3\uff1aH68\u9ec4\u94dc\u662f\u5236\u9020\u5b50\u5f39\u5f39\u58f3\u7684\u7ecf\u5178\u6750\u6599\uff0c\u5177\u6709\u826f\u597d\u7684\u6df1\u51b2\u6027\u80fd\u3002\n\n\u96f7\u8fbe\u548c\u901a\u4fe1\u8bbe\u5907\uff1a\u9ad8\u5bfc\u7535\u6027\u94dc\u5408\u91d1\u7528\u4e8e\u5929\u7ebf\u3001\u9988\u7535\u7cfb\u7edf\u3002\n\n6.6 \u5176\u4ed6\u5e94\u7528\n\n\u5e94\u7528\u9886\u57df\n\n\u4e3b\u8981\u94dc\u5408\u91d1\n\n\u5177\u4f53\u7528\u9014\n\n\u533b\u7597\u5668\u68b0\n\n\u767d\u94dc\u3001\u7eaf\u94dc\n\n\u624b\u672f\u5668\u68b0\u3001X\u5c04\u7ebf\u7ba1\u3001\u533b\u7597\u8bbe\u5907\u96f6\u4ef6\uff0c\u5229\u7528\u94dc\u7684\u6297\u83cc\u6027\n\n\u8d27\u5e01\u548c\u5956\u7ae0\n\n\u767d\u94dc\uff08BZn15-20\uff09\u3001\u9ec4\u94dc\n\n\u786c\u5e01\u3001\u7eaa\u5ff5\u7ae0\u3001\u5956\u7ae0\n\n\u827a\u672f\u4e0e\u5de5\u827a\u54c1\n\n\u591a\u79cd\u94dc\u5408\u91d1\n\n\u96d5\u5851\u3001\u4e50\u5668\uff08\u94dc\u7ba1\u4e50\u5668\u4f7f\u7528\u9ec4\u94dc\uff09\u3001\u5de5\u827a\u54c1\n\n\u519c\u4e1a\n\n\u786b\u9178\u94dc\u6eb6\u6db2\n\n\u6740\u83cc\u5242\uff08\u6ce2\u5c14\u591a\u6db2\uff09\uff0c\u9632\u6cbb\u690d\u7269\u771f\u83cc\u75c5\u5bb3\n\n\u5316\u5de5\n\n\u94dc\u5408\u91d1\n\n\u5316\u5de5\u53cd\u5e94\u5bb9\u5668\u3001\u84b8\u998f\u91dc\u5185\u886c\uff08\u5229\u7528\u94dc\u7684\u8010\u8680\u6027\uff09\n\n\u65b0\u80fd\u6e90\n\n\u7eaf\u94dc\n\n\u592a\u9633\u80fd\u5149\u4f0f\u677f\u6c47\u6d41\u6392\u3001\u98ce\u529b\u53d1\u7535\u673a\u5b9a\u5b50\u7ed5\u7ec4\n\n\n\n\n\n\n\u7b2c\u4e03\u7ae0  \u94dc\u53ca\u94dc\u5408\u91d1\u7684\u751f\u4ea7\u4e0e\u52a0\u5de5\n\n\n\n7.",
+        "mimetype": "text/plain",
+        "start_char_idx": 7056,
+        "end_char_idx": 7446,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "36dd4a46-b642-4159-a35b-85f01536e9fd": {
+      "__data__": {
+        "id_": "36dd4a46-b642-4159-a35b-85f01536e9fd",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "cdd07556-f144-48dc-b625-ec12862dfc23",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "30ceb6139ae274c60f7fa949acaf17d0c6215a712aab5111d1307bb742729e84",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "71513b8f-3b81-4df6-814a-3194ddbf2038",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "d8740938f79b99dab3cc22e078f6dea98e89786326460884a7a382026fff2495",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "\u7b2c\u4e03\u7ae0  \u94dc\u53ca\u94dc\u5408\u91d1\u7684\u751f\u4ea7\u4e0e\u52a0\u5de5\n\n\n\n7.1 \u94dc\u77ff\u8d44\u6e90\u4e0e\u51b6\u70bc\n\n7.1.1 \u94dc\u77ff\u77f3\u5206\u7c7b\n\n\u94dc\u77ff\u77f3\u6309\u6210\u56e0\u548c\u77ff\u7269\u7ec4\u6210\u4e3b\u8981\u5206\u4e3a\u4ee5\u4e0b\u51e0\u7c7b\uff1a\n\n\u786b\u5316\u94dc\u77ff\uff1a\u4e3b\u8981\u77ff\u7269\u6709\u9ec4\u94dc\u77ff\uff08CuFeS\u2082\uff09\u3001\u8f89\u94dc\u77ff\uff08Cu\u2082S\uff09\u3001\u6591\u94dc\u77ff\uff08Cu\u2085FeS\u2084\uff09\u7b49\uff0c\u662f\u5168\u7403\u6700\u4e3b\u8981\u7684\u94dc\u77ff\u6765\u6e90\uff0c\u5360\u94dc\u77ff\u8d44\u6e90\u603b\u91cf\u768480%\u4ee5\u4e0a\u3002\n\n\u6c27\u5316\u94dc\u77ff\uff1a\u4e3b\u8981\u77ff\u7269\u6709\u5b54\u96c0\u77f3\uff08Cu\u2082(CO\u2083)(OH)\u2082\uff09\u3001\u84dd\u94dc\u77ff\u3001\u8d64\u94dc\u77ff\u7b49\uff0c\u591a\u4e3a\u786b\u5316\u77ff\u6c27\u5316\u5e26\u4ea7\u7269\u3002\n\n\u81ea\u7136\u94dc\uff1a\u4ee5\u91d1\u5c5e\u94dc\u5f62\u5f0f\u5b58\u5728\uff0c\u54c1\u4f4d\u9ad8\u4f46\u50a8\u91cf\u6781\u5c11\u3002\n\n7.1.2 \u706b\u6cd5\u51b6\u70bc\u6d41\u7a0b\n\n\u786b\u5316\u94dc\u77ff\u7684\u706b\u6cd5\u51b6\u70bc\uff08\u6700\u5e38\u89c1\u5de5\u827a\uff09\u4e3b\u8981\u6d41\u7a0b\u5982\u4e0b\uff1a\n\n\u77ff\u77f3\u7834\u788e\u4e0e\u6d6e\u9009\uff1a\u5c06\u94dc\u77ff\u77f3\u7834\u788e\u7814\u78e8\u540e\uff0c\u901a\u8fc7\u6d6e\u9009\u5bcc\u96c6\uff0c\u4f7f\u94dc\u54c1\u4f4d\u4ece\u7ea60.5%~2%\u63d0\u9ad8\u523020%~30%\uff08\u94dc\u7cbe\u77ff\uff09\u3002\n\n\u7194\u70bc\u9020\u950d\uff1a\u94dc\u7cbe\u77ff\u5728\u95ea\u901f\u7194\u70bc\u7089\u6216\u53cd\u5c04\u7089\u4e2d\u7194\u70bc\uff0c\u4ea7\u751f\u94dc\u950d\uff08\u51b0\u94dc\uff0cCu\u2082S\u00b7FeS\uff09\uff0c\u94dc\u542b\u91cf\u7ea650%~70%\u3002",
+        "mimetype": "text/plain",
+        "start_char_idx": 7424,
+        "end_char_idx": 7788,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "71513b8f-3b81-4df6-814a-3194ddbf2038": {
+      "__data__": {
+        "id_": "71513b8f-3b81-4df6-814a-3194ddbf2038",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "36dd4a46-b642-4159-a35b-85f01536e9fd",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "c2acc3536b566f1fa3453c20ddb0b961be60b0bfefd85758031048aebbdfc54c",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "bf1ec1e4-d53a-4550-b844-259ddc239bee",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "9c3d17b4fd318c0b5120917410429091b7d0acc2cf0fafbfb659a3a0047d328d",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "\u5439\u70bc\u8f6c\u7089\uff1a\u94dc\u950d\u5728\u8f6c\u7089\u4e2d\u5439\u70bc\uff0c\u9664\u53bb\u786b\u548c\u94c1\uff0c\u83b7\u5f97\u7c97\u94dc\uff08\u542b\u94dc\u7ea698%~99.5%\uff09\u3002\n\n\u706b\u6cd5\u7cbe\u70bc\uff1a\u7c97\u94dc\u5728\u9633\u6781\u7089\u4e2d\u7cbe\u70bc\uff0c\u9664\u53bb\u6c27\u548c\u5176\u4ed6\u6742\u8d28\uff0c\u4ea7\u51fa\u9633\u6781\u94dc\uff08\u94dc\u542b\u91cf\u7ea699.0%~99.5%\uff09\u3002\n\n\u7535\u89e3\u7cbe\u70bc\uff1a\u9633\u6781\u94dc\u4f5c\u4e3a\u9633\u6781\uff0c\u7eaf\u94dc\u4f5c\u4e3a\u9634\u6781\uff0c\u5728\u786b\u9178\u94dc\u6eb6\u6db2\u4e2d\u7535\u89e3\uff0c\u9633\u6781\u6eb6\u89e3\u7684\u94dc\u5728\u9634\u6781\u6c89\u79ef\uff0c\u4ea7\u51fa\u9634\u6781\u94dc\uff08\u7535\u89e3\u94dc\uff0c\u94dc\u542b\u91cf\u226599.95%\uff09\u3002\n\n7.1.3 \u6e7f\u6cd5\u51b6\u70bc\uff08SX-EW\uff09\n\n\u6e7f\u6cd5\u51b6\u70bc\u9002\u7528\u4e8e\u4f4e\u54c1\u4f4d\u6c27\u5316\u94dc\u77ff\u548c\u5806\u6d78\u77ff\u77f3\uff0c\u6d41\u7a0b\u4e3a\uff1a\u77ff\u77f3\u5806\u6d78\uff08\u7a00\u786b\u9178\u6dcb\u6d17\uff09\u2192 \u6d78\u51fa\u6db2\u6eb6\u5242\u8403\u53d6\uff08SX\uff09\u2192 \u7535\u79ef\uff08EW\uff09\u2192 \u9634\u6781\u94dc\u3002\u8be5\u5de5\u827a\u6d41\u7a0b\u77ed\u3001\u6210\u672c\u4f4e\uff0c\u9002\u5408\u5927\u578b\u4f4e\u54c1\u4f4d\u77ff\u5e8a\u5f00\u91c7\u3002\n\n7.2 \u94dc\u5408\u91d1\u7684\u914d\u5236\u4e0e\u7194\u70bc\n\n\u94dc\u5408\u91d1\u7684\u7194\u70bc\u4e3b\u8981\u5728\u5769\u57da\u7089\u3001\u611f\u5e94\u7089\u3001\u7535\u5f27\u7089\u7b49\u4e2d\u8fdb\u884c\uff1a\n\n\u914d\u6599\uff1a\u6839\u636e\u76ee\u6807\u724c\u53f7\u8ba1\u7b97\u5404\u5143\u7d20\u52a0\u5165\u91cf\uff0c\u8003\u8651\u70e7\u635f\u7387\uff0c\u51c6\u5907\u94dc\u53ca\u5408\u91d1\u952d\u3001\u4e2d\u95f4\u5408\u91d1\u7b49\u539f\u6599\u3002",
+        "mimetype": "text/plain",
+        "start_char_idx": 7790,
+        "end_char_idx": 8134,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "bf1ec1e4-d53a-4550-b844-259ddc239bee": {
+      "__data__": {
+        "id_": "bf1ec1e4-d53a-4550-b844-259ddc239bee",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "71513b8f-3b81-4df6-814a-3194ddbf2038",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "a5802442f0659c5244e4030874d6b9df96532953502896b3cebbabebc53547a8",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "afff1920-ad83-46a8-a7d9-fd880944975e",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "b4b44f9b2d7bfc7de0736369d8214e589ed53e2e3c82daa80425c2802f18eb12",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "\u7194\u5316\uff1a\u5148\u7194\u5316\u94dc\uff0c\u518d\u6309\u987a\u5e8f\u52a0\u5165\u5408\u91d1\u5143\u7d20\uff1b\u6325\u53d1\u6027\u5143\u7d20\uff08\u5982\u950c\uff09\u548c\u6d3b\u6cfc\u91d1\u5c5e\uff08\u5982\u94cd\uff09\u901a\u5e38\u6700\u540e\u52a0\u5165\u6216\u4ee5\u4e2d\u95f4\u5408\u91d1\u5f62\u5f0f\u52a0\u5165\u3002\n\n\u7cbe\u70bc\u4e0e\u9664\u6c14\uff1a\u901a\u8fc7\u52a0\u5165\u78f7\u94dc\uff08\u8131\u6c27\uff09\u3001\u5439\u5165\u6c2e\u6c14\u6216\u6c29\u6c14\uff08\u9664\u6c14\uff09\u7b49\u65b9\u5f0f\u51c0\u5316\u5408\u91d1\u6db2\u4f53\uff0c\u51cf\u5c11\u6c14\u5b54\u7f3a\u9677\u3002\n\n\u94f8\u9020\uff1a\u5408\u91d1\u6db2\u4f53\u6d47\u6ce8\u6210\u94f8\u952d\uff08\u7528\u4e8e\u540e\u7eed\u53d8\u5f62\u52a0\u5de5\uff09\u6216\u94f8\u4ef6\uff08\u7802\u578b\u3001\u91d1\u5c5e\u578b\u3001\u538b\u94f8\u7b49\uff09\u3002\n\n7.3 \u94dc\u53ca\u94dc\u5408\u91d1\u7684\u53d8\u5f62\u52a0\u5de5\n\n7.3.1 \u70ed\u52a0\u5de5\n\n\u94dc\u5408\u91d1\u7684\u70ed\u52a0\u5de5\u6e29\u5ea6\u901a\u5e38\u4e3a 700~900\u00b0C\uff08\u56e0\u5408\u91d1\u6210\u5206\u4e0d\u540c\u800c\u6709\u6240\u5dee\u5f02\uff09\uff1a\n\n\u52a0\u5de5\u65b9\u5f0f\n\n\u539f\u7406\u4e0e\u7279\u70b9\n\n\u4ea7\u54c1\u5f62\u5f0f\n\n\u70ed\u8f67\n\n\u5728\u518d\u7ed3\u6676\u6e29\u5ea6\u4ee5\u4e0a\u8f67\u5236\uff0c\u53d8\u5f62\u91cf\u5927\uff0c\u6548\u7387\u9ad8\n\n\u677f\u576f\u3001\u5e26\u576f\u3001\u4e2d\u539a\u677f\n\n\u70ed\u953b\n\n\u953b\u9020\u6210\u8fd1\u51c0\u5f62\u96f6\u4ef6\u6216\u953b\u576f\uff0c\u7ec6\u5316\u6676\u7c92\uff0c\u6539\u5584\u7ec4\u7ec7\n\n\u953b\u4ef6\u3001\u9600\u4f53\u3001\u6cd5\u5170\n\n\u70ed\u6324\u538b\n\n\u5c06\u52a0\u70ed\u94f8\u952d\u901a\u8fc7\u6a21\u5177\u6324\u51fa\uff0c\u751f\u4ea7\u68d2\u6750\u3001\u578b\u6750\u3001\u7ba1\u6750\n\n\u68d2\u6750\u3001\u578b\u6750\u3001\u539a\u58c1\u7ba1\n\n\u8fde\u94f8\u8fde\u8f67\n\n\u94dc\u6db2\u76f4\u63a5\u8fde\u94f8\u6210\u576f\u5e76\u8fde\u7eed\u70ed\u8f67\uff0c\u751f\u4ea7\u94dc\u6746\uff0c\u6548\u7387\u6781\u9ad8\n\n\u94dc\u6746\uff08\u7ebf\u576f\uff09",
+        "mimetype": "text/plain",
+        "start_char_idx": 8136,
+        "end_char_idx": 8514,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "afff1920-ad83-46a8-a7d9-fd880944975e": {
+      "__data__": {
+        "id_": "afff1920-ad83-46a8-a7d9-fd880944975e",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "bf1ec1e4-d53a-4550-b844-259ddc239bee",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "a336d7b5437f6b0d16a24de4875e6857baea63a99f337925154daef5b3d8886e",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "d10b82a1-51a1-413f-ba7b-dfca774bb45a",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "a2537dc37adc4d8c85d2e9c465819a2e0986b76755f4f8b52be9f510021d79fa",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "7.3.2 \u51b7\u52a0\u5de5\n\n\u51b7\u52a0\u5de5\u5728\u518d\u7ed3\u6676\u6e29\u5ea6\u4ee5\u4e0b\u8fdb\u884c\uff0c\u5229\u7528\u52a0\u5de5\u786c\u5316\u63d0\u9ad8\u5f3a\u5ea6\uff1a\n\n\u52a0\u5de5\u65b9\u5f0f\n\n\u539f\u7406\u4e0e\u7279\u70b9\n\n\u4ea7\u54c1\u5f62\u5f0f\n\n\u51b7\u8f67\n\n\u591a\u9053\u6b21\u51b7\u8f67\uff0c\u63a7\u5236\u539a\u5ea6\u548c\u786c\u5ea6\n\n\u8584\u677f\u3001\u5e26\u6750\u3001\u7b94\u6750\n\n\u51b7\u62c9\u62d4\n\n\u901a\u8fc7\u6a21\u5177\u51cf\u5f84\uff0c\u63d0\u9ad8\u5f3a\u5ea6\uff0c\u7cbe\u63a7\u5c3a\u5bf8\n\n\u94dc\u7ebf\u3001\u94dc\u68d2\u3001\u7ec6\u7ba1\n\n\u51b2\u538b\u6210\u5f62\n\n\u5229\u7528\u51b2\u538b\u6a21\u5177\u6210\u5f62\uff0c\u6548\u7387\u9ad8\n\n\u63a5\u63d2\u4ef6\u3001\u5f39\u7247\u3001\u7535\u5b50\u96f6\u4ef6\n\n\u65cb\u538b\n\n\u5c40\u90e8\u8fde\u7eed\u53d8\u5f62\uff0c\u52a0\u5de5\u8584\u58c1\u56de\u8f6c\u4f53\n\n\u94dc\u7897\u3001\u94dc\u7ba1\u7aef\u76d6\n\n\u6df1\u51b2\uff08\u62c9\u6df1\uff09\n\n\u5c06\u677f\u6599\u51b2\u538b\u6210\u676f\u5f62\u6216\u7ba1\u5f62\u4ef6\uff0cH68\u5851\u6027\u6781\u4f73\n\n\u5f39\u58f3\u3001\u94dc\u676f\u3001\u4eea\u8868\u58f3\u4f53\n\n\n\n7.4 \u70ed\u5904\u7406\n\n7.4.1 \u9000\u706b\n\n\u9000\u706b\u662f\u94dc\u53ca\u94dc\u5408\u91d1\u6700\u5e38\u7528\u7684\u70ed\u5904\u7406\u5de5\u827a\uff0c\u76ee\u7684\u662f\u6d88\u9664\u51b7\u52a0\u5de5\u4ea7\u751f\u7684\u52a0\u5de5\u786c\u5316\uff0c\u6062\u590d\u5851\u6027\uff0c\u4ee5\u4fbf\u8fdb\u884c\u8fdb\u4e00\u6b65\u52a0\u5de5\uff0c\u6216\u4f7f\u4ea7\u54c1\u8fbe\u5230\u8f6f\u72b6\u6001\u3002\u5e38\u89c1\u9000\u706b\u6e29\u5ea6\uff1a\u7eaf\u94dc\u4e3a 400~700\u00b0C\uff0c\u9ec4\u94dc\u4e3a 500~700\u00b0C\uff0c\u9752\u94dc\u56e0\u5408\u91d1\u4e0d\u540c\u5dee\u5f02\u8f83\u5927\uff08\u4e00\u822c300~750\u00b0C\uff09\u3002\n\n7.4.",
+        "mimetype": "text/plain",
+        "start_char_idx": 8518,
+        "end_char_idx": 8887,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "d10b82a1-51a1-413f-ba7b-dfca774bb45a": {
+      "__data__": {
+        "id_": "d10b82a1-51a1-413f-ba7b-dfca774bb45a",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "afff1920-ad83-46a8-a7d9-fd880944975e",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "f6871d363e107627af406d3b908f014191c84ae790a7d253b5987a63fab20c84",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "0a2f0cd4-3251-4448-9213-4db3f7a9c841",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "84252af32fec9f88e249f20a290da8e3826d0bf4aa017f6a6bd5d94f58658dfe",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "7.4.2 \u56fa\u6eb6\u5904\u7406\uff08\u6dec\u706b\uff09\n\n\u94cd\u9752\u94dc\u3001\u94dd\u9752\u94dc\u7b49\u53ef\u65f6\u6548\u5f3a\u5316\u7684\u94dc\u5408\u91d1\u9700\u8981\u56fa\u6eb6\u5904\u7406\uff1a\u5c06\u5408\u91d1\u52a0\u70ed\u81f3\u5355\u76f8\u533a\uff08\u5982QBe2\u7684\u56fa\u6eb6\u6e29\u5ea6\u7ea6760~800\u00b0C\uff09\uff0c\u4fdd\u6e29\u540e\u5feb\u901f\u51b7\u5374\uff08\u6dec\u6c34\uff09\uff0c\u4f7f\u5408\u91d1\u5143\u7d20\u56fa\u6eb6\u4e8e\u94dc\u57fa\u4f53\u4e2d\uff0c\u5f62\u6210\u8fc7\u9971\u548c\u56fa\u6eb6\u4f53\u3002\u6b64\u72b6\u6001\u5408\u91d1\u5851\u6027\u826f\u597d\uff0c\u4fbf\u4e8e\u6210\u5f62\u52a0\u5de5\u3002\n\n7.4.3 \u65f6\u6548\u5904\u7406\uff08\u6c89\u6dc0\u786c\u5316\uff09\n\n\u56fa\u6eb6\u5904\u7406\u540e\u7684\u94cd\u9752\u94dc\u7b49\u5408\u91d1\u518d\u7ecf\u65f6\u6548\u5904\u7406\uff0c\u5728\u8f83\u4f4e\u6e29\u5ea6\uff08QBe2\u7ea6300~330\u00b0C\uff09\u4fdd\u6e29\u4e00\u5b9a\u65f6\u95f4\uff0c\u4f7f\u8fc7\u9971\u548c\u56fa\u6eb6\u4f53\u4e2d\u6790\u51fa\u5f25\u6563\u7ec6\u5c0f\u7684\u7b2c\u4e8c\u76f8\u7c92\u5b50\uff08\u5982CuBe\u76f8\uff09\uff0c\u4ea7\u751f\u5f25\u6563\u5f3a\u5316\u6548\u679c\uff0c\u663e\u8457\u63d0\u9ad8\u5f3a\u5ea6\u548c\u786c\u5ea6\uff1aQBe2\u65f6\u6548\u540e\u6297\u62c9\u5f3a\u5ea6\u53ef\u8fbe1100~1300 MPa\uff0c\u662f\u94dc\u5408\u91d1\u4e2d\u5f3a\u5ea6\u6700\u9ad8\u7684\u54c1\u79cd\u3002\n\n7.",
+        "mimetype": "text/plain",
+        "start_char_idx": 8883,
+        "end_char_idx": 9165,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "0a2f0cd4-3251-4448-9213-4db3f7a9c841": {
+      "__data__": {
+        "id_": "0a2f0cd4-3251-4448-9213-4db3f7a9c841",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "d10b82a1-51a1-413f-ba7b-dfca774bb45a",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "a3ba49f6a4477226ce949b622c61058805411b65801e38764917c768aa98b603",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "712ef603-8a19-4745-a824-ca3abf85fc8f",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "dd766c3ca4f8f34cb2488319bc69d9b8f9ce6da0c4f3a4c58b9a38f61774527c",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "7.5 \u8868\u9762\u5904\u7406\n\n\u5904\u7406\u65b9\u5f0f\n\n\u76ee\u7684\u4e0e\u7279\u70b9\n\n\u5e38\u7528\u6750\u6599\n\n\u7535\u9540\u954d/\u9521/\u91d1/\u94f6\n\n\u63d0\u9ad8\u8010\u8150\u8680\u6027\u3001\u710a\u63a5\u6027\u6216\u88c5\u9970\u6027\n\n\u8fde\u63a5\u5668\u3001\u88c5\u9970\u54c1\u3001\u7535\u5b50\u96f6\u4ef6\n\n\u5316\u5b66\u9540\u954d\n\n\u5747\u5300\u9540\u5c42\uff0c\u590d\u6742\u96f6\u4ef6\u9002\u7528\n\n\u7cbe\u5bc6\u96f6\u4ef6\n\n\u949d\u5316\u5904\u7406\n\n\u94dc\u8868\u9762\u5f62\u6210\u4fdd\u62a4\u819c\uff0c\u9632\u6b62\u6c27\u5316\u53d8\u8272\n\n\u94dc\u5de5\u827a\u54c1\u3001\u4eea\u8868\u96f6\u4ef6\n\n\u7740\u8272\u5904\u7406\uff08\u5316\u5b66\uff09\n\n\u4eba\u5de5\u5236\u9020\u94dc\u7eff\u3001\u4eff\u53e4\u6548\u679c\n\n\u827a\u672f\u54c1\u3001\u5de5\u827a\u54c1\u3001\u5efa\u7b51\u6784\u4ef6\n\n\u6d82\u88c5/\u6d82\u6cb9\n\n\u9632\u6b62\u6c27\u5316\u53d8\u8272\uff0c\u6682\u65f6\u6027\u4fdd\u62a4\n\n\u94dc\u5236\u54c1\u51fa\u5382\u4fdd\u62a4\n\n\u7535\u629b\u5149\n\n\u63d0\u9ad8\u8868\u9762\u5149\u6d01\u5ea6\uff0c\u51cf\u5c11\u6469\u64e6\n\n\u7cbe\u5bc6\u94dc\u7ba1\u3001\u7535\u5b50\u96f6\u4ef6\n\n\n\n\n\n\n\u7b2c\u516b\u7ae0  \u94dc\u53ca\u94dc\u5408\u91d1\u7684\u9274\u522b\u65b9\u6cd5",
+        "mimetype": "text/plain",
+        "start_char_idx": 9163,
+        "end_char_idx": 9409,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "712ef603-8a19-4745-a824-ca3abf85fc8f": {
+      "__data__": {
+        "id_": "712ef603-8a19-4745-a824-ca3abf85fc8f",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "0a2f0cd4-3251-4448-9213-4db3f7a9c841",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "dcdece39a76a6ec00be2e0288cb8f404981930dd808d34f5c2eb2103cf9f5d76",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "173d6fc2-9c04-4c1b-9a3e-f93acd16b8ca",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "d1da7ca16fda7c280eeb8d9ead6812c6f7c2af64a4599301cdff05f3da488f13",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "\u7b2c\u516b\u7ae0  \u94dc\u53ca\u94dc\u5408\u91d1\u7684\u9274\u522b\u65b9\u6cd5\n\n\n\n8.1 \u5916\u89c2\u989c\u8272\u9274\u522b\n\n\u4e0d\u540c\u94dc\u5408\u91d1\u5916\u89c2\u989c\u8272\u5dee\u5f02\u660e\u663e\uff0c\u662f\u6700\u76f4\u89c2\u7684\u521d\u6b65\u9274\u522b\u65b9\u6cd5\uff1a\n\n\u94dc\u5408\u91d1\u79cd\u7c7b\n\n\u5916\u89c2\u989c\u8272\n\n\u8bf4\u660e\n\n\u7eaf\u94dc\uff08\u7d2b\u94dc\uff09\n\n\u73ab\u7470\u7ea2\u8272 / \u7d2b\u7ea2\u8272\n\n\u65b0\u9c9c\u65ad\u9762\u989c\u8272\u9c9c\u4eae\uff0c\u8868\u9762\u6c27\u5316\u540e\u53d8\u6697\u7ea2\u6216\u68d5\u9ed1\u8272\n\n\u9ec4\u94dc\uff08H80\u4ee5\u4e0a\uff09\n\n\u9ec4\u91d1\u8272 / \u91d1\u9ec4\u8272\n\n\u542b\u950c\u8d8a\u591a\uff0c\u989c\u8272\u8d8a\u9ec4\uff1bH90/H80\u8fd1\u4f3c\u91d1\u9ec4\u8272\n\n\u9ec4\u94dc\uff08H62\u3001H59\uff09\n\n\u9ec4\u8272\u504f\u7eff\n\n\u542b\u950c\u8f83\u9ad8\uff0c\u989c\u8272\u504f\u6d45\u9ec4\u6216\u9ec4\u7eff\u8272\n\n\u9521\u9752\u94dc\n\n\u9ec4\u7070\u8272 / \u6df1\u9ec4\u8272\n\n\u542b\u9521\u4f7f\u989c\u8272\u504f\u6697\uff1b\u94f8\u4ef6\u65ad\u9762\u989c\u8272\u504f\u7070\n\n\u94dd\u9752\u94dc\n\n\u9ec4\u91d1\u8272\uff08\u6d45\uff09\n\n\u5916\u89c2\u4e0e\u9ec4\u94dc\u76f8\u4f3c\uff0c\u504f\u91d1\u9ec4\u8272\n\n\u94cd\u9752\u94dc\n\n\u91d1\u9ec4\u8272\n\n\u4e0e\u94dd\u9752\u94dc\u5916\u89c2\u63a5\u8fd1\uff0c\u8089\u773c\u96be\u4ee5\u533a\u5206\n\n\u767d\u94dc\n\n\u94f6\u767d\u8272\n\n\u94f6\u767d\u5149\u6cfd\uff0cNi\u542b\u91cf\u8d8a\u9ad8\u8d8a\u767d",
+        "mimetype": "text/plain",
+        "start_char_idx": 9394,
+        "end_char_idx": 9704,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "173d6fc2-9c04-4c1b-9a3e-f93acd16b8ca": {
+      "__data__": {
+        "id_": "173d6fc2-9c04-4c1b-9a3e-f93acd16b8ca",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "712ef603-8a19-4745-a824-ca3abf85fc8f",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "3b51399b5de398ef12fce9e7fc8a69363cab7a643eb7dcc0b0af921589dcf29e",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "72b29dcc-ca70-46f8-832f-f5ecdb57bed8",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "d890639558a2c8dedb2223607d77b3788189437156490316108cb896bfb9b930",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "8.2 \u5bc6\u5ea6\u6cd5\n\n\u94dc\u5408\u91d1\u5bc6\u5ea6\u4e0e\u5408\u91d1\u6210\u5206\u6709\u5173\uff0c\u901a\u8fc7\u6d4b\u91cf\u5bc6\u5ea6\u53ef\u4ee5\u521d\u6b65\u5224\u65ad\u5408\u91d1\u7c7b\u522b\uff1a\n\n\u5408\u91d1\u79cd\u7c7b\n\n\u5178\u578b\u5bc6\u5ea6 (g/cm\u00b3)\n\n\u7eaf\u94dc\n\n8.90~8.96\n\n\u9ec4\u94dc\n\n8.4~8.85\uff08\u542b\u950c\u8d8a\u591a\uff0c\u5bc6\u5ea6\u8d8a\u4f4e\uff09\n\n\u9521\u9752\u94dc\n\n8.7~8.9\n\n\u94dd\u9752\u94dc\n\n7.5~8.2\uff08\u542b\u94dd\u591a\u65f6\u5bc6\u5ea6\u4f4e\uff09\n\n\u94cd\u9752\u94dc\n\n8.2~8.3\n\n\u767d\u94dc\uff08B30\uff09\n\n8.9~9.0\n\n\n\n8.3 \u706b\u82b1\u9274\u522b\uff08\u7b80\u6613\u65b9\u6cd5\uff09\n\n\u5728\u7802\u8f6e\u4e0a\u8f7b\u78e8\u94dc\u5408\u91d1\uff0c\u89c2\u5bdf\u706b\u82b1\u989c\u8272\u548c\u5f62\u6001\uff08\u9700\u4e0e\u78b3\u94a2\u7b49\u6750\u6599\u533a\u522b\uff09\uff1a\n\n\u94dc\u53ca\u94dc\u5408\u91d1\uff1a\u706b\u82b1\u6781\u5c11\uff0c\u989c\u8272\u4e3a\u6697\u7ea2\u8272\u6216\u6a58\u7ea2\u8272\uff0c\u65e0\u7206\u82b1\uff1b\u4e0e\u94c1\u5408\u91d1\u6709\u660e\u663e\u533a\u522b\uff08\u94c1\u5408\u91d1\u6709\u767d\u8272\u660e\u4eae\u706b\u82b1\uff09\u3002\n\n\u6b64\u65b9\u6cd5\u4e3b\u8981\u7528\u4e8e\u533a\u5206\u94dc\u5408\u91d1\u4e0e\u94c1\u5408\u91d1\uff0c\u4e0d\u80fd\u533a\u5206\u94dc\u5408\u91d1\u5185\u90e8\u54c1\u79cd\u3002\n\n8.4 \u5316\u5b66\u901f\u6d4b\u6cd5\n\n\u5229\u7528\u7279\u5b9a\u5316\u5b66\u8bd5\u5242\u4e0e\u94dc\u5408\u91d1\u4e2d\u7279\u5b9a\u5143\u7d20\u53cd\u5e94\uff0c\u4ea7\u751f\u7279\u5f81\u989c\u8272\u53d8\u5316\u6765\u9274\u522b\uff1a\n\n\u94dc\u9274\u522b\uff1a\u5c06\u785d\u9178\u6db2\u6ef4\u5728\u6837\u54c1\u4e0a\uff0c\u82e5\u4ea7\u751f\u84dd\u7eff\u8272\u6eb6\u6db2\uff0c\u8bc1\u660e\u542b\u94dc\uff08Cu\u00b2\u207a \u4f7f\u6eb6\u6db2\u663e\u84dd\u7eff\u8272\uff09\u3002",
+        "mimetype": "text/plain",
+        "start_char_idx": 9708,
+        "end_char_idx": 10097,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "72b29dcc-ca70-46f8-832f-f5ecdb57bed8": {
+      "__data__": {
+        "id_": "72b29dcc-ca70-46f8-832f-f5ecdb57bed8",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "173d6fc2-9c04-4c1b-9a3e-f93acd16b8ca",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "3797122361367756df7996600a29e5a7be8d172724d1f798cf4d329096030aab",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "d4e14004-189e-44e9-9daf-79a8b4224f0b",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "1a9fea21ac4537fdb1d9344869f55afacbfe290c17b204bbc785ee82b7d09f69",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "\u950c\u9274\u522b\uff08\u533a\u5206\u9ec4\u94dc\uff09\uff1a\u7528\u6d53\u76d0\u9178\u6eb6\u89e3\u6837\u54c1\u540e\uff0c\u52a0\u5165Na\u2082S\u6eb6\u6db2\uff0c\u82e5\u4ea7\u751f\u767d\u8272\u6c89\u6dc0\uff08ZnS\uff09\uff0c\u8bf4\u660e\u542b\u950c\uff0c\u4e3a\u9ec4\u94dc\u7cfb\u3002\n\n\u954d\u9274\u522b\uff08\u533a\u5206\u767d\u94dc\uff09\uff1a\u4e01\u4e8c\u916e\u809f\uff08DMG\uff09\u8bd5\u7eb8\u63a5\u89e6Ni\u00b2\u207a \u6eb6\u6db2\u53d8\u4e3a\u7c89\u7ea2\u8272\uff0c\u53ef\u5feb\u901f\u9274\u522b\u767d\u94dc\u3002\n\n8.5 \u4eea\u5668\u68c0\u6d4b\u65b9\u6cd5\n\n\u68c0\u6d4b\u65b9\u6cd5\n\n\u68c0\u6d4b\u5185\u5bb9\n\n\u4f18\u7f3a\u70b9\n\nX\u5c04\u7ebf\u8367\u5149\u5149\u8c31\uff08XRF\uff09\n\n\u5feb\u901f\u5206\u6790\u5143\u7d20\u7ec4\u6210\u548c\u542b\u91cf\n\n\u5feb\u901f\u3001\u65e0\u635f\u3001\u51c6\u786e\uff0c\u5e38\u7528\u4e8e\u73b0\u573a\u68c0\u6d4b\uff1b\u8868\u9762\u6c61\u67d3\u5f71\u54cd\u7ed3\u679c\n\n\u7535\u611f\u8026\u5408\u7b49\u79bb\u5b50\u4f53\u5149\u8c31\uff08ICP\uff09\n\n\u7cbe\u786e\u6d4b\u5b9a\u5fae\u91cf\u5143\u7d20\u542b\u91cf\n\n\u7cbe\u5ea6\u9ad8\uff0c\u9002\u5408\u8d28\u91cf\u63a7\u5236\u548c\u4ef2\u88c1\u68c0\u6d4b\uff1b\u9700\u6eb6\u6837\u5904\u7406\n\n\u5149\u8c31\u76f4\u8bfb\u4eea\uff08OES\uff09\n\n\u5feb\u901f\u591a\u5143\u7d20\u5206\u6790\n\n\u5feb\u901f\u51c6\u786e\uff0c\u9002\u5408\u751f\u4ea7\u73b0\u573a\uff1b\u9700\u78e8\u6837\uff0c\u4e0d\u5b8c\u5168\u65e0\u635f\n\n\u5316\u5b66\u6ef4\u5b9a\u5206\u6790\n\n\u7cbe\u786e\u6d4b\u5b9a\u4e3b\u5143\u7d20\uff08\u5982\u94dc\u3001\u950c\u542b\u91cf\uff09\n\n\u7cbe\u5ea6\u9ad8\uff0c\u6210\u672c\u4f4e\uff1b\u5206\u6790\u901f\u5ea6\u6162\uff0c\u9700\u8981\u5316\u5b66\u8bd5\u5242\n\n\u786c\u5ea6\u68c0\u6d4b\uff08HV/HB\uff09\n\n\u95f4\u63a5\u53cd\u6620\u5408\u91d1\u72b6\u6001\uff08\u9000\u706b/\u51b7\u53d8\u5f62\uff09\n\n\u7b80\u4fbf\u5feb\u6377\uff0c\u4f46\u4e0d\u80fd\u76f4\u63a5\u5224\u65ad\u6210\u5206\n\n\n\n\n\n\n\u7b2c\u4e5d\u7ae0  \u94dc\u7684\u8d44\u6e90\u4e0e\u53ef\u6301\u7eed\u53d1\u5c55\n\n\n\n9.",
+        "mimetype": "text/plain",
+        "start_char_idx": 10099,
+        "end_char_idx": 10498,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "d4e14004-189e-44e9-9daf-79a8b4224f0b": {
+      "__data__": {
+        "id_": "d4e14004-189e-44e9-9daf-79a8b4224f0b",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "72b29dcc-ca70-46f8-832f-f5ecdb57bed8",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "487f67021967141cac2c696a23abe8bde158f345373ebf29a541b2de8aef5904",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "7d54cffd-d999-4bf8-89bb-0ff6492beb66",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "52735a22bebb527ebece7ce3e5bb82b3146a690e4de6e2b837c730f1d9280618",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "\u7b2c\u4e5d\u7ae0  \u94dc\u7684\u8d44\u6e90\u4e0e\u53ef\u6301\u7eed\u53d1\u5c55\n\n\n\n9.1 \u5168\u7403\u94dc\u8d44\u6e90\u6982\u51b5\n\n\u94dc\u662f\u5730\u7403\u4e0a\u50a8\u91cf\u8f83\u4e3a\u4e30\u5bcc\u7684\u6709\u8272\u91d1\u5c5e\uff0c\u5168\u7403\u5df2\u63a2\u660e\u9646\u5730\u94dc\u77ff\u50a8\u91cf\u7ea6\u4e3a8.7\u4ebf\u5428\uff082023\u5e74\u6570\u636e\uff0c\u7f8e\u56fd\u5730\u8d28\u8c03\u67e5\u5c40USGS\uff09\uff0c\u4e3b\u8981\u5206\u5e03\u5728\u5357\u7f8e\u6d32\uff08\u667a\u5229\u3001\u79d8\u9c81\u7ea6\u5360\u5168\u7403\u50a8\u91cf\u768440%\u4ee5\u4e0a\uff09\u3001\u5317\u7f8e\u6d32\uff08\u7f8e\u56fd\uff09\u3001\u975e\u6d32\uff08\u521a\u679c\uff08\u91d1\uff09\u3001\u8d5e\u6bd4\u4e9a\uff09\u3001\u4e9a\u6d32\uff08\u4e2d\u56fd\u3001\u54c8\u8428\u514b\u65af\u5766\uff09\u548c\u6b27\u6d32\uff08\u4fc4\u7f57\u65af\uff09\u7b49\u5730\u533a\u3002\u667a\u5229\u662f\u5168\u7403\u6700\u5927\u7684\u94dc\u751f\u4ea7\u56fd\uff0c\u5e74\u4ea7\u91cf\u7ea6\u5360\u5168\u7403\u768425%~28%\u3002\n\n9.2 \u4e2d\u56fd\u94dc\u8d44\u6e90\u4e0e\u6d88\u8d39\n\n\u4e2d\u56fd\u662f\u5168\u7403\u6700\u5927\u7684\u94dc\u6d88\u8d39\u56fd\uff0c\u5e74\u6d88\u8d39\u91cf\u7ea6\u5360\u5168\u7403\u603b\u91cf\u768450%\u4ee5\u4e0a\u3002\u4e2d\u56fd\u94dc\u77ff\u8d44\u6e90\u4e3b\u8981\u5206\u5e03\u5728\u4e91\u5357\u3001\u897f\u85cf\u3001\u6c5f\u897f\u3001\u5b89\u5fbd\u3001\u5185\u8499\u53e4\u7b49\u7701\u533a\u3002\u7531\u4e8e\u56fd\u5185\u77ff\u4ea7\u8d44\u6e90\u4e0d\u8db3\uff0c\u4e2d\u56fd\u5927\u91cf\u8fdb\u53e3\u94dc\u77ff\u77f3\u3001\u94dc\u7cbe\u77ff\u548c\u5e9f\u6742\u94dc\uff0c\u662f\u5168\u7403\u6700\u5927\u7684\u94dc\u8fdb\u53e3\u56fd\u4e4b\u4e00\u3002\n\n9.3 \u94dc\u7684\u56de\u6536\u4e0e\u518d\u751f\u5229\u7528\n\n\u94dc\u662f\u53ef\u4ee5\u65e0\u9650\u6b21\u56de\u6536\u518d\u5229\u7528\u7684\u91d1\u5c5e\uff0c\u518d\u751f\u94dc\uff08\u5e9f\u94dc\u7194\u70bc\uff09\u7684\u80fd\u8017\u4ec5\u4e3a\u539f\u751f\u94dc\uff08\u77ff\u77f3\u51b6\u70bc\uff09\u7684\u7ea615%~20%\uff0c\u662f\u5178\u578b\u7684\u7eff\u8272\u5faa\u73af\u6750\u6599\u3002",
+        "mimetype": "text/plain",
+        "start_char_idx": 10477,
+        "end_char_idx": 10864,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "7d54cffd-d999-4bf8-89bb-0ff6492beb66": {
+      "__data__": {
+        "id_": "7d54cffd-d999-4bf8-89bb-0ff6492beb66",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "d4e14004-189e-44e9-9daf-79a8b4224f0b",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "e7ca0199755112a2ca3ca51baa4a29b7193a1d6e05398e6fd5655bca4968c134",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "c6b66a6b-25cc-43df-a184-6de72c426129",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "e7839f978f10326689d8d385bdcdf5a18068df443355d01381545468248114ed",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "\u5e9f\u94dc\u6765\u6e90\uff1a\u5e9f\u65e7\u7535\u7ebf\u7535\u7f06\u3001\u5e9f\u65e7\u5bb6\u7535\u3001\u6c7d\u8f66\u62a5\u5e9f\u4ef6\u3001\u5de5\u4e1a\u751f\u4ea7\u5e9f\u6599\uff08\u94dc\u5c51\u3001\u94dc\u6e23\uff09\u7b49\u3002\n\n\u5e9f\u94dc\u5206\u7c7b\uff1a\u4e00\u822c\u5c06\u5e9f\u94dc\u5206\u4e3a1\u53f7\u94dc\uff08\u7eaf\u94dc\u5e9f\u6599\uff0c\u5982\u94dc\u7ebf\u5934\uff09\u30012\u53f7\u94dc\uff08\u6df7\u5408\u94dc\u5e9f\u6599\uff09\u3001\u9ec4\u94dc\u5e9f\u6599\u3001\u9752\u94dc\u5e9f\u6599\u7b49\u7ea7\u522b\u3002\n\n\u518d\u751f\u6bd4\u4f8b\uff1a\u5168\u7403\u94dc\u4f7f\u7528\u91cf\u4e2d\uff0c\u7ea635%~40%\u6765\u81ea\u518d\u751f\u94dc\uff0c\u5728\u4e00\u4e9b\u53d1\u8fbe\u56fd\u5bb6\u8be5\u6bd4\u4f8b\u66f4\u9ad8\u3002\n\n9.4 \u94dc\u4e0e\u65b0\u80fd\u6e90\u53d1\u5c55\n\n\u94dc\u5728\u65b0\u80fd\u6e90\u9886\u57df\u7684\u4f5c\u7528\u65e5\u76ca\u51f8\u663e\uff0c\u662f\u5b9e\u73b0\u78b3\u4e2d\u548c\u76ee\u6807\u7684\u5173\u952e\u6750\u6599\u4e4b\u4e00\uff1a\n\n\u7535\u52a8\u6c7d\u8f66\uff1a\u7eaf\u7535\u52a8\u6c7d\u8f66\u6bd4\u4f20\u7edf\u71c3\u6cb9\u8f66\u542b\u94dc\u91cf\u9ad8\u7ea63~4\u500d\uff0c\u7535\u673a\u3001\u7535\u6c60\u3001\u5145\u7535\u6869\u5747\u9700\u5927\u91cf\u94dc\u3002\n\n\u98ce\u529b\u53d1\u7535\uff1a\u6bcf\u5146\u74e6\u88c5\u673a\u5bb9\u91cf\u9700\u8981\u7ea62.5~3.5\u5428\u94dc\uff0c\u7528\u4e8e\u53d1\u7535\u673a\u7ed5\u7ec4\u3001\u53d8\u538b\u5668\u548c\u8f93\u914d\u7535\u7cfb\u7edf\u3002\n\n\u592a\u9633\u80fd\u5149\u4f0f\uff1a\u5149\u4f0f\u7ec4\u4ef6\u7684\u6c47\u6d41\u6392\u3001\u7535\u7f06\u53ca\u5e76\u7f51\u8bbe\u5907\u5747\u5927\u91cf\u4f7f\u7528\u94dc\u3002\n\n\u7535\u7f51\u57fa\u7840\u8bbe\u65bd\uff1a\u667a\u80fd\u7535\u7f51\u6539\u9020\u548c\u9ad8\u538b\u8f93\u7535\u7ebf\u8def\u5efa\u8bbe\u63a8\u52a8\u94dc\u9700\u6c42\u6301\u7eed\u589e\u957f\u3002\n\n\n\n\n\u7b2c\u5341\u7ae0  \u94dc\u5408\u91d1\u9009\u6750\u57fa\u672c\u539f\u5219",
+        "mimetype": "text/plain",
+        "start_char_idx": 10866,
+        "end_char_idx": 11217,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "c6b66a6b-25cc-43df-a184-6de72c426129": {
+      "__data__": {
+        "id_": "c6b66a6b-25cc-43df-a184-6de72c426129",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "7d54cffd-d999-4bf8-89bb-0ff6492beb66",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "2cbed769a5c1af3082513c4fa791df68341c8919c032da28e1124347decdfdc1",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "43e45292-f471-4b0b-a7bb-8088d7523fcb",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "a23a981feb4420753de50cb5a2eab2ea4eb0f0db98f52000a54d3d6e7eeb8882",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "\u7b2c\u5341\u7ae0  \u94dc\u5408\u91d1\u9009\u6750\u57fa\u672c\u539f\u5219\n\n\n\n10.1 \u9009\u6750\u8003\u8651\u56e0\u7d20\n\n\u5728\u5de5\u7a0b\u5e94\u7528\u4e2d\u9009\u62e9\u94dc\u5408\u91d1\u65f6\uff0c\u9700\u8981\u7efc\u5408\u8003\u8651\u4ee5\u4e0b\u4e3b\u8981\u56e0\u7d20\uff1a\n\n\u8003\u8651\u56e0\u7d20\n\n\u5173\u952e\u95ee\u9898\n\n\u63a8\u8350\u65b9\u5411\n\n\u4f7f\u7528\u6027\u80fd\u8981\u6c42\n\n\u5bfc\u7535\u6027\uff1f\u5f3a\u5ea6\uff1f\u8010\u78e8\u6027\uff1f\u5f39\u6027\uff1f\n\n\u6309\u4e3b\u8981\u6027\u80fd\u8981\u6c42\u9009\u5b9a\u5408\u91d1\u7cfb\u5217\n\n\u8150\u8680\u73af\u5883\n\n\u6de1\u6c34\uff1f\u6d77\u6c34\uff1f\u5316\u5de5\u4ecb\u8d28\uff1f\u5927\u6c14\uff1f\n\n\u6d77\u6c34\u9009\u767d\u94dc/\u94dd\u9ec4\u94dc\uff1b\u5316\u5de5\u9009\u94dd\u9752\u94dc\n\n\u52a0\u5de5\u65b9\u5f0f\n\n\u94f8\u9020\uff1f\u51b7\u53d8\u5f62\uff1f\u5207\u524a\u52a0\u5de5\uff1f\n\n\u5207\u524a\u4f18\u5148\u9009\u94c5\u9ec4\u94dc\uff1b\u6df1\u51b2\u9009H68\u9ec4\u94dc\n\n\u4f7f\u7528\u6e29\u5ea6\n\n\u5e38\u6e29\uff1f\u9ad8\u6e29\uff08>200\u00b0C\uff09\uff1f\u4f4e\u6e29\uff1f\n\n\u9ad8\u6e29\u9009\u94dd\u9752\u94dc\u6216\u94cd\u9752\u94dc\u65f6\u6548\u6001\n\n\u7ecf\u6d4e\u6027\n\n\u6750\u6599\u6210\u672c\uff1f\u52a0\u5de5\u6210\u672c\uff1f\u5bff\u547d\uff1f\n\n\u4e00\u822c\u7ed3\u6784\u4ef6\u7528\u9ec4\u94dc\uff0c\u7279\u6b8a\u7528\u9014\u518d\u8003\u8651\u9752\u94dc\n\n\u710a\u63a5\u8981\u6c42\n\n\u662f\u5426\u9700\u8981\u710a\u63a5\uff1f\u710a\u63a5\u65b9\u5f0f\uff1f\n\n\u65e0\u6c27\u94dc/\u78f7\u94dc\u710a\u63a5\u6027\u597d\uff1b\u94cd\u94dc\u4e0d\u5efa\u8bae\u710a\u63a5\n\n\u7535\u78c1\u8981\u6c42\n\n\u662f\u5426\u8981\u6c42\u975e\u78c1\u6027\uff1f\u5bfc\u7535\u7387\u8981\u6c42\uff1f\n\n\u94dc\u5408\u91d1\u5747\u4e3a\u975e\u78c1\u6027\uff1b\u9ad8\u5bfc\u7535\u9009\u7eaf\u94dc\u6216\u94f6\u94dc\n\n\n\n10.",
+        "mimetype": "text/plain",
+        "start_char_idx": 11203,
+        "end_char_idx": 11565,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "43e45292-f471-4b0b-a7bb-8088d7523fcb": {
+      "__data__": {
+        "id_": "43e45292-f471-4b0b-a7bb-8088d7523fcb",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "c6b66a6b-25cc-43df-a184-6de72c426129",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "2e9e270ea0414a08b3b74a8352c9081950ec897179b5453322776089f3b93fcb",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "66033f20-03a6-4afd-95d9-316b3370a1fa",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "4e2596f7c833a26f4f0ea613bd8dd25ccd3961a3d3ea41a01436aa4ebd2862dc",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "10.2 \u5178\u578b\u5de5\u51b5\u9009\u6750\u6307\u5357\n\n\u5de5\u51b5/\u96f6\u4ef6\u7c7b\u578b\n\n\u63a8\u8350\u5408\u91d1\n\n\u7406\u7531\n\n\u9ad8\u5bfc\u7535\u5bfc\u7ebf\n\nT1\u3001T2\u7eaf\u94dc\u3001TU\u65e0\u6c27\u94dc\n\n\u5bfc\u7535\u7387\u6700\u9ad8\n\n\u5f39\u6027\u63a5\u89e6\u4ef6\uff08\u8fde\u63a5\u5668\uff09\n\nQBe2\u94cd\u9752\u94dc\u3001QSn6.5-0.1\u78f7\u9752\u94dc\n\n\u5f39\u6027\u6a21\u91cf\u9ad8\u3001\u75b2\u52b3\u5f3a\u5ea6\u597d\n\n\u7cbe\u5bc6\u5207\u524a\u5c0f\u96f6\u4ef6\n\nHPb59-1\u94c5\u9ec4\u94dc\n\n\u5207\u524a\u6027\u6700\u597d\uff0c\u65ad\u5c51\u597d\n\n\u8010\u78e8\u8f74\u627f/\u8f74\u5957\n\nZCuSn10P1\u9521\u9752\u94dc\u3001QAl9-4\u94dd\u9752\u94dc\n\n\u8010\u78e8\u6027\u597d\uff0c\u4f4e\u6469\u64e6\u7cfb\u6570\n\n\u6d77\u6c34\u7ba1\u9053\n\nB10\u767d\u94dc\u3001HSn70-1\u6d77\u519b\u9ec4\u94dc\n\n\u8010\u6d77\u6c34\u8150\u8680\u6027\u5f3a\n\n\u5f39\u7c27/\u819c\u7247\n\nQBe2\u3001QSn4-3\u78f7\u9752\u94dc\n\n\u9ad8\u5f39\u6027\u6781\u9650\uff0c\u75b2\u52b3\u5bff\u547d\u957f\n\n\u88c5\u9970\u54c1/\u5de5\u827a\u54c1\n\nH90\u3001H80\u9ec4\u94dc\uff0cBZn15-20\u950c\u767d\u94dc\n\n\u5916\u89c2\u7f8e\u89c2\uff0c\u8272\u6cfd\u4f73\n\n\u9ad8\u5f3a\u5ea6\u7ed3\u6784\u4ef6\n\nQAl10-3-1.",
+        "mimetype": "text/plain",
+        "start_char_idx": 11562,
+        "end_char_idx": 11880,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "66033f20-03a6-4afd-95d9-316b3370a1fa": {
+      "__data__": {
+        "id_": "66033f20-03a6-4afd-95d9-316b3370a1fa",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "43e45292-f471-4b0b-a7bb-8088d7523fcb",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "a213129c3910bf73ed42aa4d84625ee3b6460e1bedfd7f204db2b7daca332199",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "d7773422-f50c-4831-a00c-df7372354a40",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "90221f8606df8878cf41f2479ee95a0752a0375eed529e5001c4dd9715390f62",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "5\u94dd\u9752\u94dc\uff08\u70ed\u5904\u7406\u6001\uff09\n\n\u5f3a\u5ea6\u53ef\u8fbe700 MPa\u4ee5\u4e0a\n\n\u6563\u70ed\u5668/\u70ed\u4ea4\u6362\u5668\n\nT2\u7eaf\u94dc\uff08\u5bfc\u70ed\u6027\uff09\u3001B30\u767d\u94dc\uff08\u8010\u8680\uff09\n\n\u5bfc\u70ed\u6027\u597d\u6216\u8010\u8150\u8680\u6027\u597d\n\n\u7ed9\u6c34\u94dc\u7ba1\n\nTP2\u8131\u6c27\u94dc\u7ba1\n\n\u536b\u751f\u5b89\u5168\uff0c\u710a\u63a5\u6027\u597d\uff0c\u8010\u8150\u8680\n\n\n\n\n\n\n\u9644\u5f55  \u5e38\u7528\u6280\u672f\u672f\u8bed\u4e0e\u53c2\u8003\u6807\u51c6\n\n\n\nA. \u5e38\u7528\u6280\u672f\u672f\u8bed\n\n\u672f\u8bed\n\n\u8bf4\u660e\n\nIACS\uff08\u56fd\u9645\u9000\u706b\u94dc\u6807\u51c6\uff09\n\n\u7528\u4e8e\u8868\u793a\u5bfc\u7535\u7387\u7684\u76f8\u5bf9\u6807\u51c6\uff0c100% IACS = 5.",
+        "mimetype": "text/plain",
+        "start_char_idx": 11880,
+        "end_char_idx": 12065,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "d7773422-f50c-4831-a00c-df7372354a40": {
+      "__data__": {
+        "id_": "d7773422-f50c-4831-a00c-df7372354a40",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "66033f20-03a6-4afd-95d9-316b3370a1fa",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "8bcd3e049a2f130e9a9611c24c7980e61de678b5ff84742dbbb21c0da3e70df8",
+            "class_name": "RelatedNodeInfo"
+          },
+          "3": {
+            "node_id": "c47d8e44-2f49-4056-b911-40dcb6c2b50f",
+            "node_type": "1",
+            "metadata": {},
+            "hash": "2ef06b5e5575be658cd5c46b1afa7e99f7e9c4086003b43d603a59af6f963d80",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "80\u00d710\u2077 S/m\uff0c\u7eaf\u94dc\u57fa\u51c6\u503c\n\n\u518d\u7ed3\u6676\u9000\u706b\n\n\u5c06\u51b7\u52a0\u5de5\u53d8\u5f62\u94dc\u5408\u91d1\u52a0\u70ed\u81f3\u518d\u7ed3\u6676\u6e29\u5ea6\u4ee5\u4e0a\uff0c\u6062\u590d\u5851\u6027\uff0c\u6d88\u9664\u52a0\u5de5\u786c\u5316\u7684\u9000\u706b\u5904\u7406\n\n\u56fa\u6eb6\u5904\u7406\n\n\u5c06\u542b\u6709\u5408\u91d1\u5143\u7d20\u7684\u94dc\u5408\u91d1\u52a0\u70ed\u5230\u5355\u76f8\u533a\u4fdd\u6e29\u540e\u5feb\u901f\u51b7\u5374\uff0c\u5f62\u6210\u8fc7\u9971\u548c\u56fa\u6eb6\u4f53\n\n\u65f6\u6548\u5904\u7406\n\n\u5bf9\u56fa\u6eb6\u5904\u7406\u540e\u5408\u91d1\u5728\u8f83\u4f4e\u6e29\u5ea6\u4fdd\u6e29\uff0c\u4f7f\u7b2c\u4e8c\u76f8\u6790\u51fa\uff0c\u63d0\u9ad8\u5f3a\u5ea6\u548c\u786c\u5ea6\n\n\u8131\u950c\u8150\u8680\n\n\u9ad8\u950c\u9ec4\u94dc\u5728\u7279\u5b9a\u8150\u8680\u4ecb\u8d28\u4e2d\u950c\u4f18\u5148\u6eb6\u89e3\u7684\u9009\u62e9\u6027\u8150\u8680\u73b0\u8c61\n\n\u5e94\u529b\u8150\u8680\u5f00\u88c2\uff08SCC\uff09\n\n\u94dc\u5408\u91d1\u5728\u62c9\u4f38\u5e94\u529b\u4e0e\u7279\u5b9a\u8150\u8680\u73af\u5883\uff08\u5982\u542b\u6c28\u5927\u6c14\uff09\u5171\u540c\u4f5c\u7528\u4e0b\u53d1\u751f\u7684\u4f4e\u5e94\u529b\u8106\u65ad\n\n\u94dc\u950d\uff08\u51b0\u94dc\uff09\n\n\u94dc\u706b\u6cd5\u51b6\u70bc\u4e2d\u95f4\u4ea7\u54c1\uff0cCu\u2082S\u548cFeS\u7684\u6df7\u5408\u7269\uff0c\u542b\u94dc\u7ea650%~70%\n\nOFHC\u94dc\uff08\u65e0\u6c27\u9ad8\u5bfc\u94dc\uff09\n\n\u6c27\u542b\u91cf\u4f4e\u4e8e10 ppm\u7684\u9ad8\u7eaf\u65e0\u6c27\u94dc\uff0c\u5373\u56fd\u5185TU1/TU2\u724c\u53f7\u5bf9\u5e94\u7684\u6750\u6599\n\n\u94dc\u5f53\u91cf\n\n\u8bc4\u4ef7\u542b\u94dc\u5e9f\u6599\u4ef7\u503c\u7684\u6807\u51c6\uff0c\u4ee5\u5176\u94dc\u542b\u91cf\u6298\u7b97\u6210\u6807\u51c6\u94dc\u7684\u91cf\n\n\u52a0\u5de5\u786c\u5316\uff08\u51b7\u53d8\u5f62\u5f3a\u5316\uff09\n\n\u91d1\u5c5e\u5728\u51b7\u52a0\u5de5\u8fc7\u7a0b\u4e2d\u968f\u53d8\u5f62\u91cf\u589e\u5927\uff0c\u5f3a\u5ea6\u786c\u5ea6\u5347\u9ad8\u3001\u5851\u6027\u964d\u4f4e\u7684\u73b0\u8c61",
+        "mimetype": "text/plain",
+        "start_char_idx": 12065,
+        "end_char_idx": 12459,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    },
+    "c47d8e44-2f49-4056-b911-40dcb6c2b50f": {
+      "__data__": {
+        "id_": "c47d8e44-2f49-4056-b911-40dcb6c2b50f",
+        "embedding": null,
+        "metadata": {
+          "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+          "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "file_size": 34823,
+          "creation_date": "2026-04-18",
+          "last_modified_date": "2026-04-18"
+        },
+        "excluded_embed_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "excluded_llm_metadata_keys": [
+          "file_name",
+          "file_type",
+          "file_size",
+          "creation_date",
+          "last_modified_date",
+          "last_accessed_date"
+        ],
+        "relationships": {
+          "1": {
+            "node_id": "bc26d4b9-5f03-4e03-aca7-0442d688ff3a",
+            "node_type": "4",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "839e03f90c8c684cdafcf793c60af94cab875e02d69be253446b28db1f937c5b",
+            "class_name": "RelatedNodeInfo"
+          },
+          "2": {
+            "node_id": "d7773422-f50c-4831-a00c-df7372354a40",
+            "node_type": "1",
+            "metadata": {
+              "file_name": "\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_path": "D:\\CodeProject\\CuproAgent\\CuproExpress\\localResource\\\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\u624b\u518c.docx",
+              "file_type": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+              "file_size": 34823,
+              "creation_date": "2026-04-18",
+              "last_modified_date": "2026-04-18"
+            },
+            "hash": "08fe5d748ea1ae3e4dc032f17016a9010be3059b993c2d606361d48e21ded818",
+            "class_name": "RelatedNodeInfo"
+          }
+        },
+        "metadata_template": "{key}: {value}",
+        "metadata_separator": "\n",
+        "text": "B. \u4e3b\u8981\u53c2\u8003\u6807\u51c6\n\n\u6807\u51c6\u53f7\n\n\u6807\u51c6\u540d\u79f0\n\nGB/T 5231-2022\n\n\u52a0\u5de5\u94dc\u53ca\u94dc\u5408\u91d1\u724c\u53f7\u548c\u5316\u5b66\u6210\u5206\n\nGB/T 2059-2017\n\n\u94dc\u53ca\u94dc\u5408\u91d1\u5e26\u6750\n\nGB/T 2462-2017\n\n\u94dc\u53ca\u94dc\u5408\u91d1\u65e0\u7f1d\u5706\u5f62\u7ba1\u6750\n\nGB/T 4423-2007\n\n\u94dc\u53ca\u94dc\u5408\u91d1\u62c9\u5236\u68d2\n\nGB/T 13808-2007\n\n\u94dc\u53ca\u94dc\u5408\u91d1\u6324\u5236\u68d2\n\nGB/T 1176-2013\n\n\u94f8\u9020\u94dc\u53ca\u94dc\u5408\u91d1\n\nGB/T 26303.1-2010\n\n\u94dc\u53ca\u94dc\u5408\u91d1\u52a0\u5de5\u6750\u5916\u5f62\u5c3a\u5bf8\u68c0\u6d4b\u65b9\u6cd5\n\nASTM B152\n\n\u94dc\u7247\u6750\u3001\u5e26\u6750\u3001\u677f\u6750\u548c\u8f67\u5236\u68d2\uff08\u6807\u51c6\u89c4\u8303\uff09\n\nASTM B36\n\n\u9ec4\u94dc\u677f\u6750\u548c\u5e26\u6750\uff08\u6807\u51c6\u89c4\u8303\uff09\n\nEN 1652\n\n\u94dc\u53ca\u94dc\u5408\u91d1 \u677f\u6750\u3001\u5e26\u6750\u548c\u5706\u7247\n\n\n\n\n\n\u2014\u2014  \u672c\u624b\u518c\u5185\u5bb9\u4ec5\u4f9b\u53c2\u8003\uff0c\u751f\u4ea7\u5e94\u7528\u4e2d\u8bf7\u4ee5\u6700\u65b0\u6709\u6548\u6807\u51c6\u4e3a\u51c6  \u2014\u2014\n\n\t\u94dc\u53ca\u94dc\u5408\u91d1\u57fa\u7840\u77e5\u8bc6\t\u7b2c  \u9875",
+        "mimetype": "text/plain",
+        "start_char_idx": 12463,
+        "end_char_idx": 12822,
+        "text_template": "{metadata_str}\n\n{content}",
+        "class_name": "TextNode"
+      },
+      "__type__": "1"
+    }
+  }
+}
