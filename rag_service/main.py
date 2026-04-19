@@ -117,8 +117,6 @@ class RagIndexManager:
         )
 
         # 配置文本切块器
-        # 中文场景通常不建议强依赖 separator=" "
-        # 这里直接用默认 SentenceSplitter 逻辑更稳一点
         Settings.text_splitter = SentenceSplitter(
             chunk_size=RAG_CHUNK_SIZE,
             chunk_overlap=RAG_CHUNK_OVERLAP,
@@ -128,31 +126,26 @@ class RagIndexManager:
     def get_data_hash(self):
         """
         对知识库目录生成哈希。
-        这里比你原版更稳一点：加入
-        - 文件名
-        - 文件大小
-        - 修改时间
         用于判断是否需要重建索引
         """
         digest = hashlib.md5()
 
-        if not DATA_DIR.exists():
+        if not DATA_DIR.exists(): # 如果数据目录不存在，返回空哈希
             return ""
 
-        for root, _, files in os.walk(DATA_DIR):
-            for file_name in sorted(files):
+        for root, _, files in os.walk(DATA_DIR): # 遍历目录下所有文件
+            for file_name in sorted(files): # 文件名排序，保证同样的文件集哈希一致
                 file_path = Path(root) / file_name
 
                 try:
                     stat = file_path.stat()
-                    digest.update(file_name.encode("utf-8"))
-                    digest.update(str(stat.st_size).encode("utf-8"))
-                    digest.update(str(stat.st_mtime).encode("utf-8"))
+                    digest.update(file_name.encode("utf-8")) # 文件名
+                    digest.update(str(stat.st_size).encode("utf-8")) # 文件大小
+                    digest.update(str(stat.st_mtime).encode("utf-8")) # 修改时间
                 except FileNotFoundError:
-                    # 某些极端情况下文件正在被替换，跳过即可
                     continue
 
-        return digest.hexdigest()
+        return digest.hexdigest() # 返回最终哈希值
 
     # --------------------- 构建或加载索引 ---------------------
     def load_or_build_index(self, force_rebuild=False):
@@ -165,9 +158,9 @@ class RagIndexManager:
 
         # 快路径：哈希一致，直接复用本地索引
         if (
-            not force_rebuild
-            and PERSIST_DIR.exists()
-            and HASH_FILE.exists()
+            not force_rebuild # 不是强制重建
+            and PERSIST_DIR.exists() # 索引文件夹存在
+            and HASH_FILE.exists() # 哈希记录文件存在
             and HASH_FILE.read_text(encoding="utf-8").strip() == self.current_hash
         ):
             storage_context = StorageContext.from_defaults(
@@ -187,12 +180,12 @@ class RagIndexManager:
                 ".md": "default",
             },
         ).load_data()
-
+        # 切割文件成索引节点，并生成向量
         self.index = VectorStoreIndex.from_documents(
             documents,
             show_progress=True,
         )
-
+        # 持久化索引到本地
         PERSIST_DIR.mkdir(parents=True, exist_ok=True)
         self.index.storage_context.persist(persist_dir=str(PERSIST_DIR))
         HASH_FILE.write_text(self.current_hash, encoding="utf-8")
@@ -215,7 +208,6 @@ class RagIndexManager:
         3. 合并结果
         4. 去重
         5. rerank 精排
-
         返回排好序的节点列表。
         """
         self.ensure_ready()
@@ -224,7 +216,8 @@ class RagIndexManager:
         vector_retriever = self.index.as_retriever(
             similarity_top_k=RAG_VECTOR_TOP_K
         )
-        vector_nodes = vector_retriever.retrieve(query)
+        # 根据用户的问题 查询"语义相似匹配"的节点，返回带分数的节点列表
+        vector_nodes = vector_retriever.retrieve(query) # 分数
 
         # 2) BM25 检索器：适合关键词精确命中
         # 从 docstore 里把所有 node 取出来构建 BM25
@@ -233,7 +226,8 @@ class RagIndexManager:
             nodes=all_nodes,
             similarity_top_k=RAG_BM25_TOP_K,
         )
-        bm25_nodes = bm25_retriever.retrieve(query)
+        # 根据用户的问题 查询"关键词精确命中"的节点，返回带分数的节点列表
+        bm25_nodes = bm25_retriever.retrieve(query) # 分数
 
         # 3) 合并结果
         merged_nodes = []
@@ -266,6 +260,7 @@ class RagIndexManager:
             model=RAG_RERANK_MODEL,
             top_n=RAG_RERANK_TOP_N,
         )
+        # 让AI精排一遍，返回最终排好序的节点列表
         reranked_nodes = reranker.postprocess_nodes(
             fusion_nodes,
             query_str=query,
@@ -281,22 +276,23 @@ class RagIndexManager:
         """
         nodes = self.build_hybrid_retrieval(query)
 
-        context_parts = []
-        source_nodes = []
+        context_parts = []  # 存完整文本（给大模型看）
+        source_nodes = []   # 存来源信息（给前端/人看）
 
         for idx, node_with_score in enumerate(nodes, start=1):
+            # idx索引也是排名 
             text = node_with_score.node.get_content().strip()
             if not text:
                 continue
-
-            metadata = node_with_score.node.metadata or {}
-            file_name = metadata.get("file_name") or metadata.get("file_path") or "unknown"
+                
+            metadata = node_with_score.node.metadata or {} # 内容
+            file_name = metadata.get("file_name") or metadata.get("file_path") or "unknown" #来源
 
             context_parts.append(f"{idx}. {text}")
             source_nodes.append(
                 {
-                    "rank": idx,
-                    "score": node_with_score.score,
+                    "rank": idx, # 排名
+                    "score": node_with_score.score, # 相关性分数  
                     "fileName": file_name,
                     "textPreview": text[:200],
                 }
@@ -315,7 +311,7 @@ class RagIndexManager:
             "sources": source_nodes,
         }
 
-    # --------------------- 生成 prompt ---------------------
+    # --------------------- 生成 System prompt ---------------------
     def build_prompt(self, query: str, context_text: str):
         """
         手动拼接 RAG prompt。
@@ -344,7 +340,7 @@ class RagIndexManager:
         执行：
         hybrid retrieval -> rerank -> prompt 拼接 -> LLM 流式生成
         """
-        result = self.retrieve(query)
+        result = self.retrieve(query) # 通过问题获取数据
         context_text = result["contextText"]
         prompt = self.build_prompt(query, context_text)
 
@@ -375,8 +371,7 @@ manager = RagIndexManager()
 @app.on_event("startup")
 async def startup_event():
     """
-    服务启动时提前加载或构建索引，
-    避免第一次请求特别慢。
+    服务启动时提前加载或构建索引
     """
     manager.load_or_build_index()
 
