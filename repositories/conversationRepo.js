@@ -1,8 +1,27 @@
 const { randomUUID } = require("crypto");
 const { getPool, ready } = require("../db/pool");
-// conversationRepo.js - 处理对话相关的数据库操作
-// 创建新对话
-async function createConversation(userId, title = "新对话") {
+
+function toFiniteInteger(value, options = {}) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) {
+    return options.defaultValue ?? null;
+  }
+
+  let normalized = Math.floor(parsed);
+  if (Number.isFinite(options.min)) {
+    normalized = Math.max(options.min, normalized);
+  }
+  if (Number.isFinite(options.max)) {
+    normalized = Math.min(options.max, normalized);
+  }
+
+  if (Number.isFinite(options.min) && normalized < options.min) {
+    return options.defaultValue ?? null;
+  }
+  return normalized;
+}
+
+async function createConversation(userId, title = "New Conversation") {
   await ready;
   const pool = await getPool();
   const conversationId = randomUUID();
@@ -12,7 +31,7 @@ async function createConversation(userId, title = "新对话") {
   );
   return { conversation_id: conversationId, user_id: userId, title };
 }
-// 根据对话ID获取对话信息
+
 async function getConversationById(conversationId) {
   await ready;
   const pool = await getPool();
@@ -22,7 +41,7 @@ async function getConversationById(conversationId) {
   );
   return rows[0] || null;
 }
-// 验证用户是否是对话的所有者
+
 async function assertConversationOwner(userId, conversationId) {
   const conversation = await getConversationById(conversationId);
   if (!conversation) {
@@ -33,7 +52,7 @@ async function assertConversationOwner(userId, conversationId) {
   }
   return { ok: true, conversation };
 }
-// 添加消息到对话中
+
 async function addMessage(conversationId, role, content) {
   await ready;
   const pool = await getPool();
@@ -52,12 +71,16 @@ async function addMessage(conversationId, role, content) {
     content,
   };
 }
-// 列出用户的对话列表，支持分页
+
 async function listConversations(userId, page = 1, pageSize = 20) {
   await ready;
   const pool = await getPool();
-  const safePage = Math.max(1, Number(page) || 1);
-  const safePageSize = Math.min(100, Math.max(1, Number(pageSize) || 20));
+  const safePage = toFiniteInteger(page, { min: 1, defaultValue: 1 });
+  const safePageSize = toFiniteInteger(pageSize, {
+    min: 1,
+    max: 100,
+    defaultValue: 20,
+  });
   const offset = (safePage - 1) * safePageSize;
 
   const sql = `
@@ -87,22 +110,23 @@ async function listConversations(userId, page = 1, pageSize = 20) {
     total: countRows[0]?.total || 0,
   };
 }
-// 获取对话中的消息列表，支持限制返回最近的N条消息
+
 async function getMessages(conversationId, limit = null) {
   await ready;
   const pool = await getPool();
 
-  if (!limit) {
+  const safeLimit = toFiniteInteger(limit, {
+    min: 1,
+    max: 500,
+    defaultValue: null,
+  });
+
+  if (!safeLimit) {
     const [rows] = await pool.execute(
       "SELECT message_id, role, content, created_at FROM messages WHERE conversation_id = ? ORDER BY created_at ASC, message_id ASC",
       [conversationId],
     );
     return rows;
-  }
-
-  const safeLimit = Number(limit);
-  if (Number.isNaN(safeLimit) || safeLimit < 1) {
-    return getMessages(conversationId, null);
   }
 
   const [rows] = await pool.execute(
@@ -123,19 +147,30 @@ async function getMessages(conversationId, limit = null) {
 async function getMessagesAfter(conversationId, afterMessageId = 0, options = {}) {
   await ready;
   const pool = await getPool();
-  const params = [conversationId, Number(afterMessageId) || 0];
+
+  const safeAfterMessageId = toFiniteInteger(afterMessageId, {
+    min: 0,
+    defaultValue: 0,
+  });
+
+  const params = [conversationId, safeAfterMessageId];
   const where = ["conversation_id = ?", "message_id > ?"];
 
-  if (Number.isFinite(options.beforeMessageId)) {
+  const beforeMessageId = toFiniteInteger(options.beforeMessageId, {
+    min: 1,
+    defaultValue: null,
+  });
+  if (beforeMessageId) {
     where.push("message_id < ?");
-    params.push(Number(options.beforeMessageId));
+    params.push(beforeMessageId);
   }
 
-  const limit = Number(options.limit);
-  const limitSql =
-    Number.isFinite(limit) && limit > 0
-      ? ` LIMIT ${Math.min(500, Math.floor(limit))}`
-      : "";
+  const limit = toFiniteInteger(options.limit, {
+    min: 1,
+    max: 500,
+    defaultValue: null,
+  });
+  const limitSql = limit ? ` LIMIT ${limit}` : "";
 
   const [rows] = await pool.execute(
     `SELECT message_id, role, content, created_at
@@ -151,12 +186,22 @@ async function getMessagesAfter(conversationId, afterMessageId = 0, options = {}
 async function countMessagesAfter(conversationId, afterMessageId = 0, options = {}) {
   await ready;
   const pool = await getPool();
-  const params = [conversationId, Number(afterMessageId) || 0];
+
+  const safeAfterMessageId = toFiniteInteger(afterMessageId, {
+    min: 0,
+    defaultValue: 0,
+  });
+
+  const params = [conversationId, safeAfterMessageId];
   const where = ["conversation_id = ?", "message_id > ?"];
 
-  if (Number.isFinite(options.beforeMessageId)) {
+  const beforeMessageId = toFiniteInteger(options.beforeMessageId, {
+    min: 1,
+    defaultValue: null,
+  });
+  if (beforeMessageId) {
     where.push("message_id < ?");
-    params.push(Number(options.beforeMessageId));
+    params.push(beforeMessageId);
   }
 
   const [rows] = await pool.execute(
@@ -175,9 +220,13 @@ async function getLatestMessageId(conversationId, options = {}) {
   const params = [conversationId];
   const where = ["conversation_id = ?"];
 
-  if (Number.isFinite(options.beforeMessageId)) {
+  const beforeMessageId = toFiniteInteger(options.beforeMessageId, {
+    min: 1,
+    defaultValue: null,
+  });
+  if (beforeMessageId) {
     where.push("message_id < ?");
-    params.push(Number(options.beforeMessageId));
+    params.push(beforeMessageId);
   }
 
   const [rows] = await pool.execute(
@@ -189,7 +238,7 @@ async function getLatestMessageId(conversationId, options = {}) {
 
   return Number(rows[0]?.latest_message_id) || 0;
 }
-// 更新对话标题
+
 async function updateConversationTitle(conversationId, userId, title) {
   await ready;
   const pool = await getPool();
@@ -204,7 +253,7 @@ async function updateConversationTitle(conversationId, userId, title) {
 
   return getConversationById(conversationId);
 }
-// 删除对话
+
 async function deleteConversation(conversationId, userId) {
   await ready;
   const pool = await getPool();
@@ -228,3 +277,4 @@ module.exports = {
   updateConversationTitle,
   deleteConversation,
 };
+

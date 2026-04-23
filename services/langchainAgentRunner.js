@@ -37,6 +37,42 @@ Conversation:
 `.trim();
 const sharedCheckpointer = new MemorySaver();
 
+function createSummaryMiddleware(summaryModelName, triggerTokens, keepMessages) {
+  return summarizationMiddleware({
+    model: getLangChainModelForName(summaryModelName, {
+      temperature: 0.1,
+      maxTokens: 1200,
+    }),
+    trigger: { tokens: triggerTokens },
+    keep: { messages: keepMessages },
+    summaryPrefix: SUMMARY_PREFIX,
+    summaryPrompt: DEFAULT_SUMMARY_PROMPT,
+  });
+}
+
+function createConfiguredAgent({
+  modelName,
+  summaryModelName,
+  networkSearchEnabled,
+  triggerTokens,
+  keepMessages,
+  tools = [],
+}) {
+  return createAgent({
+    model: getLangChainModelForName(modelName, {
+      temperature: 0.2,
+      maxTokens: 2000,
+      streaming: true,
+    }),
+    tools,
+    checkpointer: sharedCheckpointer,
+    systemPrompt: buildSystemPrompt({ networkSearchEnabled }),
+    middleware: [
+      createSummaryMiddleware(summaryModelName, triggerTokens, keepMessages),
+    ],
+  });
+}
+
 async function run({
   conversationId,
   content,
@@ -70,27 +106,13 @@ async function run({
   const persistedSummary = String(state?.running_summary || "").trim();
   const summaryModelName = resolveSummaryModelName(model);
   const networkSearchEnabled = Boolean(networkConfig?.search);
-  const seedAgent = createAgent({
-    model: getLangChainModelForName(model, {
-      temperature: 0.2,
-      maxTokens: 2000,
-      streaming: true,
-    }),
+  const seedAgent = createConfiguredAgent({
+    modelName: model,
+    summaryModelName,
+    networkSearchEnabled,
+    triggerTokens: summaryTriggerTokens,
+    keepMessages: summaryKeepMessages,
     tools: [],
-    checkpointer: sharedCheckpointer,
-    systemPrompt: buildSystemPrompt({ networkSearchEnabled }),
-    middleware: [
-      summarizationMiddleware({
-        model: getLangChainModelForName(summaryModelName, {
-          temperature: 0.1,
-          maxTokens: 1200,
-        }),
-        trigger: { tokens: summaryTriggerTokens },
-        keep: { messages: summaryKeepMessages },
-        summaryPrefix: SUMMARY_PREFIX,
-        summaryPrompt: DEFAULT_SUMMARY_PROMPT,
-      }),
-    ],
   });
   await ensureThreadSeeded({
     agent: seedAgent,
@@ -122,27 +144,13 @@ async function run({
     networkSearchEnabled,
     retrievalTracker,
   });
-  const runAgent = createAgent({
-    model: getLangChainModelForName(model, {
-      temperature: 0.2,
-      maxTokens: 2000,
-      streaming: true,
-    }),
+  const runAgent = createConfiguredAgent({
+    modelName: model,
+    summaryModelName,
+    networkSearchEnabled,
+    triggerTokens: summaryTriggerTokens,
+    keepMessages: summaryKeepMessages,
     tools,
-    checkpointer: sharedCheckpointer,
-    systemPrompt: buildSystemPrompt({ networkSearchEnabled }),
-    middleware: [
-      summarizationMiddleware({
-        model: getLangChainModelForName(summaryModelName, {
-          temperature: 0.1,
-          maxTokens: 1200,
-        }),
-        trigger: { tokens: summaryTriggerTokens },
-        keep: { messages: summaryKeepMessages },
-        summaryPrefix: SUMMARY_PREFIX,
-        summaryPrompt: DEFAULT_SUMMARY_PROMPT,
-      }),
-    ],
   });
 
   let fullResponse = "";

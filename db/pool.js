@@ -45,7 +45,7 @@ async function ensureTables() {
     CREATE TABLE IF NOT EXISTS conversations (
       conversation_id CHAR(36) PRIMARY KEY,
       user_id INT NOT NULL,
-      title VARCHAR(255) DEFAULT '新对话',
+      title VARCHAR(255) DEFAULT 'New Conversation',
       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
       CONSTRAINT fk_user_conversation
@@ -132,3 +132,4 @@ module.exports = {
   getPool,
   testDbConnection,
 };
+

@@ -106,6 +106,13 @@ router.post("/refresh", async (req, res) => {
     if (!stored || stored.revoked) {
       return sendError(res, 401, "invalid refresh token");
     }
+    const expiresAtMs = stored.expires_at
+      ? new Date(stored.expires_at).getTime()
+      : 0;
+    if (!expiresAtMs || expiresAtMs <= Date.now()) {
+      await tokenRepo.revokeRefreshToken(refreshToken);
+      return sendError(res, 401, "refresh token expired");
+    }
 
     const user = await userRepo.getUserById(payload.id);
     if (!user) {

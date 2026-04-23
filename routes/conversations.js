@@ -14,6 +14,28 @@ const {
 
 const router = express.Router();
 
+function normalizeRequiredText(value) {
+  return typeof value === "string" ? value.trim() : "";
+}
+
+function normalizeOptionalText(value) {
+  if (value === undefined || value === null) return "";
+  return String(value).trim();
+}
+
+function normalizePositiveInteger(value, options = {}) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) return null;
+
+  let normalized = Math.floor(parsed);
+  if (normalized < 1) return null;
+
+  if (Number.isFinite(options.max)) {
+    normalized = Math.min(normalized, options.max);
+  }
+  return normalized;
+}
+
 router.post("/", authMiddleware, async (req, res) => {
   try {
     const userId = req.user.id;
@@ -25,15 +47,23 @@ router.post("/", authMiddleware, async (req, res) => {
       networkConfig,
     } = req.body;
 
-    if (!content) {
+    const normalizedContent = normalizeRequiredText(content);
+    if (!normalizedContent) {
       return sendError(res, 400, "content required");
     }
-    // 确保当前对话
+
+    const normalizedTitle = normalizeOptionalText(title);
+    const normalizedModel = normalizeOptionalText(model) || "qwen-plus";
+    const normalizedNetworkConfig =
+      networkConfig && typeof networkConfig === "object" && !Array.isArray(networkConfig)
+        ? networkConfig
+        : {};
+
     const ensuredConversation = await conversationService.ensureConversation({
       userId,
       conversationId,
-      title,
-      content,
+      title: normalizedTitle,
+      content: normalizedContent,
     });
 
     if (!ensuredConversation.ok) {
@@ -43,37 +73,45 @@ router.post("/", authMiddleware, async (req, res) => {
         ensuredConversation.error,
       );
     }
-    // 获取当前对话ID
+
     const currentConversationId = ensuredConversation.conversationId;
-    // 添加用户消息
     const userMessage = await conversationService.addUserMessage(
       currentConversationId,
-      content,
+      normalizedContent,
     );
-    // 初始化SSE连接
+
     initSse(res);
-    // 发送对话开始事件
     writeEvent(res, "started", {
       started: true,
       conversation_id: currentConversationId,
     });
-    // 保持连接活跃，定期发送keep-alive事件
+
     const keepAlive = startKeepAlive(res);
-    let fullResponse = ""; // 用于累积助手消息的完整内容，以便在连接关闭时保存当前响应状态
+    let fullResponse = "";
     let assistantSaved = false;
+    let assistantSavePromise = null;
     let streamClosed = false;
-    // 定义一个函数用于保存助手消息，确保在连接关闭时也能保存当前的响应内容
+
     async function saveAssistantMessage() {
       if (assistantSaved || !fullResponse) return null;
+      if (assistantSavePromise) return assistantSavePromise;
 
-      const assistantMessage = await conversationService.addAssistantMessage(
-        currentConversationId,
-        fullResponse,
-      );
-      assistantSaved = true;
-      return assistantMessage;
+      assistantSavePromise = (async () => {
+        const assistantMessage = await conversationService.addAssistantMessage(
+          currentConversationId,
+          fullResponse,
+        );
+        assistantSaved = true;
+        return assistantMessage;
+      })();
+
+      try {
+        return await assistantSavePromise;
+      } finally {
+        assistantSavePromise = null;
+      }
     }
-    // 开启关闭连接的清理操作，确保在连接关闭时保存助手消息并清理资源
+
     attachCloseCleanup(req, res, () => {
       streamClosed = true;
       clearInterval(keepAlive);
@@ -81,12 +119,12 @@ router.post("/", authMiddleware, async (req, res) => {
         console.error("persist partial assistant message failed:", error);
       });
     });
-    // 开始生成
+
     const result = await chatOrchestrator.run({
       conversationId: currentConversationId,
-      content,
-      model,
-      networkConfig,
+      content: normalizedContent,
+      model: normalizedModel,
+      networkConfig: normalizedNetworkConfig,
       pendingMessageId: userMessage.message_id,
       onRetrieved(retrievalResult) {
         if (streamClosed) return;
@@ -97,13 +135,18 @@ router.post("/", authMiddleware, async (req, res) => {
           context_profile: retrievalResult.diagnostics?.contextProfile || {},
         });
       },
-      // 在接收到每个流式响应块时调用onChunk回调函数，累积助手消息内容并通过SSE发送给客户端
       onChunk(chunk) {
         if (streamClosed) return;
-        fullResponse += chunk;
-        writeEvent(res, "chunk", { chunk });
+        const safeChunk = String(chunk || "");
+        if (!safeChunk) return;
+        fullResponse += safeChunk;
+        writeEvent(res, "chunk", { chunk: safeChunk });
       },
     });
+
+    if (!fullResponse && result.fullResponse) {
+      fullResponse = String(result.fullResponse);
+    }
 
     const assistantMessage = await saveAssistantMessage();
 
@@ -164,7 +207,7 @@ router.get("/:id/messages", authMiddleware, async (req, res) => {
       return sendError(res, ownership.status, ownership.error);
     }
 
-    const limit = req.query.limit ? Number(req.query.limit) : null;
+    const limit = normalizePositiveInteger(req.query.limit, { max: 500 });
     const messages = await conversationRepo.getMessages(req.params.id, limit);
     return res.json({ conversation_id: req.params.id, messages });
   } catch (error) {
@@ -229,3 +272,4 @@ router.delete("/:id", authMiddleware, async (req, res) => {
 });
 
 module.exports = router;
+
