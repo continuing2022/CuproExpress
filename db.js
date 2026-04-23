@@ -3,7 +3,6 @@ const {
   userRepo,
   conversationRepo,
   conversationStateRepo,
-  conversationMemoryRepo,
   tokenRepo,
 } = require("./repositories");
 
@@ -16,7 +15,6 @@ module.exports = {
   ...userRepo,
   ...conversationRepo,
   ...conversationStateRepo,
-  ...conversationMemoryRepo,
   ...tokenRepo,
   testDbConnection,
   ready,
@@ -24,6 +22,5 @@ module.exports = {
   user: userRepo,
   conversation: conversationRepo,
   conversationState: conversationStateRepo,
-  conversationMemory: conversationMemoryRepo,
   token: tokenRepo,
 };

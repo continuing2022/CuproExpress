@@ -83,30 +83,6 @@ async function ensureTables() {
   `);
 
   await pool.query(`
-    CREATE TABLE IF NOT EXISTS conversation_memory_chunks (
-      memory_id BIGINT AUTO_INCREMENT PRIMARY KEY,
-      conversation_id CHAR(36) NOT NULL,
-      source_message_start_id BIGINT NOT NULL,
-      source_message_end_id BIGINT NOT NULL,
-      content TEXT NOT NULL,
-      memory_type ENUM('fact', 'preference', 'task', 'general')
-        NOT NULL DEFAULT 'general',
-      embedding JSON NULL,
-      keywords_json JSON NULL,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      INDEX idx_memory_conversation (conversation_id, source_message_end_id),
-      UNIQUE KEY uniq_memory_source (
-        conversation_id,
-        source_message_start_id,
-        source_message_end_id
-      ),
-      CONSTRAINT fk_conversation_memory
-        FOREIGN KEY (conversation_id) REFERENCES conversations(conversation_id)
-        ON DELETE CASCADE
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-  `);
-
-  await pool.query(`
     CREATE TABLE IF NOT EXISTS refresh_tokens (
       id INT NOT NULL AUTO_INCREMENT,
       user_id INT NOT NULL,

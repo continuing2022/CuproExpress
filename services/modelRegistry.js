@@ -1,4 +1,5 @@
 const OpenAI = require("openai");
+const { ChatOpenAI } = require("@langchain/openai");
 
 // 显式白名单：前端/路由传入的模型名必须在此注册。
 const MODEL_REGISTRY = {
@@ -60,6 +61,18 @@ function getClientForModel(modelName = "qwen-plus") {
   };
 }
 
+function getLangChainModelForName(modelName = "qwen-plus", options = {}) {
+  const config = assertSupportedModel(modelName);
+  return new ChatOpenAI({
+    model: modelName,
+    apiKey: config.apiKey,
+    configuration: {
+      baseURL: config.baseURL,
+    },
+    ...options,
+  });
+}
+
 function getModelMetadata(modelName = "qwen-plus") {
   const config = MODEL_REGISTRY[modelName] || MODEL_REGISTRY["qwen-plus"];
   return {
@@ -73,5 +86,6 @@ module.exports = {
   MODEL_REGISTRY,
   assertSupportedModel,
   getClientForModel,
+  getLangChainModelForName,
   getModelMetadata,
 };

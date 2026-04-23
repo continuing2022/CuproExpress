@@ -107,15 +107,6 @@ router.post("/", authMiddleware, async (req, res) => {
 
     const assistantMessage = await saveAssistantMessage();
 
-    conversationService
-      .maybeRefreshConversationSummary({
-        conversationId: currentConversationId,
-        model,
-      })
-      .catch((error) => {
-        console.error("post-response summary refresh failed:", error);
-      });
-
     clearInterval(keepAlive);
     if (streamClosed) {
       return res.end();
