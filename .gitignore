@@ -1,4 +1,15 @@
 node_modules
 .env
 .venv
-.localResources
+
+# Local knowledge resources
+localResource/
+**/localResource/
+
+# RAG generated index/cache
+rag_service/storage_hybrid/
+**/storage_hybrid/
+
+# Python caches
+__pycache__/
+*.py[cod]
