@@ -115,11 +115,15 @@ async function getMessages(conversationId, limit = null) {
   await ready;
   const pool = await getPool();
 
-  const safeLimit = toFiniteInteger(limit, {
-    min: 1,
-    max: 500,
-    defaultValue: null,
-  });
+  const shouldApplyLimit =
+    !(limit === null || limit === undefined || String(limit).trim() === "");
+  const safeLimit = shouldApplyLimit
+    ? toFiniteInteger(limit, {
+        min: 1,
+        max: 500,
+        defaultValue: null,
+      })
+    : null;
 
   if (!safeLimit) {
     const [rows] = await pool.execute(
