@@ -9,7 +9,10 @@ const {
 const { MemorySaver } = require("@langchain/langgraph");
 const { z } = require("zod");
 const { conversationRepo, conversationStateRepo } = require("../repositories");
-const { getLangChainModelForName, assertSupportedModel } = require("./modelRegistry");
+const {
+  getLangChainModelForName,
+  assertSupportedModel,
+} = require("./modelRegistry");
 const { SYSTEM_PROMPT } = require("./openai");
 const ragService = require("./ragService");
 const searchTool = require("../searchTool");
@@ -19,9 +22,9 @@ const {
 } = require("./messageTokenEstimator");
 
 const SUMMARY_PREFIX = "CONVERSATION_SUMMARY";
-const DEFAULT_HISTORY_LIMIT = 120;
-const DEFAULT_SUMMARY_TRIGGER_TOKENS = 12000;
-const DEFAULT_SUMMARY_KEEP_MESSAGES = 24;
+const DEFAULT_HISTORY_LIMIT = 100; // 历史消息最大条数
+const DEFAULT_SUMMARY_TRIGGER_TOKENS = 6000; // 触发摘要的Token阈值
+const DEFAULT_SUMMARY_KEEP_MESSAGES = 20; // 摘要后保留最新消息数
 const TOOL_HISTORY_LIMIT = 8;
 const DEFAULT_SUMMARY_PROMPT = `
 Summarize the conversation in Chinese and keep exactly these section headers:
@@ -36,8 +39,12 @@ Conversation:
 {messages}
 `.trim();
 const sharedCheckpointer = new MemorySaver();
-
-function createSummaryMiddleware(summaryModelName, triggerTokens, keepMessages) {
+// 自动压缩历史对话
+function createSummaryMiddleware(
+  summaryModelName,
+  triggerTokens,
+  keepMessages,
+) {
   return summarizationMiddleware({
     model: getLangChainModelForName(summaryModelName, {
       temperature: 0.1,
@@ -49,7 +56,7 @@ function createSummaryMiddleware(summaryModelName, triggerTokens, keepMessages) 
     summaryPrompt: DEFAULT_SUMMARY_PROMPT,
   });
 }
-
+// 创建配置化的Agent实例
 function createConfiguredAgent({
   modelName,
   summaryModelName,
@@ -82,19 +89,23 @@ async function run({
   onRetrieved,
   onChunk,
 }) {
-  const historyLimit = readIntEnv("LANGCHAIN_HISTORY_LIMIT", DEFAULT_HISTORY_LIMIT, {
-    min: 10,
-    max: 500,
-  });
+  const historyLimit = readIntEnv(
+    "LANGCHAIN_HISTORY_LIMIT",
+    DEFAULT_HISTORY_LIMIT,
+    {
+      min: 5,
+      max: 20,
+    },
+  );
   const summaryTriggerTokens = readIntEnv(
     "LANGCHAIN_SUMMARY_TRIGGER_TOKENS",
     DEFAULT_SUMMARY_TRIGGER_TOKENS,
-    { min: 1000, max: 120000 },
+    { min: 1000, max: 12000 },
   );
   const summaryKeepMessages = readIntEnv(
     "LANGCHAIN_SUMMARY_KEEP_MESSAGES",
     DEFAULT_SUMMARY_KEEP_MESSAGES,
-    { min: 4, max: 200 },
+    { min: 4, max: 20 },
   );
   const runConfig = {
     configurable: {
@@ -102,10 +113,12 @@ async function run({
     },
   };
 
-  const state = await conversationStateRepo.ensureConversationState(conversationId);
+  const state =
+    await conversationStateRepo.ensureConversationState(conversationId);
   const persistedSummary = String(state?.running_summary || "").trim();
   const summaryModelName = resolveSummaryModelName(model);
   const networkSearchEnabled = Boolean(networkConfig?.search);
+  // 创建种子agent
   const seedAgent = createConfiguredAgent({
     modelName: model,
     summaryModelName,
@@ -114,6 +127,7 @@ async function run({
     keepMessages: summaryKeepMessages,
     tools: [],
   });
+  // 恢复当前对话的记忆
   await ensureThreadSeeded({
     agent: seedAgent,
     runConfig,
@@ -122,12 +136,16 @@ async function run({
     persistedSummary,
     historyLimit,
   });
+  // 线程的状态
   const threadStateBefore = await safeGetThreadState(seedAgent, runConfig);
+  // 提取所有的消息
   const threadMessagesBefore = getStateMessages(threadStateBefore);
+  // 构建给工具使用的历史
   const historyForTools = buildToolHistoryFromThreadMessages(
     threadMessagesBefore,
     TOOL_HISTORY_LIMIT,
   );
+  // 消息的数量
   const recentMessageCount = historyForTools.length;
   const summaryUsed =
     Boolean(persistedSummary) || hasSummaryMessage(threadMessagesBefore);
@@ -168,15 +186,13 @@ async function run({
   for await (const event of stream) {
     if (!Array.isArray(event) || event.length < 2) continue;
     const [mode, payload] = event;
-
     if (mode === "messages") {
       const [message, metadata] = Array.isArray(payload) ? payload : [];
       const chunk = extractAssistantChunk(message, metadata);
       if (chunk) {
         fullResponse += chunk;
-        if (typeof onChunk === "function") {
-          onChunk(chunk);
-        }
+        console.debug("assistant chunk:", chunk);
+        onChunk(chunk);
       }
 
       const usageSnapshot = extractUsage(message);
@@ -192,7 +208,9 @@ async function run({
   }
 
   if (!fullResponse) {
-    const fallbackResponse = extractFinalAssistantText(latestState?.messages || []);
+    const fallbackResponse = extractFinalAssistantText(
+      latestState?.messages || [],
+    );
     if (fallbackResponse) {
       fullResponse = fallbackResponse;
       if (typeof onChunk === "function") {
@@ -530,14 +548,24 @@ function extractLatestSummaryMessage(messages = []) {
 
 function stripSummaryPrefix(content) {
   const pattern = new RegExp(`^${escapeRegExp(SUMMARY_PREFIX)}:?\\s*`, "i");
-  return String(content || "").replace(pattern, "").trim();
+  return String(content || "")
+    .replace(pattern, "")
+    .trim();
 }
 
 function extractAssistantChunk(message, metadata) {
+  if (typeof message === "string") return message;
   if (!isAssistantMessage(message)) return "";
   if (message?.additional_kwargs?.lc_source === "summarization") return "";
-  if (metadata?.langgraph_node && metadata.langgraph_node !== "model") return "";
-  return normalizeMessageContent(message.content);
+
+  const contentText = normalizeMessageContent(message?.content);
+  if (contentText) return contentText;
+
+  if (typeof message?.text === "string") {
+    return message.text;
+  }
+
+  return normalizeMessageContent(message?.contentBlocks);
 }
 
 function extractFinalAssistantText(messages = []) {
@@ -568,17 +596,28 @@ function normalizeMessageContent(content) {
   if (Array.isArray(content)) {
     return content
       .map((item) => {
-        if (typeof item === "string") return item;
-        if (item && typeof item.text === "string") return item.text;
-        if (item && typeof item.delta === "string") return item.delta;
-        return "";
+        return normalizeContentItem(item);
       })
       .join("");
   }
 
-  if (typeof content === "object") {
-    if (typeof content.text === "string") return content.text;
-    if (typeof content.delta === "string") return content.delta;
+  return normalizeContentItem(content);
+}
+
+function normalizeContentItem(item) {
+  if (typeof item === "string") return item;
+  if (!item || typeof item !== "object") return "";
+  if (typeof item.text === "string") return item.text;
+  if (typeof item.delta === "string") return item.delta;
+
+  // Some providers use "output_text" style blocks for incremental output.
+  if (
+    (item.type === "output_text" ||
+      item.type === "text" ||
+      item.type === "text_delta") &&
+    typeof item.value === "string"
+  ) {
+    return item.value;
   }
 
   return "";
@@ -632,10 +671,15 @@ function estimateInputTokens({ summary, messages }) {
     });
   }
 
-  return estimateTextTokens(SYSTEM_PROMPT) + estimateMessagesTokens(messageList);
+  return (
+    estimateTextTokens(SYSTEM_PROMPT) + estimateMessagesTokens(messageList)
+  );
 }
 
-function buildToolHistoryFromThreadMessages(messages = [], limit = TOOL_HISTORY_LIMIT) {
+function buildToolHistoryFromThreadMessages(
+  messages = [],
+  limit = TOOL_HISTORY_LIMIT,
+) {
   const normalized = [];
   for (const message of messages || []) {
     const role = normalizeRole(message);
@@ -691,11 +735,9 @@ function normalizeRole(message) {
   }
   return null;
 }
-
+// 返回总结模型名称
 function resolveSummaryModelName(primaryModel) {
-  const configured = String(
-    process.env.LANGCHAIN_SUMMARY_MODEL || process.env.SUMMARY_MODEL || "",
-  ).trim();
+  const configured = String(process.env.SUMMARY_MODEL || "").trim();
   if (!configured) return primaryModel;
 
   try {

@@ -47,111 +47,11 @@ async function run({
       telemetry,
     };
   } catch (error) {
-    console.error("langchain agent run failed, fallback to direct chat:", error);
-
-    const fallback = await runFallbackDirect({
-      conversationId,
-      content,
-      model,
-      pendingMessageId,
-      onRetrieved,
-      onChunk,
-    });
-
-    const telemetry = buildTelemetry({
-      conversationId,
-      model,
-      diagnostics: fallback.diagnostics,
-      usage: fallback.usage,
-      responseContent: fallback.fullResponse,
-      latencyMs: Date.now() - startedAt,
-    });
-    logTelemetry(telemetry);
-
-    return {
-      fullResponse: fallback.fullResponse,
-      mode: fallback.mode,
-      retrievalMeta: fallback.retrievalMeta,
-      diagnostics: fallback.diagnostics,
-      telemetry,
-    };
+    console.error(
+      "langchain agent run failed, fallback to direct chat:",
+      error,
+    );
   }
-}
-
-async function runFallbackDirect({
-  conversationId,
-  content,
-  model,
-  pendingMessageId,
-  onRetrieved,
-  onChunk,
-}) {
-  let recentMessages = await conversationRepo.getMessages(conversationId, 20);
-
-  if (
-    Number.isFinite(Number(pendingMessageId)) &&
-    !recentMessages.some(
-      (message) => Number(message.message_id) === Number(pendingMessageId),
-    )
-  ) {
-    recentMessages = [
-      ...recentMessages,
-      {
-        message_id: pendingMessageId,
-        role: "user",
-        content,
-      },
-    ];
-  }
-
-  const finalMessages = recentMessages.map((message) => ({
-    role: message.role,
-    content: message.content,
-  }));
-
-  if (typeof onRetrieved === "function") {
-    onRetrieved({
-      mode: "direct_chat",
-      meta: { reason: "langchain_fallback" },
-      diagnostics: {
-        contextProfile: {
-          recent_count: finalMessages.length,
-          summary_used: false,
-          memory_hits: 0,
-          truncated: false,
-        },
-      },
-    });
-  }
-
-  const completion = await openaiService.getChatCompletionStream(
-    finalMessages,
-    onChunk,
-    { max_tokens: 2000, model },
-  );
-
-  return {
-    fullResponse: completion.content || "",
-    usage: completion.usage || null,
-    mode: "direct_chat",
-    retrievalMeta: { reason: "langchain_fallback" },
-    diagnostics: {
-      estimatedInputTokens:
-        estimateTextTokens(SYSTEM_PROMPT) + estimateMessagesTokens(finalMessages),
-      summaryUsed: false,
-      summaryRefreshed: false,
-      recentMessageCount: finalMessages.length,
-      memoryRecallCount: 0,
-      ragContextTokens: 0,
-      truncated: false,
-      contextProfile: {
-        recent_count: finalMessages.length,
-        summary_used: false,
-        memory_hits: 0,
-        truncated: false,
-      },
-    },
-  };
 }
 
 function buildTelemetry({

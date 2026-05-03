@@ -55,7 +55,9 @@ router.post("/", authMiddleware, async (req, res) => {
     const normalizedTitle = normalizeOptionalText(title);
     const normalizedModel = normalizeOptionalText(model) || "qwen-plus";
     const normalizedNetworkConfig =
-      networkConfig && typeof networkConfig === "object" && !Array.isArray(networkConfig)
+      networkConfig &&
+      typeof networkConfig === "object" &&
+      !Array.isArray(networkConfig)
         ? networkConfig
         : {};
 
@@ -272,4 +274,3 @@ router.delete("/:id", authMiddleware, async (req, res) => {
 });
 
 module.exports = router;
-
