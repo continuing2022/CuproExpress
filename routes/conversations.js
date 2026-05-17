@@ -97,7 +97,6 @@ router.post("/", authMiddleware, async (req, res) => {
     async function saveAssistantMessage() {
       if (assistantSaved || !fullResponse) return null;
       if (assistantSavePromise) return assistantSavePromise;
-
       assistantSavePromise = (async () => {
         const assistantMessage = await conversationService.addAssistantMessage(
           currentConversationId,
@@ -106,7 +105,6 @@ router.post("/", authMiddleware, async (req, res) => {
         assistantSaved = true;
         return assistantMessage;
       })();
-
       try {
         return await assistantSavePromise;
       } finally {

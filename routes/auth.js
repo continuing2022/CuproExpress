@@ -71,7 +71,6 @@ router.post("/login", async (req, res) => {
 
     // 同步登录观测字段，便于后续统计与审计。
     await userRepo.updateUserLoginInfo(user.id);
-
     // accessToken 用于接口鉴权，refreshToken 用于长会话续期。
     const accessToken = signAccessToken(user);
     const refreshToken = signRefreshToken(user);
@@ -179,15 +178,20 @@ router.get("/users/stats", authMiddleware, adminOnly, async (req, res) => {
   }
 });
 
-router.get("/users/:id", authMiddleware, requireSelfOrAdmin, async (req, res) => {
-  try {
-    const user = await userRepo.getUserById(Number(req.params.id));
-    if (!user) return sendError(res, 404, "user not found");
-    return res.json(toPublicUser(user));
-  } catch (error) {
-    return sendInternalError(res, error);
-  }
-});
+router.get(
+  "/users/:id",
+  authMiddleware,
+  requireSelfOrAdmin,
+  async (req, res) => {
+    try {
+      const user = await userRepo.getUserById(Number(req.params.id));
+      if (!user) return sendError(res, 404, "user not found");
+      return res.json(toPublicUser(user));
+    } catch (error) {
+      return sendInternalError(res, error);
+    }
+  },
+);
 
 router.post("/users", authMiddleware, adminOnly, async (req, res) => {
   try {
@@ -280,25 +284,30 @@ router.delete("/users/:id", authMiddleware, adminOnly, async (req, res) => {
   }
 });
 
-router.post("/users/bulk-delete", authMiddleware, adminOnly, async (req, res) => {
-  try {
-    const { userIds } = req.body;
-    if (!Array.isArray(userIds) || userIds.length === 0) {
-      return sendError(res, 400, "userIds array required");
-    }
-    if (userIds.includes(req.user.id)) {
-      return sendError(res, 403, "cannot delete yourself");
-    }
+router.post(
+  "/users/bulk-delete",
+  authMiddleware,
+  adminOnly,
+  async (req, res) => {
+    try {
+      const { userIds } = req.body;
+      if (!Array.isArray(userIds) || userIds.length === 0) {
+        return sendError(res, 400, "userIds array required");
+      }
+      if (userIds.includes(req.user.id)) {
+        return sendError(res, 403, "cannot delete yourself");
+      }
 
-    const deletedCount = await userRepo.deleteUsers(userIds);
-    return res.json({
-      message: "users deleted successfully",
-      deletedCount,
-    });
-  } catch (error) {
-    return sendInternalError(res, error);
-  }
-});
+      const deletedCount = await userRepo.deleteUsers(userIds);
+      return res.json({
+        message: "users deleted successfully",
+        deletedCount,
+      });
+    } catch (error) {
+      return sendInternalError(res, error);
+    }
+  },
+);
 
 router.put(
   "/users/:id/password",

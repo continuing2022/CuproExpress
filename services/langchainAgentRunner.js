@@ -191,7 +191,6 @@ async function run({
       const chunk = extractAssistantChunk(message, metadata);
       if (chunk) {
         fullResponse += chunk;
-        console.debug("assistant chunk:", chunk);
         onChunk(chunk);
       }
 
@@ -228,6 +227,7 @@ async function run({
   );
   const summaryText =
     summaryPayload?.summaryText || summaryFromState?.summaryText || "";
+  // 持久化总结到数据库，并返回是否更新了总结
   const summaryRefreshed = await persistSummary({
     conversationId,
     pendingMessageId,
