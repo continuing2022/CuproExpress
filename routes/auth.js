@@ -12,7 +12,10 @@ const {
 const { sendError, sendInternalError } = require("../utils/response");
 const {
   isValidEmail,
+  isValidUsername,
   isValidRole,
+  normalizeEmail,
+  normalizeUsername,
   validatePasswordLength,
   normalizePagination,
 } = require("../utils/validators");
@@ -20,18 +23,37 @@ const { toPublicUser, toPublicUsers } = require("../utils/userMapper");
 
 const router = express.Router();
 
+function sendValidationError(res, fieldErrors) {
+  return sendError(res, 400, "validation failed", {
+    fieldErrors,
+    errors: fieldErrors,
+  });
+}
+
 router.post("/register", async (req, res) => {
   try {
-    const { email, username, password } = req.body;
+    const email = normalizeEmail(req.body?.email);
+    const username = normalizeUsername(req.body?.username);
+    const { password } = req.body;
+    const fieldErrors = {};
 
-    if (!email || !username || !password) {
-      return sendError(res, 400, "email, username and password required");
+    if (!username) {
+      fieldErrors.username = "username required";
+    } else if (!isValidUsername(username)) {
+      fieldErrors.username = "username must be 2-20 characters";
     }
-    if (!isValidEmail(email)) {
-      return sendError(res, 400, "invalid email format");
+    if (!email) {
+      fieldErrors.email = "email required";
+    } else if (!isValidEmail(email)) {
+      fieldErrors.email = "invalid email format";
     }
-    if (!validatePasswordLength(password)) {
-      return sendError(res, 400, "password must be at least 6 characters");
+    if (!password) {
+      fieldErrors.password = "password required";
+    } else if (!validatePasswordLength(password)) {
+      fieldErrors.password = "password must be at least 6 characters";
+    }
+    if (Object.keys(fieldErrors).length > 0) {
+      return sendValidationError(res, fieldErrors);
     }
     if (await userRepo.getUserByEmail(email)) {
       return sendError(res, 409, "email already registered");
@@ -53,10 +75,20 @@ router.post("/register", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const email = normalizeEmail(req.body?.email);
+    const { password } = req.body;
+    const fieldErrors = {};
 
-    if (!email || !password) {
-      return sendError(res, 400, "email and password required");
+    if (!email) {
+      fieldErrors.email = "email required";
+    } else if (!isValidEmail(email)) {
+      fieldErrors.email = "invalid email format";
+    }
+    if (!password) {
+      fieldErrors.password = "password required";
+    }
+    if (Object.keys(fieldErrors).length > 0) {
+      return sendValidationError(res, fieldErrors);
     }
 
     const user = await userRepo.getUserByEmail(email);
@@ -195,19 +227,31 @@ router.get(
 
 router.post("/users", authMiddleware, adminOnly, async (req, res) => {
   try {
-    const { email, username, password, role = "user" } = req.body;
+    const email = normalizeEmail(req.body?.email);
+    const username = normalizeUsername(req.body?.username);
+    const { password, role = "user" } = req.body;
+    const fieldErrors = {};
 
-    if (!email || !username || !password) {
-      return sendError(res, 400, "email, username and password required");
+    if (!username) {
+      fieldErrors.username = "username required";
+    } else if (!isValidUsername(username)) {
+      fieldErrors.username = "username must be 2-20 characters";
     }
-    if (!isValidEmail(email)) {
-      return sendError(res, 400, "invalid email format");
+    if (!email) {
+      fieldErrors.email = "email required";
+    } else if (!isValidEmail(email)) {
+      fieldErrors.email = "invalid email format";
     }
-    if (!validatePasswordLength(password)) {
-      return sendError(res, 400, "password must be at least 6 characters");
+    if (!password) {
+      fieldErrors.password = "password required";
+    } else if (!validatePasswordLength(password)) {
+      fieldErrors.password = "password must be at least 6 characters";
     }
     if (!isValidRole(role)) {
       return sendError(res, 400, "invalid role");
+    }
+    if (Object.keys(fieldErrors).length > 0) {
+      return sendValidationError(res, fieldErrors);
     }
     if (await userRepo.getUserByEmail(email)) {
       return sendError(res, 409, "email already registered");
@@ -236,16 +280,37 @@ router.put("/users/:id", authMiddleware, adminOnly, async (req, res) => {
     }
 
     const updates = {};
-    if (username !== undefined) updates.username = username;
-    if (email !== undefined) {
-      if (!isValidEmail(email)) {
-        return sendError(res, 400, "invalid email format");
+    if (username !== undefined) {
+      const normalizedUsername = normalizeUsername(username);
+      if (!normalizedUsername) {
+        return sendValidationError(res, {
+          username: "username required",
+        });
       }
-      const existingUser = await userRepo.getUserByEmail(email);
+      if (!isValidUsername(normalizedUsername)) {
+        return sendValidationError(res, {
+          username: "username must be 2-20 characters",
+        });
+      }
+      updates.username = normalizedUsername;
+    }
+    if (email !== undefined) {
+      const normalizedEmail = normalizeEmail(email);
+      if (!normalizedEmail) {
+        return sendValidationError(res, {
+          email: "email required",
+        });
+      }
+      if (!isValidEmail(normalizedEmail)) {
+        return sendValidationError(res, {
+          email: "invalid email format",
+        });
+      }
+      const existingUser = await userRepo.getUserByEmail(normalizedEmail);
       if (existingUser && existingUser.id !== userId) {
         return sendError(res, 409, "email already in use");
       }
-      updates.email = email;
+      updates.email = normalizedEmail;
     }
     if (role !== undefined) {
       if (!isValidRole(role)) {
