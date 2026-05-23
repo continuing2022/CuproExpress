@@ -1,13 +1,12 @@
 const mysql = require("mysql2/promise");
 require("dotenv").config();
+const { requireEnv, getEnv } = require("../utils/env");
 
-const {
-  DB_HOST = "localhost",
-  DB_USER = "root",
-  DB_PASSWORD = "123456",
-  DB_NAME = "orangeai",
-  DB_PORT = 3306,
-} = process.env;
+const DB_HOST = getEnv("DB_HOST", "localhost");
+const DB_USER = requireEnv("DB_USER");
+const DB_PASSWORD = requireEnv("DB_PASSWORD");
+const DB_NAME = requireEnv("DB_NAME");
+const DB_PORT = Number(getEnv("DB_PORT", "3306"));
 
 let pool;
 

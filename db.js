@@ -6,11 +6,6 @@ const {
   tokenRepo,
 } = require("./repositories");
 
-testDbConnection().catch((error) => {
-  console.error("database connection failed:", error);
-  process.exit(1);
-});
-
 module.exports = {
   ...userRepo,
   ...conversationRepo,
