@@ -11,6 +11,11 @@ const {
 } = require("../utils/auth");
 const { sendError, sendInternalError } = require("../utils/response");
 const {
+  clearRefreshTokenCookie,
+  readRefreshToken,
+  setRefreshTokenCookie,
+} = require("../utils/refreshTokenCookie");
+const {
   isValidEmail,
   isValidUsername,
   isValidRole,
@@ -77,6 +82,7 @@ router.post("/login", async (req, res) => {
   try {
     const email = normalizeEmail(req.body?.email);
     const { password } = req.body;
+    const rememberMe = req.body?.rememberMe !== false;
     const fieldErrors = {};
 
     if (!email) {
@@ -112,9 +118,10 @@ router.post("/login", async (req, res) => {
       token: refreshToken,
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     });
+    setRefreshTokenCookie(res, refreshToken, { rememberMe });
 
     return res.json({
-      token: { accessToken, refreshToken },
+      token: { accessToken },
       user: toPublicUser(user),
     });
   } catch (error) {
@@ -123,7 +130,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/refresh", async (req, res) => {
-  const { refreshToken } = req.body;
+  const refreshToken = readRefreshToken(req);
   if (!refreshToken) {
     return sendError(res, 401, "refresh token required");
   }
@@ -150,18 +157,33 @@ router.post("/refresh", async (req, res) => {
       return sendError(res, 401, "invalid refresh token");
     }
 
-    return res.json({ accessToken: signAccessToken(user) });
+    const nextAccessToken = signAccessToken(user);
+    const nextRefreshToken = signRefreshToken(user);
+
+    await tokenRepo.revokeRefreshToken(refreshToken);
+    await tokenRepo.saveRefreshToken({
+      userId: user.id,
+      token: nextRefreshToken,
+      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    });
+    setRefreshTokenCookie(res, nextRefreshToken);
+
+    return res.json({
+      accessToken: nextAccessToken,
+    });
   } catch (error) {
+    clearRefreshTokenCookie(res);
     return sendError(res, 401, "refresh token expired");
   }
 });
 
 router.post("/logout", async (req, res) => {
   try {
-    const { refreshToken } = req.body;
+    const refreshToken = readRefreshToken(req);
     if (refreshToken) {
       await tokenRepo.revokeRefreshToken(refreshToken);
     }
+    clearRefreshTokenCookie(res);
     return res.json({ message: "logged out" });
   } catch (error) {
     return sendInternalError(res, error);

@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
 const { sendError } = require("./response");
+const { requireEnv } = require("./env");
 
-const ACCESS_SECRET = process.env.JWT_SECRET || "dev_secret";
-const REFRESH_SECRET = process.env.REFRESH_SECRET || "dev_refresh_secret";
+const ACCESS_SECRET = requireEnv("JWT_SECRET");
+const REFRESH_SECRET = requireEnv("REFRESH_SECRET");
 
 function signAccessToken(user) {
   return jwt.sign({ id: user.id, role: user.role }, ACCESS_SECRET, {
