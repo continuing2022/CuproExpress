@@ -1,8 +1,9 @@
 // SSE 服务相关的工具函数，提供初始化 SSE 连接、发送事件、保持连接活跃和清理资源等功能。
 function initSse(res) {
   res.setHeader("Content-Type", "text/event-stream");
-  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Cache-Control", "no-cache, no-transform");
   res.setHeader("Connection", "keep-alive");
+  res.setHeader("X-Accel-Buffering", "no");
   if (typeof res.flushHeaders === "function") {
     res.flushHeaders();
   }

@@ -1,10 +1,5 @@
-const openaiService = require("./openai");
 const langchainAgentRunner = require("./langchainAgentRunner");
-const { conversationRepo } = require("../repositories");
-const {
-  estimateMessagesTokens,
-  estimateTextTokens,
-} = require("./messageTokenEstimator");
+const { estimateTextTokens } = require("./messageTokenEstimator");
 const { SYSTEM_PROMPT } = require("./openai");
 
 async function run({
@@ -47,10 +42,8 @@ async function run({
       telemetry,
     };
   } catch (error) {
-    console.error(
-      "langchain agent run failed, fallback to direct chat:",
-      error,
-    );
+    console.error("langchain agent run failed:", error);
+    throw error;
   }
 }
 
