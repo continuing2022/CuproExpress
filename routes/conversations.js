@@ -207,9 +207,39 @@ router.get("/:id/messages", authMiddleware, async (req, res) => {
       return sendError(res, ownership.status, ownership.error);
     }
 
-    const limit = normalizePositiveInteger(req.query.limit, { max: 500 });
-    const messages = await conversationRepo.getMessages(req.params.id, limit);
-    return res.json({ conversation_id: req.params.id, messages });
+    const limit =
+      normalizePositiveInteger(req.query.limit, { max: 500 }) || 10;
+    const beforeMessageId = normalizePositiveInteger(req.query.beforeMessageId, {
+      max: Number.MAX_SAFE_INTEGER,
+    });
+
+    const messages = await conversationRepo.getMessages(req.params.id, {
+      limit,
+      beforeMessageId,
+    });
+    console.log("[GET /conversations/:id/messages]", {
+      conversationId: req.params.id,
+      userId: req.user.id,
+      limit,
+      beforeMessageId: beforeMessageId ?? null,
+      messagesCount: messages.length,
+      firstMessageId: messages[0]?.message_id ?? null,
+      lastMessageId: messages[messages.length - 1]?.message_id ?? null,
+    });
+    const oldestLoadedMessageId = messages[0]?.message_id ?? null;
+    const remainingCount = oldestLoadedMessageId
+      ? await conversationRepo.countMessagesAfter(req.params.id, 0, {
+          beforeMessageId: oldestLoadedMessageId,
+        })
+      : 0;
+
+    return res.json({
+      conversation_id: req.params.id,
+      messages,
+      hasMore: remainingCount > 0,
+      oldestLoadedMessageId,
+      remainingCount,
+    });
   } catch (error) {
     return sendInternalError(res, error);
   }

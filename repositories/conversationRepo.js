@@ -2,6 +2,14 @@ const { randomUUID } = require("crypto");
 const { getPool, ready } = require("../db/pool");
 
 function toFiniteInteger(value, options = {}) {
+  if (
+    value === null ||
+    value === undefined ||
+    (typeof value === "string" && value.trim() === "")
+  ) {
+    return options.defaultValue ?? null;
+  }
+
   const parsed = Number(value);
   if (!Number.isFinite(parsed)) {
     return options.defaultValue ?? null;
@@ -111,44 +119,70 @@ async function listConversations(userId, page = 1, pageSize = 20) {
   };
 }
 
-async function getMessages(conversationId, limit = null) {
+async function getMessages(conversationId, limitOrOptions = null) {
   await ready;
   const pool = await getPool();
 
-  const shouldApplyLimit =
-    !(limit === null || limit === undefined || String(limit).trim() === "");
+  const options =
+    limitOrOptions &&
+    typeof limitOrOptions === "object" &&
+    !Array.isArray(limitOrOptions)
+      ? limitOrOptions
+      : { limit: limitOrOptions };
+
+  const shouldApplyLimit = !(
+    options.limit === null ||
+    options.limit === undefined ||
+    String(options.limit).trim() === ""
+  );
   const safeLimit = shouldApplyLimit
-    ? toFiniteInteger(limit, {
+    ? toFiniteInteger(options.limit, {
         min: 1,
         max: 500,
         defaultValue: null,
       })
     : null;
+  const safeBeforeMessageId = toFiniteInteger(options.beforeMessageId, {
+    min: 1,
+    defaultValue: null,
+  });
+
+  const params = [conversationId];
+  const where = ["conversation_id = ?"];
+
+  if (safeBeforeMessageId) {
+    where.push("message_id < ?");
+    params.push(safeBeforeMessageId);
+  }
 
   if (!safeLimit) {
     const [rows] = await pool.execute(
-      "SELECT message_id, role, content, created_at FROM messages WHERE conversation_id = ? ORDER BY created_at ASC, message_id ASC",
-      [conversationId],
+      `SELECT message_id, role, content, created_at
+       FROM messages
+       WHERE ${where.join(" AND ")}
+       ORDER BY created_at ASC, message_id ASC`,
+      params,
     );
     return rows;
   }
 
   const [rows] = await pool.execute(
     `SELECT message_id, role, content, created_at
-     FROM (
-       SELECT message_id, role, content, created_at
-       FROM messages
-       WHERE conversation_id = ?
-       ORDER BY created_at DESC, message_id DESC
-       LIMIT ${safeLimit}
-     ) recent
-     ORDER BY created_at ASC, message_id ASC`,
-    [conversationId],
+     FROM messages
+     WHERE ${where.join(" AND ")}
+     ORDER BY created_at DESC, message_id DESC
+     LIMIT ${safeLimit}`,
+    params,
   );
-  return rows;
+
+  return rows.reverse();
 }
 
-async function getMessagesAfter(conversationId, afterMessageId = 0, options = {}) {
+async function getMessagesAfter(
+  conversationId,
+  afterMessageId = 0,
+  options = {},
+) {
   await ready;
   const pool = await getPool();
 
@@ -187,7 +221,11 @@ async function getMessagesAfter(conversationId, afterMessageId = 0, options = {}
   return rows;
 }
 
-async function countMessagesAfter(conversationId, afterMessageId = 0, options = {}) {
+async function countMessagesAfter(
+  conversationId,
+  afterMessageId = 0,
+  options = {},
+) {
   await ready;
   const pool = await getPool();
 
@@ -281,4 +319,3 @@ module.exports = {
   updateConversationTitle,
   deleteConversation,
 };
-
