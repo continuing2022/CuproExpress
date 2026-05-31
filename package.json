@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "rag": "node scripts/startRag.js",
     "test": "node --test --experimental-test-isolation=none --test-concurrency=1"
   },
   "dependencies": {

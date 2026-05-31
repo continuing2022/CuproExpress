@@ -2,6 +2,8 @@
 llama-index
 llama-index-llms-dashscope
 llama-index-embeddings-dashscope
+llama-index-retrievers-bm25
+llama-index-postprocessor-sbert-rerank
 fastapi
 uvicorn
 python-dotenv

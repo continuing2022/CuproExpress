@@ -22,11 +22,16 @@ function normalizeResults(payload) {
 
 async function retrieveContext({ query }) {
   const apiKey = getBochaApiKey();
+  const startedAt = Date.now();
   if (!apiKey) {
     return {
       mode: "direct_chat",
       contextText: "",
-      meta: { fallbackFrom: "web_search", reason: "missing_bocha_api_key" },
+      meta: {
+        fallbackFrom: "web_search",
+        reason: "missing_bocha_api_key",
+        searchLatencyMs: Date.now() - startedAt,
+      },
     };
   }
 
@@ -57,6 +62,7 @@ async function retrieveContext({ query }) {
     contextText,
     meta: {
       resultCount: results.length,
+      searchLatencyMs: Date.now() - startedAt,
     },
   };
 }

@@ -38,6 +38,13 @@ const MODEL_REGISTRY = {
     contextWindow: 128000,
     preferredOutputTokens: 4000,
   },
+  "deepseek-v4-pro": {
+    provider: "deepseek",
+    baseURL: "https://api.deepseek.com/v1",
+    apiKeyEnv: "DEEPSEEK_API_KEY",
+    contextWindow: 128000,
+    preferredOutputTokens: 4000,
+  },
 };
 // 校验模型名是否合法，并返回对应的模型配置（包含API Key）
 function assertSupportedModel(modelName) {

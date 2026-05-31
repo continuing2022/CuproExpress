@@ -44,11 +44,12 @@ function createSummaryMiddleware(
   summaryModelName,
   triggerTokens,
   keepMessages,
+  observer,
 ) {
   return summarizationMiddleware({
-    model: getLangChainModelForName(summaryModelName, {
-      temperature: 0.1,
-      maxTokens: 1200,
+    model: createInstrumentedSummaryModel(summaryModelName, observer, {
+      triggerTokens,
+      keepMessages,
     }),
     trigger: { tokens: triggerTokens },
     keep: { messages: keepMessages },
@@ -63,6 +64,7 @@ function createConfiguredAgent({
   networkSearchEnabled,
   triggerTokens,
   keepMessages,
+  observer,
   tools = [],
 }) {
   return createAgent({
@@ -75,7 +77,12 @@ function createConfiguredAgent({
     checkpointer: sharedCheckpointer,
     systemPrompt: buildSystemPrompt({ networkSearchEnabled }),
     middleware: [
-      createSummaryMiddleware(summaryModelName, triggerTokens, keepMessages),
+      createSummaryMiddleware(
+        summaryModelName,
+        triggerTokens,
+        keepMessages,
+        observer,
+      ),
     ],
   });
 }
@@ -86,6 +93,7 @@ async function run({
   model,
   networkConfig,
   pendingMessageId,
+  observer,
   onRetrieved,
   onChunk,
 }) {
@@ -125,6 +133,7 @@ async function run({
     networkSearchEnabled,
     triggerTokens: summaryTriggerTokens,
     keepMessages: summaryKeepMessages,
+    observer,
     tools: [],
   });
   // 恢复当前对话的记忆
@@ -161,6 +170,7 @@ async function run({
     historyForTools,
     networkSearchEnabled,
     retrievalTracker,
+    observer,
   });
   const runAgent = createConfiguredAgent({
     modelName: model,
@@ -168,6 +178,7 @@ async function run({
     networkSearchEnabled,
     triggerTokens: summaryTriggerTokens,
     keepMessages: summaryKeepMessages,
+    observer,
     tools,
   });
 
@@ -270,10 +281,15 @@ function createRetrievalTools({
   historyForTools,
   networkSearchEnabled,
   retrievalTracker,
+  observer,
 }) {
   const localRagTool = tool(
     async ({ query }) => {
-      const retrieval = await runLocalRagRetrieval({ query, historyForTools });
+      const retrieval = await runLocalRagRetrieval({
+        query,
+        historyForTools,
+        observer,
+      });
       retrievalTracker.capture(retrieval);
       return formatToolResult(retrieval);
     },
@@ -293,7 +309,11 @@ function createRetrievalTools({
 
   const webSearchTool = tool(
     async ({ query }) => {
-      const retrieval = await runWebSearchRetrieval({ query, historyForTools });
+      const retrieval = await runWebSearchRetrieval({
+        query,
+        historyForTools,
+        observer,
+      });
       retrievalTracker.capture(retrieval);
       return formatToolResult(retrieval);
     },
@@ -310,15 +330,35 @@ function createRetrievalTools({
   return [localRagTool, webSearchTool];
 }
 
-async function runLocalRagRetrieval({ query, historyForTools }) {
+async function runLocalRagRetrieval({ query, historyForTools, observer }) {
+  const startedAt = Date.now();
   try {
     const result = await ragService.retrieveContext({
       query,
       history: historyForTools,
       options: {},
     });
-    return normalizeRetrievalResult(result, "local_rag");
+    const normalized = normalizeRetrievalResult(result, "local_rag");
+    observer?.recordToolCall({
+      toolName: "local_rag_retrieve",
+      query,
+      success: !isRetrievalTransportFailure(normalized, "local_rag"),
+      contextHit: Boolean(normalized.contextText.trim()),
+      durationMs: Date.now() - startedAt,
+      mode: normalized.mode,
+      meta: normalized.meta,
+    });
+    return normalized;
   } catch (error) {
+    observer?.recordToolCall({
+      toolName: "local_rag_retrieve",
+      query,
+      success: false,
+      contextHit: false,
+      durationMs: Date.now() - startedAt,
+      mode: "direct_chat",
+      errorMessage: String(error?.message || error),
+    });
     return {
       mode: "direct_chat",
       contextText: "",
@@ -331,15 +371,35 @@ async function runLocalRagRetrieval({ query, historyForTools }) {
   }
 }
 
-async function runWebSearchRetrieval({ query, historyForTools }) {
+async function runWebSearchRetrieval({ query, historyForTools, observer }) {
+  const startedAt = Date.now();
   try {
     const result = await searchTool.retrieveContext({
       query,
       history: historyForTools,
       options: {},
     });
-    return normalizeRetrievalResult(result, "web_search");
+    const normalized = normalizeRetrievalResult(result, "web_search");
+    observer?.recordToolCall({
+      toolName: "web_search_retrieve",
+      query,
+      success: !isRetrievalTransportFailure(normalized, "web_search"),
+      contextHit: Boolean(normalized.contextText.trim()),
+      durationMs: Date.now() - startedAt,
+      mode: normalized.mode,
+      meta: normalized.meta,
+    });
+    return normalized;
   } catch (error) {
+    observer?.recordToolCall({
+      toolName: "web_search_retrieve",
+      query,
+      success: false,
+      contextHit: false,
+      durationMs: Date.now() - startedAt,
+      mode: "direct_chat",
+      errorMessage: String(error?.message || error),
+    });
     return {
       mode: "direct_chat",
       contextText: "",
@@ -388,6 +448,52 @@ function formatToolResult(retrieval) {
   );
 }
 
+function createInstrumentedSummaryModel(
+  summaryModelName,
+  observer,
+  { triggerTokens, keepMessages },
+) {
+  const model = getLangChainModelForName(summaryModelName, {
+    temperature: 0.1,
+    maxTokens: 1200,
+  });
+  const originalInvoke =
+    typeof model?.invoke === "function" ? model.invoke.bind(model) : null;
+
+  if (!originalInvoke) {
+    return model;
+  }
+
+  model.invoke = async (...args) => {
+    const startedAt = Date.now();
+    try {
+      const result = await originalInvoke(...args);
+      observer?.recordSummaryCall({
+        success: true,
+        durationMs: Date.now() - startedAt,
+        modelName: summaryModelName,
+        triggerTokens,
+        keepMessages,
+        method: "invoke",
+      });
+      return result;
+    } catch (error) {
+      observer?.recordSummaryCall({
+        success: false,
+        durationMs: Date.now() - startedAt,
+        modelName: summaryModelName,
+        triggerTokens,
+        keepMessages,
+        method: "invoke",
+        errorMessage: String(error?.message || error),
+      });
+      throw error;
+    }
+  };
+
+  return model;
+}
+
 function createRetrievalTracker({ onRetrieved, summaryUsed, recentCount }) {
   const contextProfile = {
     recent_count: recentCount,
@@ -434,6 +540,15 @@ function createRetrievalTracker({ onRetrieved, summaryUsed, recentCount }) {
       }
     },
   };
+}
+
+function isRetrievalTransportFailure(retrieval, fallbackMode) {
+  const meta = isPlainObject(retrieval?.meta) ? retrieval.meta : {};
+  return (
+    meta.fallbackFrom === fallbackMode &&
+    (meta.reason === "retrieval_error" ||
+      meta.reason === "missing_bocha_api_key")
+  );
 }
 
 function buildSystemPrompt({ networkSearchEnabled }) {
