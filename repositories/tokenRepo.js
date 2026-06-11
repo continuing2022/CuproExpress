@@ -38,8 +38,19 @@ async function revokeRefreshToken(token) {
   return result.affectedRows > 0;
 }
 
+async function revokeRefreshTokensByUserId(userId) {
+  await ready;
+  const pool = await getPool();
+  const [result] = await pool.execute(
+    "UPDATE refresh_tokens SET revoked = TRUE WHERE user_id = ?",
+    [userId],
+  );
+  return result.affectedRows || 0;
+}
+
 module.exports = {
   saveRefreshToken,
   getRefreshToken,
   revokeRefreshToken,
+  revokeRefreshTokensByUserId,
 };

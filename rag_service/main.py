@@ -1,8 +1,11 @@
 import hashlib
 import json
+import logging
 import os
+import time
 from pathlib import Path
 from typing import List, Dict, Any, Optional
+from urllib.parse import urlparse
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
@@ -34,6 +37,36 @@ BASE_DIR = Path(__file__).resolve().parent
 # 先加载当前目录下 .env，再回退到父目录 .env
 load_dotenv(BASE_DIR / ".env")
 load_dotenv(BASE_DIR.parent / ".env")
+
+PROXY_ENV_NAMES = (
+    "HTTP_PROXY",
+    "HTTPS_PROXY",
+    "ALL_PROXY",
+    "http_proxy",
+    "https_proxy",
+    "all_proxy",
+)
+LOCAL_PROXY_HOSTS = {"localhost", "127.0.0.1", "::1"}
+
+
+def is_blackhole_proxy(value: str) -> bool:
+    if not value:
+        return False
+    try:
+        parsed = urlparse(value.strip())
+    except Exception:
+        return False
+    return parsed.hostname in LOCAL_PROXY_HOSTS and parsed.port == 9
+
+
+def clear_blackhole_proxy_env():
+    for name in PROXY_ENV_NAMES:
+        value = os.environ.get(name)
+        if is_blackhole_proxy(value):
+            os.environ.pop(name, None)
+
+
+clear_blackhole_proxy_env()
 
 # 索引持久化目录
 PERSIST_DIR = Path(os.getenv("RAG_PERSIST_DIR", BASE_DIR / "storage_hybrid"))
@@ -69,7 +102,59 @@ RAG_RERANK_MODEL = os.getenv(
     "cross-encoder/ms-marco-MiniLM-L-2-v2",
 )
 
+logging.basicConfig(
+    level=os.getenv("RAG_LOG_LEVEL", "INFO"),
+    format="%(asctime)s %(levelname)s %(message)s",
+)
+logger = logging.getLogger("cupro_rag")
+
 app = FastAPI()
+
+
+def elapsed_ms(started_at: float) -> float:
+    return round((time.perf_counter() - started_at) * 1000, 2)
+
+
+def log_rag_event(event: str, **payload):
+    logger.info(
+        "[observe][rag] %s",
+        json.dumps({"event": event, **payload}, ensure_ascii=False),
+    )
+
+
+def pick_rag_bottleneck(diagnostics: dict):
+    candidates = {
+        "vectorMs": diagnostics.get("vectorMs"),
+        "bm25Ms": diagnostics.get("bm25Ms"),
+        "dedupMs": diagnostics.get("dedupMs"),
+        "rerankMs": diagnostics.get("rerankMs"),
+    }
+    best_name = None
+    best_value = None
+    for name, value in candidates.items():
+        if value is None:
+            continue
+        if best_value is None or value > best_value:
+            best_name = name
+            best_value = value
+    if best_name is None:
+        return None
+    return {"stage": best_name, "durationMs": round(best_value, 2)}
+
+
+def build_rag_optimization_hint(bottleneck: Optional[Dict[str, Any]]):
+    if not bottleneck:
+        return "优先检查召回规模与缓存策略。"
+    stage = bottleneck.get("stage")
+    if stage == "rerankMs":
+        return "优先减少 rerank 输入规模或更换更轻量的 rerank 模型。"
+    if stage == "bm25Ms":
+        return "优先减少 BM25 召回规模，必要时缓存高频查询结果。"
+    if stage == "vectorMs":
+        return "优先优化向量索引加载与检索参数，减少向量召回规模。"
+    if stage == "dedupMs":
+        return "优先减少融合候选数，降低去重与截断成本。"
+    return "优先检查召回规模与缓存策略。"
 
 
 # ===================== 请求体定义 =====================
@@ -153,6 +238,7 @@ class RagIndexManager:
         如果知识库没变化，则直接加载已有索引；
         如果变化了，重新读取文档并构建向量索引。
         """
+        started_at = time.perf_counter()
         self.configure_models()
         self.current_hash = self.get_data_hash()
 
@@ -167,6 +253,13 @@ class RagIndexManager:
                 persist_dir=str(PERSIST_DIR)
             )
             self.index = load_index_from_storage(storage_context)
+            log_rag_event(
+                "rag_index",
+                ok=True,
+                rebuild=False,
+                costMs=elapsed_ms(started_at),
+                persistDir=str(PERSIST_DIR),
+            )
             return self.index
 
         # 慢路径：重新构建索引
@@ -189,6 +282,14 @@ class RagIndexManager:
         PERSIST_DIR.mkdir(parents=True, exist_ok=True)
         self.index.storage_context.persist(persist_dir=str(PERSIST_DIR))
         HASH_FILE.write_text(self.current_hash, encoding="utf-8")
+        log_rag_event(
+            "rag_index",
+            ok=True,
+            rebuild=True,
+            costMs=elapsed_ms(started_at),
+            documentCount=len(documents),
+            persistDir=str(PERSIST_DIR),
+        )
         return self.index
 
     # --------------------- 懒初始化 ---------------------
@@ -210,37 +311,33 @@ class RagIndexManager:
         5. rerank 精排
         返回排好序的节点列表。
         """
+        retrieval_started_at = time.perf_counter()
         self.ensure_ready()
 
-        # 1) 向量检索器：适合语义相似匹配
+        vector_started_at = time.perf_counter()
         vector_retriever = self.index.as_retriever(
             similarity_top_k=RAG_VECTOR_TOP_K
         )
-        # 根据用户的问题 查询"语义相似匹配"的节点，返回带分数的节点列表
-        vector_nodes = vector_retriever.retrieve(query) # 分数
+        vector_nodes = vector_retriever.retrieve(query)
+        vector_ms = elapsed_ms(vector_started_at)
 
-        # 2) BM25 检索器：适合关键词精确命中
-        # 从 docstore 里把所有 node 取出来构建 BM25
+        bm25_started_at = time.perf_counter()
         all_nodes = list(self.index.docstore.docs.values())
         bm25_retriever = BM25Retriever.from_defaults(
             nodes=all_nodes,
             similarity_top_k=RAG_BM25_TOP_K,
         )
-        # 根据用户的问题 查询"关键词精确命中"的节点，返回带分数的节点列表
-        bm25_nodes = bm25_retriever.retrieve(query) # 分数
+        bm25_nodes = bm25_retriever.retrieve(query)
+        bm25_ms = elapsed_ms(bm25_started_at)
 
-        # 3) 合并结果
         merged_nodes = []
         merged_nodes.extend(vector_nodes)
         merged_nodes.extend(bm25_nodes)
 
-        # 4) 去重
-        # 不同检索器可能召回同一个 node，需要按 node_id 去重
+        dedup_started_at = time.perf_counter()
         dedup_map = {}
         for node_with_score in merged_nodes:
             node_id = node_with_score.node.node_id
-
-            # 如果重复，保留分数更高的那个
             if node_id not in dedup_map:
                 dedup_map[node_id] = node_with_score
             else:
@@ -250,23 +347,59 @@ class RagIndexManager:
                     dedup_map[node_id] = node_with_score
 
         dedup_nodes = list(dedup_map.values())
-
-        # 先按原始分数做一次截断，避免 rerank 输入过多
         dedup_nodes.sort(key=lambda x: x.score or 0, reverse=True)
         fusion_nodes = dedup_nodes[:RAG_FUSION_TOP_K]
+        dedup_ms = elapsed_ms(dedup_started_at)
 
-        # 5) rerank：让 cross-encoder 再做一次精排
-        reranker = SentenceTransformerRerank(
-            model=RAG_RERANK_MODEL,
-            top_n=RAG_RERANK_TOP_N,
-        )
-        # 让AI精排一遍，返回最终排好序的节点列表
-        reranked_nodes = reranker.postprocess_nodes(
-            fusion_nodes,
-            query_str=query,
+        rerank_started_at = time.perf_counter()
+        rerank_skipped = False
+        rerank_error = None
+        try:
+            reranker = SentenceTransformerRerank(
+                model=RAG_RERANK_MODEL,
+                top_n=RAG_RERANK_TOP_N,
+            )
+            reranked_nodes = reranker.postprocess_nodes(
+                fusion_nodes,
+                query_str=query,
+            )
+        except Exception as exc:
+            rerank_skipped = True
+            rerank_error = f"{type(exc).__name__}: {exc}"
+            reranked_nodes = fusion_nodes[:RAG_RERANK_TOP_N]
+            log_rag_event(
+                "rag_rerank_fallback",
+                ok=False,
+                model=RAG_RERANK_MODEL,
+                error=rerank_error,
+            )
+        rerank_ms = elapsed_ms(rerank_started_at)
+
+        diagnostics = {
+            "vectorMs": vector_ms,
+            "bm25Ms": bm25_ms,
+            "dedupMs": dedup_ms,
+            "rerankMs": rerank_ms,
+            "rerankSkipped": rerank_skipped,
+            "rerankError": rerank_error,
+            "totalMs": elapsed_ms(retrieval_started_at),
+            "vectorNodeCount": len(vector_nodes),
+            "bm25NodeCount": len(bm25_nodes),
+            "mergedNodeCount": len(merged_nodes),
+            "dedupNodeCount": len(dedup_nodes),
+            "fusionNodeCount": len(fusion_nodes),
+            "rerankedNodeCount": len(reranked_nodes),
+        }
+        bottleneck = pick_rag_bottleneck(diagnostics)
+        log_rag_event(
+            "rag_summary",
+            queryChars=len(query or ""),
+            timings=diagnostics,
+            bottleneck=bottleneck,
+            optimize=build_rag_optimization_hint(bottleneck),
         )
 
-        return reranked_nodes
+        return reranked_nodes, diagnostics
 
     # --------------------- 仅检索接口 ---------------------
     def retrieve(self, query: str):
@@ -274,7 +407,7 @@ class RagIndexManager:
         只返回检索结果和上下文，不直接让 LLM 生成。
         适合给 Node 层或别的服务做二次编排。
         """
-        nodes = self.build_hybrid_retrieval(query)
+        nodes, retrieval_diagnostics = self.build_hybrid_retrieval(query)
 
         context_parts = []  # 存完整文本（给大模型看）
         source_nodes = []   # 存来源信息（给前端/人看）
@@ -307,6 +440,7 @@ class RagIndexManager:
                 "fusionTopK": RAG_FUSION_TOP_K,
                 "rerankTopN": RAG_RERANK_TOP_N,
                 "nodeCount": len(nodes),
+                "retrievalDiagnostics": retrieval_diagnostics,
             },
             "sources": source_nodes,
         }

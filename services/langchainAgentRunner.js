@@ -126,7 +126,7 @@ async function run({
   const persistedSummary = String(state?.running_summary || "").trim();
   const summaryModelName = resolveSummaryModelName(model);
   const networkSearchEnabled = Boolean(networkConfig?.search);
-  // 创建种子agent
+  // 创建种子agent 用于恢复对话状态和记忆，并提供给工具使用
   const seedAgent = createConfiguredAgent({
     modelName: model,
     summaryModelName,
@@ -193,7 +193,7 @@ async function run({
       streamMode: ["messages", "values"],
     },
   );
-
+  // 处理流式输出，提取消息块、最新状态和使用情况，并通过 onChunk 回调增量返回响应内容
   for await (const event of stream) {
     if (!Array.isArray(event) || event.length < 2) continue;
     const [mode, payload] = event;

@@ -1,7 +1,7 @@
 const TOKEN_ESTIMATE_MULTIPLIER = Number(
   process.env.TOKEN_ESTIMATE_MULTIPLIER || 1.1,
 );
-
+// token估算
 function estimateTextTokens(text = "") {
   const input = String(text || "");
   if (!input.trim()) return 0;
@@ -28,7 +28,11 @@ function estimateTextTokens(text = "") {
 }
 
 function estimateMessageTokens(message = {}) {
-  return 4 + estimateTextTokens(message.role || "") + estimateTextTokens(message.content || "");
+  return (
+    4 +
+    estimateTextTokens(message.role || "") +
+    estimateTextTokens(message.content || "")
+  );
 }
 
 function estimateMessagesTokens(messages = []) {
@@ -80,7 +84,10 @@ function trimMessagesToTokenBudget(messages = [], maxTokens = 0) {
     if (kept.length === 0 && next > maxTokens) {
       kept.unshift({
         ...message,
-        content: trimTextToTokenBudget(message.content, Math.max(32, maxTokens - 8)),
+        content: trimTextToTokenBudget(
+          message.content,
+          Math.max(32, maxTokens - 8),
+        ),
       });
       break;
     }

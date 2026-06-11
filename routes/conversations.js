@@ -5,6 +5,7 @@ const { sendError, sendInternalError } = require("../utils/response");
 const { normalizePagination } = require("../utils/validators");
 const conversationService = require("../services/conversationService");
 const chatOrchestrator = require("../services/chatOrchestrator");
+const { createConversationObserver } = require("../services/observability");
 const {
   initSse,
   writeEvent,
@@ -37,6 +38,7 @@ function normalizePositiveInteger(value, options = {}) {
 }
 
 router.post("/", authMiddleware, async (req, res) => {
+  let observer = null;
   try {
     const userId = req.user.id;
     const {
@@ -60,6 +62,12 @@ router.post("/", authMiddleware, async (req, res) => {
       !Array.isArray(networkConfig)
         ? networkConfig
         : {};
+    observer = createConversationObserver({
+      conversationId: conversationId || null,
+      model: normalizedModel,
+      content: normalizedContent,
+      networkSearchEnabled: Boolean(normalizedNetworkConfig.search),
+    });
 
     const ensuredConversation = await conversationService.ensureConversation({
       userId,
@@ -69,6 +77,10 @@ router.post("/", authMiddleware, async (req, res) => {
     });
 
     if (!ensuredConversation.ok) {
+      observer.fail({
+        error: ensuredConversation.error,
+        stage: "ensure_conversation",
+      });
       return sendError(
         res,
         ensuredConversation.status,
@@ -77,17 +89,19 @@ router.post("/", authMiddleware, async (req, res) => {
     }
 
     const currentConversationId = ensuredConversation.conversationId;
+    observer.setConversationId(currentConversationId);
     const userMessage = await conversationService.addUserMessage(
       currentConversationId,
       normalizedContent,
     );
 
     initSse(res);
+    observer.markSseOpened();
     writeEvent(res, "started", {
       started: true,
       conversation_id: currentConversationId,
     });
-
+    // 保持连接活跃，防止中间件或代理服务器关闭连接
     const keepAlive = startKeepAlive(res);
     let fullResponse = "";
     let assistantSaved = false;
@@ -115,6 +129,9 @@ router.post("/", authMiddleware, async (req, res) => {
     attachCloseCleanup(req, res, () => {
       streamClosed = true;
       clearInterval(keepAlive);
+      observer.abort({
+        reason: req.aborted ? "request_aborted" : "client_closed",
+      });
       saveAssistantMessage().catch((error) => {
         console.error("persist partial assistant message failed:", error);
       });
@@ -126,12 +143,23 @@ router.post("/", authMiddleware, async (req, res) => {
       model: normalizedModel,
       networkConfig: normalizedNetworkConfig,
       pendingMessageId: userMessage.message_id,
+      observer,
       onRetrieved(retrievalResult) {
         if (streamClosed) return;
+        const retrievalMeta = retrievalResult.meta || {};
+        const shouldTrackRetrieval =
+          retrievalResult.mode !== "direct_chat" ||
+          Object.keys(retrievalMeta).length > 0;
+        if (shouldTrackRetrieval) {
+          observer.markRetrieved({
+            mode: retrievalResult.mode,
+            meta: retrievalMeta,
+          });
+        }
         writeEvent(res, "retrieved", {
           retrieved: true,
           mode: retrievalResult.mode,
-          meta: retrievalResult.meta || {},
+          meta: retrievalMeta,
           context_profile: retrievalResult.diagnostics?.contextProfile || {},
         });
       },
@@ -139,6 +167,8 @@ router.post("/", authMiddleware, async (req, res) => {
         if (streamClosed) return;
         const safeChunk = String(chunk || "");
         if (!safeChunk) return;
+        observer.markFirstChunk(safeChunk);
+        observer.markChunk(safeChunk);
         fullResponse += safeChunk;
         writeEvent(res, "chunk", { chunk: safeChunk });
       },
@@ -152,6 +182,14 @@ router.post("/", authMiddleware, async (req, res) => {
 
     clearInterval(keepAlive);
     if (streamClosed) {
+      observer.finish({
+        fullResponse,
+        mode: result.mode,
+        retrievalMeta: result.retrievalMeta,
+        telemetry: result.telemetry,
+        streamClosedEarly: true,
+        assistantMessageId: assistantMessage?.message_id,
+      });
       return res.end();
     }
 
@@ -163,9 +201,22 @@ router.post("/", authMiddleware, async (req, res) => {
       meta: result.retrievalMeta,
       diagnostics: result.telemetry,
     });
+    observer.finish({
+      fullResponse,
+      mode: result.mode,
+      retrievalMeta: result.retrievalMeta,
+      telemetry: result.telemetry,
+      streamClosedEarly: false,
+      assistantMessageId: assistantMessage?.message_id,
+    });
     return res.end();
   } catch (error) {
     console.error("conversation stream error:", error);
+    observer?.fail({
+      error,
+      stage: "conversation_route",
+      streamClosedEarly: res.headersSent,
+    });
     if (!res.headersSent) {
       return sendInternalError(res, error);
     }
@@ -207,25 +258,27 @@ router.get("/:id/messages", authMiddleware, async (req, res) => {
       return sendError(res, ownership.status, ownership.error);
     }
 
-    const limit =
-      normalizePositiveInteger(req.query.limit, { max: 500 }) || 10;
-    const beforeMessageId = normalizePositiveInteger(req.query.beforeMessageId, {
-      max: Number.MAX_SAFE_INTEGER,
-    });
+    const limit = normalizePositiveInteger(req.query.limit, { max: 500 }) || 10;
+    const beforeMessageId = normalizePositiveInteger(
+      req.query.beforeMessageId,
+      {
+        max: Number.MAX_SAFE_INTEGER,
+      },
+    );
 
     const messages = await conversationRepo.getMessages(req.params.id, {
       limit,
       beforeMessageId,
     });
-    console.log("[GET /conversations/:id/messages]", {
-      conversationId: req.params.id,
-      userId: req.user.id,
-      limit,
-      beforeMessageId: beforeMessageId ?? null,
-      messagesCount: messages.length,
-      firstMessageId: messages[0]?.message_id ?? null,
-      lastMessageId: messages[messages.length - 1]?.message_id ?? null,
-    });
+    // console.log("[GET /conversations/:id/messages]", {
+    //   conversationId: req.params.id,
+    //   userId: req.user.id,
+    //   limit,
+    //   beforeMessageId: beforeMessageId ?? null,
+    //   messagesCount: messages.length,
+    //   firstMessageId: messages[0]?.message_id ?? null,
+    //   lastMessageId: messages[messages.length - 1]?.message_id ?? null,
+    // });
     const oldestLoadedMessageId = messages[0]?.message_id ?? null;
     const remainingCount = oldestLoadedMessageId
       ? await conversationRepo.countMessagesAfter(req.params.id, 0, {

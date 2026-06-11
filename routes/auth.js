@@ -78,6 +78,42 @@ router.post("/register", async (req, res) => {
   }
 });
 
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const email = normalizeEmail(req.body?.email);
+    const { password } = req.body;
+    const fieldErrors = {};
+
+    if (!email) {
+      fieldErrors.email = "email required";
+    } else if (!isValidEmail(email)) {
+      fieldErrors.email = "invalid email format";
+    }
+    if (!password) {
+      fieldErrors.password = "password required";
+    } else if (!validatePasswordLength(password)) {
+      fieldErrors.password = "password must be at least 6 characters";
+    }
+    if (Object.keys(fieldErrors).length > 0) {
+      return sendValidationError(res, fieldErrors);
+    }
+
+    const user = await userRepo.getUserByEmail(email);
+    if (!user) {
+      return sendError(res, 404, "email not registered");
+    }
+
+    await userRepo.updateUser(user.id, {
+      password: await bcrypt.hash(password, 10),
+    });
+    await tokenRepo.revokeRefreshTokensByUserId(user.id);
+
+    return res.json({ message: "password reset successfully" });
+  } catch (error) {
+    return sendInternalError(res, error);
+  }
+});
+
 router.post("/login", async (req, res) => {
   try {
     const email = normalizeEmail(req.body?.email);
@@ -112,14 +148,13 @@ router.post("/login", async (req, res) => {
     // accessToken 用于接口鉴权，refreshToken 用于长会话续期。
     const accessToken = signAccessToken(user);
     const refreshToken = signRefreshToken(user);
-
     await tokenRepo.saveRefreshToken({
       userId: user.id,
       token: refreshToken,
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
     });
+    // 登录成功后即设置 HttpOnly 的 refresh token cookie
     setRefreshTokenCookie(res, refreshToken, { rememberMe });
-
     return res.json({
       token: { accessToken },
       user: toPublicUser(user),

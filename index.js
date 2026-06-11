@@ -3,6 +3,7 @@ const express = require("express");
 const cors = require("cors");
 const authRouter = require("./routes/auth");
 const conversationsRouter = require("./routes/conversations");
+const { startLocalRagIfNeeded } = require("./services/ragProcess");
 
 function readAllowedOrigins() {
   const configured = String(
@@ -46,9 +47,13 @@ function createApp() {
 
 function startServer(port = process.env.PORT || 3000) {
   const app = createApp();
-  return app.listen(port, () => {
+  const server = app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
   });
+  startLocalRagIfNeeded().catch((error) => {
+    console.error("Failed to start local RAG service:", error);
+  });
+  return server;
 }
 
 if (require.main === module) {

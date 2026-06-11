@@ -8,6 +8,7 @@ async function run({
   model,
   networkConfig,
   pendingMessageId,
+  observer,
   onRetrieved,
   onChunk,
 }) {
@@ -20,6 +21,7 @@ async function run({
       model,
       networkConfig,
       pendingMessageId,
+      observer,
       onRetrieved,
       onChunk,
     });
