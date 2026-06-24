@@ -1,6 +1,13 @@
 const OpenAI = require("openai");
 const { ChatOpenAI } = require("@langchain/openai");
 
+function createModelError(message, statusCode, code) {
+  const error = new Error(message);
+  error.statusCode = statusCode;
+  error.code = code;
+  return error;
+}
+
 // 显式白名单：前端/路由传入的模型名必须在此注册。
 const MODEL_REGISTRY = {
   "qwen-plus": {
@@ -50,14 +57,20 @@ const MODEL_REGISTRY = {
 function assertSupportedModel(modelName) {
   const config = MODEL_REGISTRY[modelName];
   if (!config) {
-    throw new Error(`unsupported model: ${modelName}`);
+    throw createModelError(
+      `unsupported model: ${modelName}`,
+      400,
+      "UNSUPPORTED_MODEL",
+    );
   }
 
   // 每个模型绑定独立的环境变量名，运行时强制校验。
   const apiKey = process.env[config.apiKeyEnv];
   if (!apiKey) {
-    throw new Error(
+    throw createModelError(
       `missing API key for model ${modelName}; expected env ${config.apiKeyEnv}`,
+      503,
+      "MISSING_MODEL_API_KEY",
     );
   }
 
@@ -98,6 +111,7 @@ function getModelMetadata(modelName = "qwen-plus") {
 
 module.exports = {
   MODEL_REGISTRY,
+  createModelError,
   assertSupportedModel,
   getClientForModel,
   getLangChainModelForName,

@@ -40,7 +40,6 @@ function checkHealth() {
 
 async function main() {
   if (await checkHealth()) {
-    console.log(`RAG service is already running: ${healthUrl}`);
     return;
   }
 
@@ -67,7 +66,6 @@ async function main() {
   });
 }
 
-main().catch((error) => {
-  console.error("Failed to start RAG service:", error);
+main().catch(() => {
   process.exit(1);
 });

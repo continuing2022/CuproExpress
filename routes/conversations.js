@@ -132,9 +132,7 @@ router.post("/", authMiddleware, async (req, res) => {
       observer.abort({
         reason: req.aborted ? "request_aborted" : "client_closed",
       });
-      saveAssistantMessage().catch((error) => {
-        console.error("persist partial assistant message failed:", error);
-      });
+      saveAssistantMessage().catch(() => {});
     });
 
     const result = await chatOrchestrator.run({
@@ -211,16 +209,25 @@ router.post("/", authMiddleware, async (req, res) => {
     });
     return res.end();
   } catch (error) {
-    console.error("conversation stream error:", error);
     observer?.fail({
       error,
       stage: "conversation_route",
       streamClosedEarly: res.headersSent,
     });
+    const statusCode =
+      Number.isInteger(error?.statusCode) && error.statusCode >= 400
+        ? error.statusCode
+        : 500;
+    const publicMessage =
+      statusCode === 500 ? "AI service error" : error.message;
+
     if (!res.headersSent) {
-      return sendInternalError(res, error);
+      if (statusCode === 500) {
+        return sendInternalError(res, error);
+      }
+      return sendError(res, statusCode, publicMessage);
     }
-    writeEvent(res, "error", { error: "AI service error" });
+    writeEvent(res, "error", { error: publicMessage });
     return res.end();
   }
 });
@@ -270,15 +277,6 @@ router.get("/:id/messages", authMiddleware, async (req, res) => {
       limit,
       beforeMessageId,
     });
-    // console.log("[GET /conversations/:id/messages]", {
-    //   conversationId: req.params.id,
-    //   userId: req.user.id,
-    //   limit,
-    //   beforeMessageId: beforeMessageId ?? null,
-    //   messagesCount: messages.length,
-    //   firstMessageId: messages[0]?.message_id ?? null,
-    //   lastMessageId: messages[messages.length - 1]?.message_id ?? null,
-    // });
     const oldestLoadedMessageId = messages[0]?.message_id ?? null;
     const remainingCount = oldestLoadedMessageId
       ? await conversationRepo.countMessagesAfter(req.params.id, 0, {

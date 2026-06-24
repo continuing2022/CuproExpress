@@ -5,8 +5,7 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "rag": "node scripts/startRag.js",
-    "test": "node --test --experimental-test-isolation=none --test-concurrency=1"
+    "rag": "node scripts/startRag.js"
   },
   "dependencies": {
     "@langchain/core": "^1.1.40",
@@ -24,6 +23,6 @@
     "openai": "^6.18.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.22"
+    "nodemon": "^3.1.14"
   }
 }

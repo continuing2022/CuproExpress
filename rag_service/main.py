@@ -116,10 +116,7 @@ def elapsed_ms(started_at: float) -> float:
 
 
 def log_rag_event(event: str, **payload):
-    logger.info(
-        "[observe][rag] %s",
-        json.dumps({"event": event, **payload}, ensure_ascii=False),
-    )
+    pass
 
 
 def pick_rag_bottleneck(diagnostics: dict):

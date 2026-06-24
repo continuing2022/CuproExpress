@@ -44,6 +44,9 @@ function adminOnly(req, res, next) {
 
 function requireSelfOrAdmin(req, res, next) {
   const userId = Number(req.params.id);
+  if (!Number.isInteger(userId) || userId <= 0) {
+    return sendError(res, 400, "invalid user id");
+  }
   if (req.user?.role === "admin" || req.user?.id === userId) {
     return next();
   }

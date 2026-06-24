@@ -35,6 +35,21 @@ function sendValidationError(res, fieldErrors) {
   });
 }
 
+function normalizeUserId(value) {
+  const userId = Number(value);
+  return Number.isInteger(userId) && userId > 0 ? userId : null;
+}
+
+function normalizeUserIds(values) {
+  if (!Array.isArray(values)) return [];
+  return [...new Set(values.map(normalizeUserId).filter(Boolean))];
+}
+
+function allowDirectPasswordReset() {
+  if (process.env.NODE_ENV !== "production") return true;
+  return String(process.env.ALLOW_INSECURE_PASSWORD_RESET || "").trim() === "1";
+}
+
 router.post("/register", async (req, res) => {
   try {
     const email = normalizeEmail(req.body?.email);
@@ -80,6 +95,13 @@ router.post("/register", async (req, res) => {
 
 router.post("/forgot-password", async (req, res) => {
   try {
+    if (!allowDirectPasswordReset()) {
+      return res.status(202).json({
+        message:
+          "password reset request accepted; verification is required in production",
+      });
+    }
+
     const email = normalizeEmail(req.body?.email);
     const { password } = req.body;
     const fieldErrors = {};
@@ -273,7 +295,10 @@ router.get(
   requireSelfOrAdmin,
   async (req, res) => {
     try {
-      const user = await userRepo.getUserById(Number(req.params.id));
+      const userId = normalizeUserId(req.params.id);
+      if (!userId) return sendError(res, 400, "invalid user id");
+
+      const user = await userRepo.getUserById(userId);
       if (!user) return sendError(res, 404, "user not found");
       return res.json(toPublicUser(user));
     } catch (error) {
@@ -329,7 +354,9 @@ router.post("/users", authMiddleware, adminOnly, async (req, res) => {
 
 router.put("/users/:id", authMiddleware, adminOnly, async (req, res) => {
   try {
-    const userId = Number(req.params.id);
+    const userId = normalizeUserId(req.params.id);
+    if (!userId) return sendError(res, 400, "invalid user id");
+
     const { username, email, role } = req.body;
     const user = await userRepo.getUserById(userId);
     if (!user) {
@@ -389,7 +416,9 @@ router.put("/users/:id", authMiddleware, adminOnly, async (req, res) => {
 
 router.delete("/users/:id", authMiddleware, adminOnly, async (req, res) => {
   try {
-    const userId = Number(req.params.id);
+    const userId = normalizeUserId(req.params.id);
+    if (!userId) return sendError(res, 400, "invalid user id");
+
     if (req.user.id === userId) {
       return sendError(res, 403, "cannot delete yourself");
     }
@@ -412,8 +441,8 @@ router.post(
   adminOnly,
   async (req, res) => {
     try {
-      const { userIds } = req.body;
-      if (!Array.isArray(userIds) || userIds.length === 0) {
+      const userIds = normalizeUserIds(req.body?.userIds);
+      if (userIds.length === 0) {
         return sendError(res, 400, "userIds array required");
       }
       if (userIds.includes(req.user.id)) {
@@ -437,7 +466,9 @@ router.put(
   requireSelfOrAdmin,
   async (req, res) => {
     try {
-      const userId = Number(req.params.id);
+      const userId = normalizeUserId(req.params.id);
+      if (!userId) return sendError(res, 400, "invalid user id");
+
       const { currentPassword, newPassword } = req.body;
 
       if (!newPassword) {

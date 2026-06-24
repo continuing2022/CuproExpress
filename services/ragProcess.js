@@ -127,9 +127,6 @@ async function startLocalRagIfNeeded(options = {}) {
     });
     child.once("exit", (code, signal) => {
       if (ragChild === child) ragChild = null;
-      if (code && code !== 0) {
-        console.error(`RAG service exited with code ${code}${signal ? ` (${signal})` : ""}`);
-      }
     });
 
     return child;

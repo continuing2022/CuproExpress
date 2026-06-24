@@ -3,7 +3,6 @@ function sendError(res, status, message, extra = {}) {
 }
 
 function sendInternalError(res, error) {
-  console.error(error);
   return sendError(res, 500, "internal error");
 }
 

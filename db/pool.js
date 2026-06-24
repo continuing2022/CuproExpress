@@ -2,24 +2,29 @@ const mysql = require("mysql2/promise");
 require("dotenv").config();
 const { requireEnv, getEnv } = require("../utils/env");
 
-const DB_HOST = getEnv("DB_HOST", "localhost");
-const DB_USER = requireEnv("DB_USER");
-const DB_PASSWORD = requireEnv("DB_PASSWORD");
-const DB_NAME = requireEnv("DB_NAME");
-const DB_PORT = Number(getEnv("DB_PORT", "3306"));
-
 let pool;
+let initPromise;
 
-async function ensureDatabase() {
+function readDbConfig() {
+  return {
+    host: getEnv("DB_HOST", "localhost"),
+    user: requireEnv("DB_USER"),
+    password: requireEnv("DB_PASSWORD"),
+    database: requireEnv("DB_NAME"),
+    port: Number(getEnv("DB_PORT", "3306")),
+  };
+}
+
+async function ensureDatabase(config) {
   const conn = await mysql.createConnection({
-    host: DB_HOST,
-    user: DB_USER,
-    password: DB_PASSWORD,
-    port: Number(DB_PORT),
+    host: config.host,
+    user: config.user,
+    password: config.password,
+    port: config.port,
   });
 
   await conn.query(
-    `CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\`
+    `CREATE DATABASE IF NOT EXISTS \`${config.database}\`
      DEFAULT CHARACTER SET utf8mb4
      COLLATE utf8mb4_unicode_ci;`,
   );
@@ -97,36 +102,60 @@ async function ensureTables() {
   `);
 }
 
-const ready = (async () => {
-  await ensureDatabase();
+async function initializePool() {
+  if (pool) return pool;
+  if (initPromise) return initPromise;
 
-  pool = mysql.createPool({
-    host: DB_HOST,
-    user: DB_USER,
-    password: DB_PASSWORD,
-    database: DB_NAME,
-    port: Number(DB_PORT),
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0,
-  });
+  initPromise = (async () => {
+    const config = readDbConfig();
+    await ensureDatabase(config);
 
-  await ensureTables();
-})();
+    pool = mysql.createPool({
+      host: config.host,
+      user: config.user,
+      password: config.password,
+      database: config.database,
+      port: config.port,
+      waitForConnections: true,
+      connectionLimit: 10,
+      queueLimit: 0,
+    });
+
+    await ensureTables();
+    return pool;
+  })();
+
+  try {
+    return await initPromise;
+  } finally {
+    initPromise = null;
+  }
+}
+
+const ready = {
+  then(onFulfilled, onRejected) {
+    return initializePool().then(onFulfilled, onRejected);
+  },
+  catch(onRejected) {
+    return initializePool().catch(onRejected);
+  },
+  finally(onFinally) {
+    return initializePool().finally(onFinally);
+  },
+};
 
 async function getPool() {
-  await ready;
-  return pool;
+  return initializePool();
 }
 
 async function testDbConnection() {
-  await ready;
   const currentPool = await getPool();
   const [rows] = await currentPool.execute("SELECT VERSION() AS mysql_version");
   return rows[0];
 }
 
 module.exports = {
+  initializePool,
   ready,
   getPool,
   testDbConnection,

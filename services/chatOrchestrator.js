@@ -44,7 +44,6 @@ async function run({
       telemetry,
     };
   } catch (error) {
-    console.error("langchain agent run failed:", error);
     throw error;
   }
 }
@@ -76,7 +75,6 @@ function buildTelemetry({
 }
 
 function logTelemetry(telemetry) {
-  console.info("[chat_telemetry]", JSON.stringify(telemetry));
 }
 
 module.exports = {

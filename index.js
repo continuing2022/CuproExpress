@@ -31,9 +31,16 @@ function createApp() {
     },
   };
 
+  app.disable("x-powered-by");
+  app.use((req, res, next) => {
+    res.setHeader("X-Content-Type-Options", "nosniff");
+    res.setHeader("X-Frame-Options", "DENY");
+    res.setHeader("Referrer-Policy", "no-referrer");
+    next();
+  });
   app.use(cors(corsOptions));
   app.options("*", cors(corsOptions));
-  app.use(express.json());
+  app.use(express.json({ limit: process.env.JSON_BODY_LIMIT || "1mb" }));
 
   app.get("/", (req, res) => {
     res.send("Hello from OrangeExpress!");
@@ -47,12 +54,8 @@ function createApp() {
 
 function startServer(port = process.env.PORT || 3000) {
   const app = createApp();
-  const server = app.listen(port, () => {
-    console.log(`Server listening on port ${port}`);
-  });
-  startLocalRagIfNeeded().catch((error) => {
-    console.error("Failed to start local RAG service:", error);
-  });
+  const server = app.listen(port);
+  startLocalRagIfNeeded().catch(() => {});
   return server;
 }
 

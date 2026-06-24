@@ -88,18 +88,6 @@ function buildConcurrencySnapshot() {
 }
 
 function logEvent(type, payload = {}) {
-  if (!isLoggingEnabled()) return;
-  console.info(
-    `[observe][${type}]`,
-    JSON.stringify(
-      {
-        ts: nowIso(),
-        ...payload,
-      },
-      null,
-      0,
-    ),
-  );
 }
 
 function logVerboseEvent(type, payload = {}) {
