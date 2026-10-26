@@ -6,6 +6,10 @@ const { normalizePagination } = require("../utils/validators");
 const conversationService = require("../services/conversationService");
 const chatOrchestrator = require("../services/chatOrchestrator");
 const { createConversationObserver } = require("../services/observability");
+const attachmentRepo = require("../repositories/attachmentRepo");
+const attachmentStorage = require("../services/attachmentStorage");
+const { normalizeAttachmentIds, buildMessageContent } = require("../services/attachmentContent");
+const { assertSupportedModel } = require("../services/modelRegistry");
 const {
   initSse,
   writeEvent,
@@ -47,15 +51,30 @@ router.post("/", authMiddleware, async (req, res) => {
       content,
       model,
       networkConfig,
+      attachment_ids: attachmentIds,
     } = req.body;
 
     const normalizedContent = normalizeRequiredText(content);
-    if (!normalizedContent) {
+    const ids = normalizeAttachmentIds(attachmentIds);
+    if (!normalizedContent && !ids.length) {
       return sendError(res, 400, "content required");
     }
 
     const normalizedTitle = normalizeOptionalText(title);
     const normalizedModel = normalizeOptionalText(model) || "qwen-plus";
+    const modelConfig = assertSupportedModel(normalizedModel);
+    if (ids.length && modelConfig.provider !== "dashscope") return sendError(res, 400, "附件仅使用阿里云模型分析，请选择 Qwen 系列模型");
+    const attachments = [];
+    for (const id of ids) {
+      const file = await attachmentRepo.getOwned(id, userId);
+      if (!file || file.message_id) return sendError(res, 400, "附件不存在、已发送或无权访问，请重新上传");
+      if (file.mimeType.startsWith("image/")) file.data = await attachmentStorage.get(file.object_key);
+      attachments.push(file);
+    }
+    const modelContent = buildMessageContent(normalizedContent, attachments);
+    if (attachments.some((file) => file.mimeType.startsWith("image/")) && !modelConfig.supportsVision) {
+      return sendError(res, 400, "图片需要使用视觉模型，请选择 Qwen3-VL-Plus");
+    }
     const normalizedNetworkConfig =
       networkConfig &&
       typeof networkConfig === "object" &&
@@ -89,10 +108,18 @@ router.post("/", authMiddleware, async (req, res) => {
     }
 
     const currentConversationId = ensuredConversation.conversationId;
+    if (modelConfig.provider !== "dashscope" && await attachmentRepo.conversationHasAttachments(currentConversationId)) {
+      return sendError(res, 400, "此会话包含附件，请选择 Qwen 系列模型继续对话");
+    }
+    if (!modelConfig.supportsVision && await attachmentRepo.conversationHasImages(currentConversationId)) {
+      return sendError(res, 400, "此会话包含图片，请选择 Qwen3-VL-Plus 继续对话");
+    }
     observer.setConversationId(currentConversationId);
-    const userMessage = await conversationService.addUserMessage(
+    const userMessage = await attachmentRepo.addUserMessage(
       currentConversationId,
+      userId,
       normalizedContent,
+      ids,
     );
 
     initSse(res);
@@ -100,6 +127,7 @@ router.post("/", authMiddleware, async (req, res) => {
     writeEvent(res, "started", {
       started: true,
       conversation_id: currentConversationId,
+      user_message_id: userMessage.message_id,
     });
     // 保持连接活跃，防止中间件或代理服务器关闭连接
     const keepAlive = startKeepAlive(res);
@@ -137,7 +165,7 @@ router.post("/", authMiddleware, async (req, res) => {
 
     const result = await chatOrchestrator.run({
       conversationId: currentConversationId,
-      content: normalizedContent,
+      content: modelContent,
       model: normalizedModel,
       networkConfig: normalizedNetworkConfig,
       pendingMessageId: userMessage.message_id,
@@ -277,6 +305,8 @@ router.get("/:id/messages", authMiddleware, async (req, res) => {
       limit,
       beforeMessageId,
     });
+    const files = await attachmentRepo.forMessages(messages.map((message) => message.message_id));
+    for (const message of messages) message.attachments = files.filter((file) => String(file.message_id) === String(message.message_id));
     const oldestLoadedMessageId = messages[0]?.message_id ?? null;
     const remainingCount = oldestLoadedMessageId
       ? await conversationRepo.countMessagesAfter(req.params.id, 0, {
@@ -346,6 +376,7 @@ router.delete("/:id", authMiddleware, async (req, res) => {
     if (!ok) {
       return sendError(res, 404, "conversation not found or not owned");
     }
+    require("../services/attachmentCleanup").cleanupAttachments().catch(() => {});
     return res.json({ success: true });
   } catch (error) {
     return sendInternalError(res, error);

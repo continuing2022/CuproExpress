@@ -10,6 +10,14 @@ function createModelError(message, statusCode, code) {
 
 // 显式白名单：前端/路由传入的模型名必须在此注册。
 const MODEL_REGISTRY = {
+  "qwen3-vl-plus": {
+    provider: "dashscope",
+    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    apiKeyEnv: "DASHSCOPE_API_KEY",
+    contextWindow: 262144,
+    preferredOutputTokens: 4000,
+    supportsVision: true,
+  },
   "qwen-plus": {
     provider: "dashscope",
     baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",

@@ -26,7 +26,7 @@ async function ensureConversation({ userId, conversationId, title, content }) {
     normalizedTitle ||
     (normalizedContent.length > 60
       ? normalizedContent.slice(0, 60)
-      : normalizedContent);
+      : normalizedContent) || "附件对话";
   const conversation = await conversationRepo.createConversation(
     userId,
     autoTitle,

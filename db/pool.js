@@ -71,6 +71,31 @@ async function ensureTables() {
   `);
 
   await pool.query(`
+    CREATE TABLE IF NOT EXISTS attachments (
+      attachment_id CHAR(36) PRIMARY KEY,
+      user_id INT NOT NULL,
+      message_id BIGINT NULL,
+      name VARCHAR(255) NOT NULL,
+      mime_type VARCHAR(100) NOT NULL,
+      size INT NOT NULL,
+      object_key VARCHAR(512) NOT NULL,
+      extracted_text MEDIUMTEXT NULL,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+      FOREIGN KEY (message_id) REFERENCES messages(message_id) ON DELETE CASCADE,
+      INDEX idx_attachment_message (message_id),
+      INDEX idx_attachment_pending (user_id, created_at)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS attachment_cleanup (
+      object_key VARCHAR(512) PRIMARY KEY,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `);
+
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS conversation_states (
       conversation_id CHAR(36) PRIMARY KEY,
       running_summary LONGTEXT NULL,

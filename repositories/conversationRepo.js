@@ -299,11 +299,17 @@ async function updateConversationTitle(conversationId, userId, title) {
 async function deleteConversation(conversationId, userId) {
   await ready;
   const pool = await getPool();
-  const [result] = await pool.execute(
-    "DELETE FROM conversations WHERE conversation_id = ? AND user_id = ?",
-    [conversationId, userId],
-  );
-  return result.affectedRows > 0;
+  const connection = await pool.getConnection();
+  try {
+    await connection.beginTransaction();
+    const [owned] = await connection.execute("SELECT conversation_id FROM conversations WHERE conversation_id = ? AND user_id = ? FOR UPDATE", [conversationId, userId]);
+    if (!owned.length) { await connection.rollback(); return false; }
+    await connection.execute("INSERT IGNORE INTO attachment_cleanup (object_key) SELECT a.object_key FROM attachments a JOIN messages m ON m.message_id = a.message_id WHERE m.conversation_id = ?", [conversationId]);
+    await connection.execute("DELETE FROM conversations WHERE conversation_id = ? AND user_id = ?", [conversationId, userId]);
+    await connection.commit();
+    return true;
+  } catch (error) { await connection.rollback(); throw error; }
+  finally { connection.release(); }
 }
 
 module.exports = {

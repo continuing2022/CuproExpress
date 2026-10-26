@@ -217,3 +217,16 @@ npm run dev
 # 前端项目
 npm run dev
 ```
+# 多模态附件（阿里云 OSS + 百炼）
+
+聊天输入框可上传 PNG、JPEG、WebP、PDF、Markdown、TXT 和 Word `.docx`，每条最多 4 个、每个 5 MB。支持仅发送附件、上传状态、图片预览、私有下载、历史会话追问和发送失败恢复草稿。图片自动选择 `qwen3-vl-plus`，附件会话只允许使用阿里云 Qwen 模型；摘要模型也不会将附件切换到其他服务商。
+
+将 [attachments.env.example](./attachments.env.example) 中的 OSS 配置填入后端 `.env`，百炼继续使用已有的 `DASHSCOPE_API_KEY`。创建私有 OSS Bucket，配置其 `OSS_REGION`（例如 `oss-cn-hangzhou`）、`OSS_BUCKET` 及后端 RAM 凭据 `OSS_ACCESS_KEY_ID`、`OSS_ACCESS_KEY_SECRET`。RAM 仅需对该桶 `chat-attachments/*` 的 GetObject、PutObject、DeleteObject 权限。不要在前端 `VITE_*` 配置中放密钥。临时 STS 凭据还需配置 `OSS_STS_TOKEN`，到期前更新凭据并重启后端。
+
+运行 `npm install` 并重启后端；初始化会自动创建 `attachments` 和 `attachment_cleanup` 表，不修改已有消息表。文件经鉴权后由后端上传到 OSS，原文件不写入数据库；数据库保存文件元信息、关联及提取文字。图片由后端读取为模型输入，浏览器通过鉴权接口预览和下载，无需公开 Bucket 或配置浏览器直传 CORS。
+
+PDF、DOCX 在独立进程中提取文字（15 秒超时、256 MB JS 堆限制）；MD、TXT 要求 UTF-8。文档最多 40000 字符，每条消息文档合计约 12000 tokens，超过限制会提示拆分。扫描版 PDF、文档内嵌图片和旧版 `.doc` 不做 OCR 或转换：请先 OCR、将页面作为图片上传，或另存为 `.docx`。
+
+删除会话会在同一数据库事务中登记 OSS 清理任务；删除失败的对象保留队列重试。后端启动、删除会话及每小时执行清理，超过一天未发送的附件会过期。每轮最多处理 100 个过期附件和 100 个删除任务。移除尚未发送的附件也会删除 OSS 原文件。
+
+验证：`npm test`，覆盖真实 PDF/DOCX 解析、扫描 PDF/损坏文件拒绝、大小与格式限制、上传/下载权限、附件输入和历史元信息；云存储与模型调用使用模拟接口，部署后仍需使用实际 OSS 和百炼配置联调。

@@ -14,6 +14,9 @@ const {
   assertSupportedModel,
 } = require("./modelRegistry");
 const { SYSTEM_PROMPT } = require("./openai");
+const attachmentRepo = require("../repositories/attachmentRepo");
+const { buildMessageContent } = require("./attachmentContent");
+const { MODEL_REGISTRY } = require("./modelRegistry");
 const ragService = require("./ragService");
 const searchTool = require("../searchTool");
 const {
@@ -603,7 +606,7 @@ async function ensureThreadSeeded({
   for (const message of historicalMessages) {
     seedMessages.push({
       role: message.role,
-      content: message.content,
+      content: buildMessageContent(message.content, await attachmentRepo.forMessages([message.message_id], true)),
     });
   }
 
@@ -852,11 +855,14 @@ function normalizeRole(message) {
 }
 // 返回总结模型名称
 function resolveSummaryModelName(primaryModel) {
+  if (MODEL_REGISTRY[primaryModel]?.supportsVision) return primaryModel;
   const configured = String(process.env.SUMMARY_MODEL || "").trim();
   if (!configured) return primaryModel;
 
   try {
-    assertSupportedModel(configured);
+    const summaryConfig = assertSupportedModel(configured);
+    // Attachment conversations stay with the provider authorized for their primary model.
+    if (MODEL_REGISTRY[primaryModel]?.provider === "dashscope" && summaryConfig.provider !== "dashscope") return primaryModel;
     return configured;
   } catch (error) {
     return primaryModel;

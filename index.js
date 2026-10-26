@@ -48,6 +48,7 @@ function createApp() {
 
   app.use("/auth", authRouter);
   app.use("/conversations", conversationsRouter);
+  app.use("/attachments", require("./routes/attachments"));
 
   return app;
 }
@@ -55,6 +56,11 @@ function createApp() {
 function startServer(port = process.env.PORT || 3000) {
   const app = createApp();
   const server = app.listen(port);
+  const cleanup = () => require("./services/attachmentCleanup").cleanupAttachments().catch(() => {});
+  cleanup();
+  const cleanupTimer = setInterval(cleanup, 60 * 60 * 1000);
+  cleanupTimer.unref();
+  server.on("close", () => clearInterval(cleanupTimer));
   startLocalRagIfNeeded().catch(() => {});
   return server;
 }
