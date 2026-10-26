@@ -3,12 +3,13 @@ import json
 import logging
 import os
 import time
+from threading import RLock
 from pathlib import Path
 from typing import List, Dict, Any, Optional
 from urllib.parse import urlparse
 
 from dotenv import load_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, Header, HTTPException
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
@@ -20,6 +21,7 @@ from llama_index.core import (
     load_index_from_storage,
 )
 from llama_index.core.node_parser import SentenceSplitter
+from llama_index.core.embeddings import MockEmbedding
 from llama_index.embeddings.dashscope import DashScopeEmbedding
 from llama_index.llms.dashscope import DashScope
 
@@ -177,26 +179,12 @@ class RagIndexManager:
     # --------------------- 模型配置 ---------------------
     def configure_models(self):
         """
-        配置 LlamaIndex 全局模型：
-        1. LLM：负责最终回答生成
-        2. Embedding：负责向量化
-        3. Text Splitter：负责切块
+        全局仅保存不含密钥的占位模型与切块器。
+        实际 Embedding 和 LLM 由单次请求显式创建。
         """
-        dashscope_api_key = os.getenv("DASHSCOPE_API_KEY", "").strip()
-        if not dashscope_api_key:
-            raise RuntimeError("missing env DASHSCOPE_API_KEY")
-
-        # 配置大模型
-        Settings.llm = DashScope(
-            model_name=RAG_MODEL_NAME,
-            api_key=dashscope_api_key,
-            temperature=0.2,  # RAG 场景建议低温度，更稳
-        )
-
-        # 配置向量模型
-        Settings.embed_model = DashScopeEmbedding(
-            api_key=dashscope_api_key
-        )
+        # Shared index state must never retain a user's credential.
+        Settings.llm = None
+        Settings.embed_model = MockEmbedding(embed_dim=1536)
 
         # 配置文本切块器
         Settings.text_splitter = SentenceSplitter(
@@ -230,10 +218,9 @@ class RagIndexManager:
         return digest.hexdigest() # 返回最终哈希值
 
     # --------------------- 构建或加载索引 ---------------------
-    def load_or_build_index(self, force_rebuild=False):
+    def load_or_build_index(self, force_rebuild=False, api_key=None):
         """
-        如果知识库没变化，则直接加载已有索引；
-        如果变化了，重新读取文档并构建向量索引。
+        已有索引可无密钥加载；构建索引必须显式提供本次使用的 Key。
         """
         started_at = time.perf_counter()
         self.configure_models()
@@ -259,22 +246,23 @@ class RagIndexManager:
             )
             return self.index
 
+        # Ingestion is explicit and never billed implicitly to a chat request.
+        if not api_key:
+            raise RuntimeError("知识库索引需要通过 /rag/rebuild 显式构建")
+        embed_model = DashScopeEmbedding(api_key=api_key)
         # 慢路径：重新构建索引
         documents = SimpleDirectoryReader(
             str(DATA_DIR),
             recursive=True,
-            # 可按需继续扩展支持的文件类型
-            file_extractor={
-                ".pdf": "default",
-                ".txt": "default",
-                ".md": "default",
-            },
+            # Use the reader's built-in extractors (values must be reader objects).
         ).load_data()
         # 切割文件成索引节点，并生成向量
         self.index = VectorStoreIndex.from_documents(
             documents,
             show_progress=True,
+            embed_model=embed_model,
         )
+        self.index._embed_model = Settings.embed_model
         # 持久化索引到本地
         PERSIST_DIR.mkdir(parents=True, exist_ok=True)
         self.index.storage_context.persist(persist_dir=str(PERSIST_DIR))
@@ -298,7 +286,7 @@ class RagIndexManager:
             self.load_or_build_index()
 
     # --------------------- 构建混合检索器 ---------------------
-    def build_hybrid_retrieval(self, query: str):
+    def build_hybrid_retrieval(self, query: str, api_key: str):
         """
         执行 hybrid retrieval：
         1. 向量检索
@@ -313,7 +301,8 @@ class RagIndexManager:
 
         vector_started_at = time.perf_counter()
         vector_retriever = self.index.as_retriever(
-            similarity_top_k=RAG_VECTOR_TOP_K
+            similarity_top_k=RAG_VECTOR_TOP_K,
+            embed_model=DashScopeEmbedding(api_key=api_key),
         )
         vector_nodes = vector_retriever.retrieve(query)
         vector_ms = elapsed_ms(vector_started_at)
@@ -399,12 +388,12 @@ class RagIndexManager:
         return reranked_nodes, diagnostics
 
     # --------------------- 仅检索接口 ---------------------
-    def retrieve(self, query: str):
+    def retrieve(self, query: str, api_key: str):
         """
         只返回检索结果和上下文，不直接让 LLM 生成。
         适合给 Node 层或别的服务做二次编排。
         """
-        nodes, retrieval_diagnostics = self.build_hybrid_retrieval(query)
+        nodes, retrieval_diagnostics = self.build_hybrid_retrieval(query, api_key)
 
         context_parts = []  # 存完整文本（给大模型看）
         source_nodes = []   # 存来源信息（给前端/人看）
@@ -466,17 +455,17 @@ class RagIndexManager:
         """
 
     # --------------------- 流式回答 ---------------------
-    def stream_answer(self, query: str):
+    def stream_answer(self, query: str, api_key: str):
         """
         执行：
         hybrid retrieval -> rerank -> prompt 拼接 -> LLM 流式生成
         """
-        result = self.retrieve(query) # 通过问题获取数据
+        result = self.retrieve(query, api_key) # 通过问题获取数据
         context_text = result["contextText"]
         prompt = self.build_prompt(query, context_text)
 
         # 直接走 LLM 的流式补全
-        return Settings.llm.stream_complete(prompt), result
+        return DashScope(model_name=RAG_MODEL_NAME, api_key=api_key, temperature=0.2).stream_complete(prompt), result
 
     # --------------------- 健康信息 ---------------------
     def get_health(self):
@@ -495,6 +484,7 @@ class RagIndexManager:
 
 
 manager = RagIndexManager()
+index_lock = RLock()
 
 
 # ===================== 应用启动 =====================
@@ -502,25 +492,34 @@ manager = RagIndexManager()
 @app.on_event("startup")
 async def startup_event():
     """
-    服务启动时提前加载或构建索引
+    服务启动时仅加载已有索引，不触发付费构建
     """
-    manager.load_or_build_index()
+    # Start without credentials; ingestion must be requested explicitly.
+    if HASH_FILE.exists() and PERSIST_DIR.exists():
+        try:
+            manager.load_or_build_index()
+        except RuntimeError:
+            pass
 
 
 # ===================== 接口：仅检索 =====================
 
 @app.post("/rag/retrieve")
-async def rag_retrieve(req: QueryRequest):
+def rag_retrieve(req: QueryRequest, x_dashscope_api_key: str = Header(min_length=8, max_length=512)):
     """
     仅返回检索结果，不生成最终答案。
     """
-    return manager.retrieve(req.query)
+    try:
+        with index_lock:
+            return manager.retrieve(req.query, x_dashscope_api_key)
+    except Exception:
+        raise HTTPException(status_code=503, detail="知识库检索失败，请检查百炼 Key 或重建知识库索引") from None
 
 
 # ===================== 接口：流式回答 =====================
 
 @app.post("/rag/stream")
-async def rag_stream(req: QueryRequest):
+async def rag_stream(req: QueryRequest, x_dashscope_api_key: str = Header(min_length=8, max_length=512)):
     """
     SSE 流式输出回答。
     返回格式示例：
@@ -530,7 +529,8 @@ async def rag_stream(req: QueryRequest):
     """
     async def generate():
         try:
-            stream_resp, retrieval_result = manager.stream_answer(req.query)
+            with index_lock:
+                stream_resp, retrieval_result = manager.stream_answer(req.query, x_dashscope_api_key)
 
             # 先把 sources 发给前端，方便调试和展示
             yield f"data: {json.dumps({'sources': retrieval_result['sources']}, ensure_ascii=False)}\n\n"
@@ -545,7 +545,7 @@ async def rag_stream(req: QueryRequest):
             yield f"data: {json.dumps({'done': True}, ensure_ascii=False)}\n\n"
 
         except Exception as exc:
-            yield f"data: {json.dumps({'error': str(exc)}, ensure_ascii=False)}\n\n"
+            yield f"data: {json.dumps({'error': '知识库服务暂不可用，请检查百炼 Key 和索引'}, ensure_ascii=False)}\n\n"
 
     return StreamingResponse(generate(), media_type="text/event-stream")
 
@@ -553,12 +553,16 @@ async def rag_stream(req: QueryRequest):
 # ===================== 接口：强制重建索引 =====================
 
 @app.post("/rag/rebuild")
-async def rebuild_index():
+def rebuild_index(x_dashscope_api_key: str = Header(min_length=8, max_length=512)):
     """
     强制重建索引。
     适合知识库更新后手动调用。
     """
-    manager.load_or_build_index(force_rebuild=True)
+    try:
+        with index_lock:
+            manager.load_or_build_index(force_rebuild=True, api_key=x_dashscope_api_key)
+    except Exception:
+        raise HTTPException(status_code=503, detail="索引构建失败，请检查百炼 Key 和知识库文件") from None
     return {
         "status": "rebuilt",
         "hash": manager.current_hash,

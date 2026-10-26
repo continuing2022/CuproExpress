@@ -61,7 +61,8 @@ test("builds image blocks and bounded document context without changing text mes
 process.env.JWT_SECRET = "attachment-test-secret";
 process.env.REFRESH_SECRET = "attachment-refresh-test-secret";
 process.env.DASHSCOPE_API_KEY = "test-key";
-process.env.KIMI_API_KEY = "test-key";
+process.env.DEEPSEEK_API_KEY = "test-key";
+require("../repositories/userApiKeyRepo").load = async () => ({ dashscope: "user-dashscope-test-key", deepseek: "user-deepseek-test-key" });
 process.env.OBSERVE_CHAT_METRICS = "0";
 const repo = require("../repositories/attachmentRepo");
 const storage = require("../services/attachmentStorage");
@@ -144,7 +145,7 @@ test("upload constraints and pending-file removal are enforced at HTTP boundary"
   assert.equal((await upload("big.txt", Buffer.alloc(MAX_FILE_BYTES + 1))).status, 400);
   const result = await upload("notes.md", Buffer.from("# 铜材说明"));
   const item = await result.json();
-  assert.equal((await send({ content: "分析文档", model: "kimi-k2.5", attachment_ids: [item.id] })).status, 400);
+  assert.equal((await send({ content: "分析文档", model: "deepseek-v4-pro", attachment_ids: [item.id] })).status, 400);
   await fetch(`${base}/attachments/${item.id}`, { method: "DELETE", headers: headers(2) });
   assert.ok(records.has(item.id));
   const removed = await fetch(`${base}/attachments/${item.id}`, { method: "DELETE", headers: headers(1) });
@@ -159,7 +160,7 @@ test("document text reaches the model and attachment history keeps the authorize
   await sent.text();
   assert.match(captured.content.at(-1).text, /C11000 copper/);
   repo.conversationHasAttachments = async () => true;
-  assert.equal((await send({ conversation_id: "test-conversation", content: "继续", model: "kimi-k2.5" })).status, 400);
+  assert.equal((await send({ conversation_id: "test-conversation", content: "继续", model: "deepseek-v4-pro" })).status, 400);
   repo.conversationHasAttachments = async () => false;
   repo.conversationHasImages = async () => true;
   assert.equal((await send({ conversation_id: "test-conversation", content: "继续", model: "qwen-plus" })).status, 400);

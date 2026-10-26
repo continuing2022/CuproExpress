@@ -6,6 +6,7 @@ const fetch =
 const DEFAULT_RAG_URL =
   process.env.RAG_SERVICE_URL || "http://localhost:8001/rag/retrieve";
 const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "::1"]);
+const { getRequestApiKey } = require("./userCredentials");
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -14,7 +15,7 @@ function sleep(ms) {
 function isLocalRagUrl(rawUrl) {
   try {
     const parsed = new URL(rawUrl);
-    return LOCAL_HOSTS.has(parsed.hostname);
+    return ["http:", "https:"].includes(parsed.protocol) && LOCAL_HOSTS.has(parsed.hostname.replace(/^\[|\]$/g, ""));
   } catch {
     return false;
   }
@@ -39,7 +40,7 @@ function isRetryableLocalFetchError(error) {
   return /fetch failed|network/i.test(String(error?.message || ""));
 }
 
-async function fetchWithTimeout(fetchImpl, url, payload, timeoutMs) {
+async function fetchWithTimeout(fetchImpl, url, payload, timeoutMs, apiKey) {
   const controller =
     typeof AbortController !== "undefined" ? new AbortController() : null;
   const timer = controller
@@ -49,7 +50,8 @@ async function fetchWithTimeout(fetchImpl, url, payload, timeoutMs) {
   try {
     return await fetchImpl(url, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "X-Dashscope-Api-Key": apiKey },
+      redirect: "error",
       body: JSON.stringify(payload),
       signal: controller?.signal,
     });
@@ -60,9 +62,17 @@ async function fetchWithTimeout(fetchImpl, url, payload, timeoutMs) {
 
 // 提供一个函数 retrieveContext 来调用 RAG 服务，获取与用户查询相关的上下文信息
 async function retrieveContext({ query, history, options = {} }) {
+  const apiKey = getRequestApiKey("dashscope", false);
+  if (!apiKey) return {
+    mode: "direct_chat", contextText: "",
+    meta: { reason: "missing_user_dashscope_key", message: "知识库检索需要配置你自己的阿里云百炼 API Key；当前使用普通对话。" },
+  };
   const timeoutMs = options.timeoutMs || 15000;
   const startedAt = Date.now();
   const ragUrl = options.ragUrl || DEFAULT_RAG_URL;
+  if (!isLocalRagUrl(ragUrl)) {
+    return { mode: "direct_chat", contextText: "", meta: { reason: "remote_rag_disabled", message: "用户密钥仅用于本机知识库服务，远程知识库检索未启用。" } };
+  }
   const fetchImpl = options.fetchImpl || fetch;
   const maxAttempts =
     options.retryAttempts || (isLocalRagUrl(ragUrl) ? 3 : 1);
@@ -77,11 +87,11 @@ async function retrieveContext({ query, history, options = {} }) {
         ragUrl,
         { query, history },
         timeoutMs,
+        apiKey,
       );
 
       if (!response.ok) {
-        const text = await response.text();
-        throw new Error(`rag retrieve failed: ${response.status} ${text}`);
+        throw new Error(`知识库检索暂不可用（${response.status}），请检查个人百炼 Key 和知识库索引`);
       }
 
       const data = await response.json();

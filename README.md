@@ -69,9 +69,7 @@ DB_NAME=cupro_agent
 JWT_SECRET=change_me_access_secret
 REFRESH_SECRET=change_me_refresh_secret
 
-DASHSCOPE_API_KEY=your_dashscope_api_key
-KIMI_API_KEY=
-DEEPSEEK_API_KEY=
+USER_API_KEY_ENCRYPTION_KEY=replace_with_64_hex_characters
 
 BOCHA_API_KEY=
 BOCHA_SEARCH_URL=https://api.bochaai.com/v1/web-search
@@ -95,7 +93,7 @@ npm run dev
 npm start
 ```
 
-服务默认监听 `http://localhost:3000`。启动时会自动创建数据库和所需表：`users`、`conversations`、`messages`、`conversation_states`、`refresh_tokens`。
+服务默认监听 `http://localhost:3000`。启动时会自动创建数据库和所需表：`users`、`user_api_keys`、`conversations`、`messages`、`conversation_states`、`refresh_tokens`。
 
 ## RAG 服务
 
@@ -113,7 +111,7 @@ python -m venv ../.venv
 npm run rag
 ```
 
-RAG 服务会读取 `RAG_DATA_DIR` 指向的本地知识库目录，构建并复用持久化索引。默认接口：
+RAG 服务会读取 `RAG_DATA_DIR` 指向的本地知识库目录，启动时仅加载已有持久化索引；首次构建或重建需显式调用 `/rag/rebuild` 并提供本次使用的百炼 Key。默认接口：
 
 - `POST /rag/retrieve`：只返回检索上下文。
 - `POST /rag/stream`：RAG 服务内部流式生成回答。
@@ -174,16 +172,40 @@ SSE 事件包括 `started`、`retrieved`、`chunk`、`done` 和 `error`。
 
 ## 支持的模型
 
-| 模型 | 服务商 | 环境变量 |
+| 模型 | 服务商 | 凭据来源 |
 | --- | --- | --- |
-| `qwen-plus` | DashScope | `DASHSCOPE_API_KEY` |
-| `qwen-math-turbo` | DashScope | `DASHSCOPE_API_KEY` |
-| `qwen-flash` | DashScope | `DASHSCOPE_API_KEY` |
-| `qwen-max` | DashScope | `DASHSCOPE_API_KEY` |
-| `kimi-k2.5` | Moonshot | `KIMI_API_KEY` |
-| `deepseek-v4-pro` | DeepSeek | `DEEPSEEK_API_KEY` |
+| `qwen3-vl-plus`、`qwen-plus`、`qwen-math-turbo`、`qwen-flash`、`qwen-max` | 阿里云百炼 | 当前用户保存的百炼 Key |
+| `deepseek-v4-pro` | DeepSeek | 当前用户保存的 DeepSeek Key |
 
-如需新增模型，在 `services/modelRegistry.js` 中注册模型名、base URL、API Key 环境变量和上下文窗口。
+仅支持以上两个服务商。旧的 `DASHSCOPE_API_KEY`、`DEEPSEEK_API_KEY`、`KIMI_API_KEY` 环境变量不再用于模型调用。没有个人 Key 时会提示配置，不会回退到平台 Key；Key 失效或额度不足也不会回退。摘要限制为与主模型相同的服务商。
+
+### 用户 API Key 与上线配置
+
+1. 在后端 `.env` 设置 `USER_API_KEY_ENCRYPTION_KEY`，必须为 64 位十六进制字符串。用下面的命令生成一次，并妥善备份，后续部署保持一致：
+
+   ```bash
+   node -e "console.log(require('node:crypto').randomBytes(32).toString('hex'))"
+   ```
+
+2. 重启后端，首次数据库初始化会自动创建 `user_api_keys` 表，已有用户不需要迁移账号。
+3. 用户登录后，通过个人菜单或聊天框下方的“模型服务设置”分别填写自己的百炼、DeepSeek Key。保存仅做格式检查，服务商的有效性、权限与余额在实际调用时判断。
+4. 生产环境通过 HTTPS 提供前后端。Key 不保存到浏览器持久存储、不写入 JWT；AES-256-GCM 密文与用户 ID、服务商绑定，只有该账号可操作，管理员没有读取他人 Key 的接口。加密主密钥丢失或被替换后，用户必须重新填写 Key。
+
+设置接口（均需登录，身份来自 JWT，不接受请求体中的用户 ID）：
+
+- `GET /model-settings`：仅返回两种服务商的配置状态和 Key 尾号。
+- `PUT /model-settings/:provider`：保存/更换 `{ "apiKey": "..." }`，provider 为 `dashscope` 或 `deepseek`。
+- `DELETE /model-settings/:provider`：删除当前用户对应 Key。
+
+### 知识库与其他服务费用
+
+RAG 查询向量使用当前用户的百炼 Key，通过请求头传递给本机 Python 服务，不写入共享模型或环境变量。只有 DeepSeek Key 的用户可以聊天，检索会提示需要个人百炼 Key。用户密钥仅允许传到 loopback 地址的 RAG 服务，禁止重定向；配置远程 RAG 地址时检索会被跳过。Python 服务应只绑定本机地址，禁止对公网开放。
+
+索引加载不调用付费模型。没有可用索引或知识库内容发生变化时，需要运维显式向本机 `POST /rag/rebuild`，使用 `X-Dashscope-Api-Key` 请求头提供用于本次构建的百炼 Key，构建费用由该 Key 对应账户承担。用户聊天不会自动触发全库向量化。Python `/rag/retrieve`、`/rag/stream` 也必须提供此请求头；未提供时不会使用任何平台 Key。
+
+联网搜索仍由平台 `BOCHA_API_KEY` 提供，附件存储仍使用平台 OSS 配置；它们是独立基础服务，不属于本次两种模型 Key 设置。
+
+验证用户凭据：运行 `npm test`；安装 Python RAG 依赖及 `httpx` 后，运行 `.venv/Scripts/python -B -m unittest discover -s tests -p test_rag_credentials.py`。测试使用模拟模型与临时索引，不调用付费 API。数据库接口在测试中模拟，部署时还需验证真实 MySQL 建表和实际服务商调用。
 
 ## 常用配置
 
@@ -221,7 +243,7 @@ npm run dev
 
 聊天输入框可上传 PNG、JPEG、WebP、PDF、Markdown、TXT 和 Word `.docx`，每条最多 4 个、每个 5 MB。支持仅发送附件、上传状态、图片预览、私有下载、历史会话追问和发送失败恢复草稿。图片自动选择 `qwen3-vl-plus`，附件会话只允许使用阿里云 Qwen 模型；摘要模型也不会将附件切换到其他服务商。
 
-将 [attachments.env.example](./attachments.env.example) 中的 OSS 配置填入后端 `.env`，百炼继续使用已有的 `DASHSCOPE_API_KEY`。创建私有 OSS Bucket，配置其 `OSS_REGION`（例如 `oss-cn-hangzhou`）、`OSS_BUCKET` 及后端 RAM 凭据 `OSS_ACCESS_KEY_ID`、`OSS_ACCESS_KEY_SECRET`。RAM 仅需对该桶 `chat-attachments/*` 的 GetObject、PutObject、DeleteObject 权限。不要在前端 `VITE_*` 配置中放密钥。临时 STS 凭据还需配置 `OSS_STS_TOKEN`，到期前更新凭据并重启后端。
+将 [attachments.env.example](./attachments.env.example) 中的 OSS 配置填入后端 `.env`，百炼模型使用当前用户在“模型服务设置”中保存的 Key。创建私有 OSS Bucket，配置其 `OSS_REGION`（例如 `oss-cn-hangzhou`）、`OSS_BUCKET` 及后端 RAM 凭据 `OSS_ACCESS_KEY_ID`、`OSS_ACCESS_KEY_SECRET`。RAM 仅需对该桶 `chat-attachments/*` 的 GetObject、PutObject、DeleteObject 权限。不要在前端 `VITE_*` 配置中放密钥。临时 STS 凭据还需配置 `OSS_STS_TOKEN`，到期前更新凭据并重启后端。
 
 运行 `npm install` 并重启后端；初始化会自动创建 `attachments` 和 `attachment_cleanup` 表，不修改已有消息表。文件经鉴权后由后端上传到 OSS，原文件不写入数据库；数据库保存文件元信息、关联及提取文字。图片由后端读取为模型输入，浏览器通过鉴权接口预览和下载，无需公开 Bucket 或配置浏览器直传 CORS。
 

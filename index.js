@@ -47,6 +47,7 @@ function createApp() {
   });
 
   app.use("/auth", authRouter);
+  app.use("/model-settings", require("./routes/modelSettings"));
   app.use("/conversations", conversationsRouter);
   app.use("/attachments", require("./routes/attachments"));
 
@@ -56,17 +57,32 @@ function createApp() {
 function startServer(port = process.env.PORT || 3000) {
   const app = createApp();
   const server = app.listen(port);
-  const cleanup = () => require("./services/attachmentCleanup").cleanupAttachments().catch(() => {});
-  cleanup();
-  const cleanupTimer = setInterval(cleanup, 60 * 60 * 1000);
-  cleanupTimer.unref();
-  server.on("close", () => clearInterval(cleanupTimer));
-  startLocalRagIfNeeded().catch(() => {});
+  server.once("listening", () => {
+    const cleanup = () => require("./services/attachmentCleanup").cleanupAttachments().catch(() => {});
+    cleanup();
+    const cleanupTimer = setInterval(cleanup, 60 * 60 * 1000);
+    cleanupTimer.unref();
+    server.on("close", () => clearInterval(cleanupTimer));
+    startLocalRagIfNeeded().catch(() => {});
+  });
   return server;
 }
 
 if (require.main === module) {
-  startServer();
+  const server = startServer();
+  server.once("listening", () => {
+    console.log(`CuproExpress listening on port ${server.address().port}`);
+  });
+  server.once("error", (error) => {
+    if (error.code === "EADDRINUSE") {
+      console.error(
+        `启动失败：端口 ${process.env.PORT || 3000} 已被占用。请关闭已有服务后重试，或在 PowerShell 中设置 $env:PORT=3001 后运行 npm run start。`,
+      );
+    } else {
+      console.error("CuproExpress 启动失败：", error);
+    }
+    process.exitCode = 1;
+  });
 }
 
 module.exports = {

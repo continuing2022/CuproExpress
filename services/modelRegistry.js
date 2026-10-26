@@ -1,5 +1,6 @@
 const OpenAI = require("openai");
 const { ChatOpenAI } = require("@langchain/openai");
+const { getRequestApiKey } = require("./userCredentials");
 
 function createModelError(message, statusCode, code) {
   const error = new Error(message);
@@ -13,7 +14,6 @@ const MODEL_REGISTRY = {
   "qwen3-vl-plus": {
     provider: "dashscope",
     baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
-    apiKeyEnv: "DASHSCOPE_API_KEY",
     contextWindow: 262144,
     preferredOutputTokens: 4000,
     supportsVision: true,
@@ -21,49 +21,37 @@ const MODEL_REGISTRY = {
   "qwen-plus": {
     provider: "dashscope",
     baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
-    apiKeyEnv: "DASHSCOPE_API_KEY",
     contextWindow: 131072,
     preferredOutputTokens: 4000,
   },
   "qwen-math-turbo": {
     provider: "dashscope",
     baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
-    apiKeyEnv: "DASHSCOPE_API_KEY",
     contextWindow: 32768,
     preferredOutputTokens: 4000,
   },
   "qwen-flash": {
     provider: "dashscope",
     baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
-    apiKeyEnv: "DASHSCOPE_API_KEY",
     contextWindow: 32768,
     preferredOutputTokens: 4000,
   },
   "qwen-max": {
     provider: "dashscope",
     baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
-    apiKeyEnv: "DASHSCOPE_API_KEY",
     contextWindow: 32768,
-    preferredOutputTokens: 4000,
-  },
-  "kimi-k2.5": {
-    provider: "moonshot",
-    baseURL: "https://api.moonshot.cn/v1",
-    apiKeyEnv: "KIMI_API_KEY",
-    contextWindow: 128000,
     preferredOutputTokens: 4000,
   },
   "deepseek-v4-pro": {
     provider: "deepseek",
     baseURL: "https://api.deepseek.com/v1",
-    apiKeyEnv: "DEEPSEEK_API_KEY",
     contextWindow: 128000,
     preferredOutputTokens: 4000,
   },
 };
-// 校验模型名是否合法，并返回对应的模型配置（包含API Key）
+// 校验模型名，仅返回公共模型配置；凭据由当前请求提供。
 function assertSupportedModel(modelName) {
-  const config = MODEL_REGISTRY[modelName];
+  const config = Object.hasOwn(MODEL_REGISTRY, modelName) ? MODEL_REGISTRY[modelName] : null;
   if (!config) {
     throw createModelError(
       `unsupported model: ${modelName}`,
@@ -72,24 +60,14 @@ function assertSupportedModel(modelName) {
     );
   }
 
-  // 每个模型绑定独立的环境变量名，运行时强制校验。
-  const apiKey = process.env[config.apiKeyEnv];
-  if (!apiKey) {
-    throw createModelError(
-      `missing API key for model ${modelName}; expected env ${config.apiKeyEnv}`,
-      503,
-      "MISSING_MODEL_API_KEY",
-    );
-  }
-
-  return { ...config, apiKey };
+  return { ...config };
 }
 // 根据模型名获取对应的OpenAI客户端实例和模型配置
 function getClientForModel(modelName = "qwen-plus") {
   const config = assertSupportedModel(modelName);
   return {
     client: new OpenAI({
-      apiKey: config.apiKey,
+      apiKey: getRequestApiKey(config.provider),
       baseURL: config.baseURL,
     }),
     model: modelName,
@@ -99,12 +77,12 @@ function getClientForModel(modelName = "qwen-plus") {
 function getLangChainModelForName(modelName = "qwen-plus", options = {}) {
   const config = assertSupportedModel(modelName);
   return new ChatOpenAI({
+    ...options,
     model: modelName,
-    apiKey: config.apiKey,
+    apiKey: getRequestApiKey(config.provider),
     configuration: {
       baseURL: config.baseURL,
     },
-    ...options,
   });
 }
 

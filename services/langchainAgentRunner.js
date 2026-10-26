@@ -360,7 +360,7 @@ async function runLocalRagRetrieval({ query, historyForTools, observer }) {
       contextHit: false,
       durationMs: Date.now() - startedAt,
       mode: "direct_chat",
-      errorMessage: String(error?.message || error),
+      errorMessage: "知识库检索暂不可用",
     });
     return {
       mode: "direct_chat",
@@ -368,7 +368,7 @@ async function runLocalRagRetrieval({ query, historyForTools, observer }) {
       meta: {
         fallbackFrom: "local_rag",
         reason: "retrieval_error",
-        message: String(error?.message || error),
+        message: "知识库检索暂不可用，请检查个人百炼 Key 和知识库服务",
       },
     };
   }
@@ -488,7 +488,7 @@ function createInstrumentedSummaryModel(
         triggerTokens,
         keepMessages,
         method: "invoke",
-        errorMessage: String(error?.message || error),
+        errorMessage: "摘要模型调用失败，请检查个人 Key、权限与额度",
       });
       throw error;
     }
@@ -861,8 +861,8 @@ function resolveSummaryModelName(primaryModel) {
 
   try {
     const summaryConfig = assertSupportedModel(configured);
-    // Attachment conversations stay with the provider authorized for their primary model.
-    if (MODEL_REGISTRY[primaryModel]?.provider === "dashscope" && summaryConfig.provider !== "dashscope") return primaryModel;
+    // Summaries use the same provider credentials as the primary model.
+    if (MODEL_REGISTRY[primaryModel]?.provider !== summaryConfig.provider) return primaryModel;
     return configured;
   } catch (error) {
     return primaryModel;

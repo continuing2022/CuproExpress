@@ -10,6 +10,8 @@ const attachmentRepo = require("../repositories/attachmentRepo");
 const attachmentStorage = require("../services/attachmentStorage");
 const { normalizeAttachmentIds, buildMessageContent } = require("../services/attachmentContent");
 const { assertSupportedModel } = require("../services/modelRegistry");
+const userApiKeyRepo = require("../repositories/userApiKeyRepo");
+const { withCredentials, getRequestApiKey } = require("../services/userCredentials");
 const {
   initSse,
   writeEvent,
@@ -63,6 +65,8 @@ router.post("/", authMiddleware, async (req, res) => {
     const normalizedTitle = normalizeOptionalText(title);
     const normalizedModel = normalizeOptionalText(model) || "qwen-plus";
     const modelConfig = assertSupportedModel(normalizedModel);
+    const userKeys = await userApiKeyRepo.load(userId);
+    withCredentials(userKeys, () => getRequestApiKey(modelConfig.provider));
     if (ids.length && modelConfig.provider !== "dashscope") return sendError(res, 400, "附件仅使用阿里云模型分析，请选择 Qwen 系列模型");
     const attachments = [];
     for (const id of ids) {
@@ -163,7 +167,7 @@ router.post("/", authMiddleware, async (req, res) => {
       saveAssistantMessage().catch(() => {});
     });
 
-    const result = await chatOrchestrator.run({
+    const result = await withCredentials(userKeys, () => chatOrchestrator.run({
       conversationId: currentConversationId,
       content: modelContent,
       model: normalizedModel,
@@ -198,7 +202,7 @@ router.post("/", authMiddleware, async (req, res) => {
         fullResponse += safeChunk;
         writeEvent(res, "chunk", { chunk: safeChunk });
       },
-    });
+    }));
 
     if (!fullResponse && result.fullResponse) {
       fullResponse = String(result.fullResponse);
@@ -237,21 +241,25 @@ router.post("/", authMiddleware, async (req, res) => {
     });
     return res.end();
   } catch (error) {
-    observer?.fail({
-      error,
-      stage: "conversation_route",
-      streamClosedEarly: res.headersSent,
-    });
     const statusCode =
       Number.isInteger(error?.statusCode) && error.statusCode >= 400
         ? error.statusCode
         : 500;
-    const publicMessage =
-      statusCode === 500 ? "AI service error" : error.message;
+    const upstreamStatus = Number(error?.status);
+    const publicMessage = upstreamStatus === 401 || upstreamStatus === 403
+      ? "模型服务拒绝了你的 API Key，请在模型服务设置中检查密钥和权限"
+      : upstreamStatus === 402 ? "模型服务余额不足，请检查你的服务商账户"
+      : upstreamStatus === 429 ? "模型服务额度不足或请求过于频繁，请检查你的账户额度后重试"
+      : statusCode === 500 ? "AI service error" : error.message;
+    observer?.fail({
+      error: new Error(publicMessage),
+      stage: "conversation_route",
+      streamClosedEarly: res.headersSent,
+    });
 
     if (!res.headersSent) {
       if (statusCode === 500) {
-        return sendInternalError(res, error);
+        return sendError(res, upstreamStatus ? 502 : 500, publicMessage);
       }
       return sendError(res, statusCode, publicMessage);
     }

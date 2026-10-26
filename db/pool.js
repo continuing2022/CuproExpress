@@ -46,6 +46,18 @@ async function ensureTables() {
   `);
 
   await pool.query(`
+    CREATE TABLE IF NOT EXISTS user_api_keys (
+      user_id INT NOT NULL,
+      provider VARCHAR(32) NOT NULL,
+      encrypted_key TEXT NOT NULL,
+      key_last_four CHAR(4) NOT NULL,
+      updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+      PRIMARY KEY (user_id, provider),
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `);
+
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS conversations (
       conversation_id CHAR(36) PRIMARY KEY,
       user_id INT NOT NULL,
