@@ -185,6 +185,7 @@ router.post("/login", async (req, res) => {
       userId: user.id,
       token: refreshToken,
       expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      rememberMe,
     });
     // 登录成功后即设置 HttpOnly 的 refresh token cookie
     setRefreshTokenCookie(res, refreshToken, { rememberMe });
@@ -198,47 +199,39 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/refresh", async (req, res) => {
+  res.setHeader("Cache-Control", "no-store");
+  const refreshToken = readRefreshToken(req);
+  if (!refreshToken) return sendError(res, 401, "refresh token required");
+  let payload;
   try {
-    const refreshToken = readRefreshToken(req);
-    if (!refreshToken) return sendError(res, 401, "refresh token required");
-    // 刷新流程必须同时通过两层校验：
-    // 1) JWT 签名与过期校验
-    // 2) 服务端 token 记录未被撤销
-    const payload = verifyRefreshToken(refreshToken);
-    const stored = await tokenRepo.getRefreshToken(refreshToken);
-    if (!stored || stored.revoked) {
-      return sendError(res, 401, "invalid refresh token");
-    }
-    const expiresAtMs = stored.expires_at
-      ? new Date(stored.expires_at).getTime()
-      : 0;
-    if (!expiresAtMs || expiresAtMs <= Date.now()) {
-      await tokenRepo.revokeRefreshToken(refreshToken);
-      return sendError(res, 401, "refresh token expired");
-    }
-
-    const user = await userRepo.getUserById(payload.id);
-    if (!user || (payload.sv ?? 0) !== (user.session_version || 0)) {
-      return sendError(res, 401, "invalid refresh token");
-    }
-
-    const nextAccessToken = signAccessToken(user);
-    const nextRefreshToken = signRefreshToken(user);
-
-    await tokenRepo.revokeRefreshToken(refreshToken);
-    await tokenRepo.saveRefreshToken({
-      userId: user.id,
-      token: nextRefreshToken,
-      expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-    });
-    setRefreshTokenCookie(res, nextRefreshToken);
-
-    return res.json({
-      accessToken: nextAccessToken,
-    });
-  } catch (error) {
+    payload = verifyRefreshToken(refreshToken);
+  } catch {
     clearRefreshTokenCookie(res);
-    return sendError(res, 401, "refresh token expired");
+    return sendError(res, 401, "invalid refresh token");
+  }
+  try {
+    const result = await tokenRepo.rotateRefreshToken({
+      token: refreshToken,
+      payload,
+      issueTokens: user => ({
+        accessToken: signAccessToken(user),
+        refreshToken: signRefreshToken(user),
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      }),
+    });
+    if (result.status === "conflict") {
+      res.setHeader("Retry-After", "1");
+      return sendError(res, 409, "refresh already rotated", { code: "refresh_conflict" });
+    }
+    if (result.status !== "ok") {
+      clearRefreshTokenCookie(res);
+      return sendError(res, 401, "invalid refresh token");
+    }
+    setRefreshTokenCookie(res, result.refreshToken, { rememberMe: result.rememberMe });
+    return res.json({ accessToken: result.accessToken });
+  } catch {
+    // An infrastructure failure must not destroy an otherwise valid session.
+    return sendError(res, 503, "session refresh temporarily unavailable");
   }
 });
 

@@ -151,7 +151,10 @@ test("one concurrent reset succeeds; old access/refresh credentials are rejected
   assert.ok(state.revoked);
   assert.equal((await fetch(base + "/private", { headers: { Authorization: `Bearer ${access}` } })).status, 401);
   const tokenRepo = require("../repositories/tokenRepo");
-  tokenRepo.getRefreshToken = async () => ({ revoked: false, expires_at: new Date(Date.now() + 100000) });
+  tokenRepo.rotateRefreshToken = async ({ payload }) => {
+    assert.notEqual(payload.sv, state.user.session_version);
+    return { status: "invalid" };
+  };
   assert.equal((await post("/auth/refresh", {}, { Cookie: `${REFRESH_TOKEN_COOKIE_NAME}=${refresh}` })).status, 401);
   const next = auth.signAccessToken(state.user);
   assert.equal((await fetch(base + "/private", { headers: { Authorization: `Bearer ${next}` } })).status, 200);

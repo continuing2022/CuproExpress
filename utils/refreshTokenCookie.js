@@ -14,9 +14,13 @@ function parseCookieHeader(cookieHeader = "") {
       const key = pair.slice(0, separatorIndex).trim();
       const value = pair.slice(separatorIndex + 1).trim();
       if (!key) return accumulator;
-      accumulator[key] = decodeURIComponent(value);
+      try {
+        accumulator[key] = decodeURIComponent(value);
+      } catch {
+        // Ignore malformed cookies, including unrelated cookie values.
+      }
       return accumulator;
-    }, {});
+    }, Object.create(null));
 }
 
 function readRefreshToken(req) {

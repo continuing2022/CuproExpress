@@ -238,11 +238,23 @@ RAG 查询向量使用当前用户的百炼 Key，通过请求头传递给本机
 
 重置凭据使用 32 字节密码学随机数，数据库仅存 SHA-256 哈希，15 分钟有效。链接通过 URL fragment 传递 Token，前端读取后立即移除 URL 中的凭据。`POST /auth/reset-password` 接收 `{ token, password }`，在同一 MySQL 事务内锁定用户、消费凭据、改密、递增会话版本并撤销 Refresh Token；并发提交仅一次成功，过期及重复凭据统一拒绝。
 
-首次执行数据库初始化会自动为已有 `users` 表添加 `session_version`（默认 0），并新建 `password_resets` 表，需具备相应建表和 ALTER 权限。所有鉴权读取用户当前角色及会话版本；旧 JWT 未携带版本时按 0 处理，密码重置或密码、邮箱、角色更新后旧凭据失效，删号后旧 Access Token 失效。该机制是 OPT-02 的基础，Refresh Token 原子轮换和前端统一刷新仍待后续实现。
+首次执行数据库初始化会自动为已有 `users` 表添加 `session_version`（默认 0），并新建 `password_resets` 表，需具备相应建表和 ALTER 权限。所有鉴权读取用户当前角色及会话版本；旧 JWT 未携带版本时按 0 处理，密码重置或密码、邮箱、角色更新后旧凭据失效，删号后旧 Access Token 失效。
 
 回退应先停用密码重置接口并使既有会话失效，再回退应用版本；仅回退代码会丢失会话版本校验，不应恢复旧的直接改密路径。新增表及列可保留，不需为了回退删除数据。
 
 验证：`npm test` 包含 HTTP 边界、模拟邮件、一次性消费、并发、过期、回滚和旧会话失效测试；`node tests/passwordReset.mysql.cjs` 使用当前配置的本机 MySQL 凭据创建独立的随机测试库，验证真实事务与迁移并自动清理，不操作业务库。真实 SMTP 投递需部署配置后联调。SMTP 配置依据 [Nodemailer 官方说明](https://nodemailer.com/smtp)，模拟邮件使用其 [JSON transport](https://nodemailer.com/transports/stream)。
+
+## Refresh Token 轮换与重放检测
+
+Access Token 签发和服务端验证均限制为 15 分钟，旧的 8 小时 Token 也受此限制；Refresh Token 有效期仍为 7 天，每次签发带随机 UUID `jti`。轮换先锁定用户，再锁定旧 Token，在同一事务内检查会话版本和有效期、消费旧 Token、保存新 Token 哈希；插入失败时回滚。密码重置与轮换使用一致的锁顺序，改密或降权后不能通过并发刷新延续旧会话。
+
+同一旧 Token 在轮换后 5 秒内重复提交，返回 `409` 和 `code: refresh_conflict`，不签发凭据也不清 Cookie。前端在支持 Web Locks 时跨同源标签页串行刷新；不支持时对该冲突有限重试，使用浏览器最新 Cookie，不向重复请求返回后继 Token。超过 5 秒仍重放已消费且未过期的 Token，服务端递增用户会话版本并撤销该用户所有 Refresh Token，要求各设备重新登录。该策略优先控制凭据泄露；无 Web Locks 的跨标签页请求若长时间延迟，仍可能需要重新登录。
+
+`/auth/refresh` 的认证失败返回 401 并清理 Cookie；数据库等基础设施故障返回 503，回滚并保留 Cookie，前端不会因此主动清空会话。畸形 Cookie 值被忽略，不影响其他正常 Cookie。轮换保留登录时的 `rememberMe`，未勾选时仍使用会话 Cookie。
+
+数据库初始化会为 `refresh_tokens` 增加 `rotated_at` 和 `remember_me`，不删除历史数据；已有 Token 支持原始值和哈希两种查询方式，历史同值重复行会一起消费。旧记录没有 `rememberMe` 信息，按历史持久 Cookie 行为默认 `true`。启动期间请求等待迁移完成；迁移失败会关闭连接池，允许后续重试。部署需同时更新前后端，以识别新的 409 冲突响应。回退旧后端会失去事务轮换和重放防护，不应仅以回退为由删除新字段。
+
+验证：`npm test` 覆盖 Token 生命周期、随机 `jti`、Cookie 解析和既有功能；`node tests/authRefresh.mysql.cjs` 在随机创建的本机 `cupro_refresh_test_*` 测试库验证旧表迁移、HTTP 并发轮换、插入失败回滚、重放撤销、记住我、改密/降权/删号及旧 Token 兼容，结束后自动删除测试库。
 
 ## 前端联调
 

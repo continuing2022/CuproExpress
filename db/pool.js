@@ -161,11 +161,25 @@ async function ensureTables() {
       INDEX idx_user_id (user_id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
   `);
+
+  for (const [name, definition] of [
+    ["rotated_at", "DATETIME(3) NULL"],
+    ["remember_me", "BOOLEAN NOT NULL DEFAULT TRUE"],
+  ]) {
+    const [columns] = await pool.query("SHOW COLUMNS FROM refresh_tokens LIKE ?", [name]);
+    if (!columns.length) {
+      try {
+        await pool.query(`ALTER TABLE refresh_tokens ADD COLUMN ${name} ${definition}`);
+      } catch (error) {
+        if (error.code !== "ER_DUP_FIELDNAME") throw error;
+      }
+    }
+  }
 }
 
 async function initializePool() {
-  if (pool) return pool;
   if (initPromise) return initPromise;
+  if (pool) return pool;
 
   initPromise = (async () => {
     const config = readDbConfig();
@@ -188,6 +202,10 @@ async function initializePool() {
 
   try {
     return await initPromise;
+  } catch (error) {
+    await pool?.end();
+    pool = undefined;
+    throw error;
   } finally {
     initPromise = null;
   }
