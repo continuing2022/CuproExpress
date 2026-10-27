@@ -45,6 +45,30 @@ async function ensureTables() {
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
   `);
 
+  const [sessionColumns] = await pool.query(
+    "SHOW COLUMNS FROM users LIKE 'session_version'",
+  );
+  if (!sessionColumns.length) {
+    try {
+      await pool.query("ALTER TABLE users ADD COLUMN session_version INT NOT NULL DEFAULT 0");
+    } catch (error) {
+      if (error.code !== "ER_DUP_FIELDNAME") throw error;
+    }
+  }
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS password_resets (
+      token_hash CHAR(64) CHARACTER SET ascii COLLATE ascii_bin PRIMARY KEY,
+      user_id INT NOT NULL,
+      session_version INT NOT NULL,
+      expires_at DATETIME(3) NOT NULL,
+      consumed_at DATETIME(3) NULL,
+      created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+      FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+      INDEX idx_reset_user (user_id, created_at)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  `);
+
   await pool.query(`
     CREATE TABLE IF NOT EXISTS user_api_keys (
       user_id INT NOT NULL,

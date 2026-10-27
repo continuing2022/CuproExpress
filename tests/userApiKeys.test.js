@@ -53,6 +53,7 @@ orchestrator.run = async input => {
   return { fullResponse: "reply", mode: "direct_chat" };
 };
 const jwt = require("jsonwebtoken");
+require("../repositories/userRepo").getUserById = async id => ({ id, role: "admin", session_version: 0 });
 let server, base;
 before(async () => {
   server = require("../index").createApp().listen(0, "127.0.0.1");

@@ -59,6 +59,7 @@ test("builds image blocks and bounded document context without changing text mes
 
 // Stub only external boundaries: no cloud requests or real database writes in these tests.
 process.env.JWT_SECRET = "attachment-test-secret";
+require("../repositories/userRepo").getUserById = async id => ({ id, role: "user", session_version: 0 });
 process.env.REFRESH_SECRET = "attachment-refresh-test-secret";
 process.env.DASHSCOPE_API_KEY = "test-key";
 process.env.DEEPSEEK_API_KEY = "test-key";

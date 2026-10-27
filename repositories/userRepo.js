@@ -96,6 +96,10 @@ async function updateUser(userId, updates = {}) {
 
   if (sets.length === 0) return null;
 
+  if (["password", "email", "role"].some(key => Object.prototype.hasOwnProperty.call(updates, key))) {
+    sets.push("session_version = session_version + 1");
+  }
+
   params.push(userId);
   await pool.execute(
     `UPDATE users SET ${sets.join(", ")} WHERE id = ?`,

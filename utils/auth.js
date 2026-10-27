@@ -6,13 +6,13 @@ const ACCESS_SECRET = requireEnv("JWT_SECRET");
 const REFRESH_SECRET = requireEnv("REFRESH_SECRET");
 
 function signAccessToken(user) {
-  return jwt.sign({ id: user.id, role: user.role }, ACCESS_SECRET, {
+  return jwt.sign({ id: user.id, role: user.role, sv: user.session_version || 0 }, ACCESS_SECRET, {
     expiresIn: "8h",
   });
 }
 
 function signRefreshToken(user) {
-  return jwt.sign({ id: user.id }, REFRESH_SECRET, {
+  return jwt.sign({ id: user.id, sv: user.session_version || 0 }, REFRESH_SECRET, {
     expiresIn: "7d",
   });
 }
@@ -21,14 +21,18 @@ function verifyRefreshToken(token) {
   return jwt.verify(token, REFRESH_SECRET);
 }
 
-function authMiddleware(req, res, next) {
+async function authMiddleware(req, res, next) {
   const authHeader = req.headers.authorization || "";
   const token = authHeader.replace(/^Bearer\s+/i, "");
   if (!token) return sendError(res, 401, "token required");
 
   try {
     const payload = jwt.verify(token, ACCESS_SECRET);
-    req.user = { id: payload.id, role: payload.role };
+    const user = await require("../repositories/userRepo").getUserById(payload.id);
+    if (!user || (payload.sv ?? 0) !== (user.session_version || 0)) {
+      return sendError(res, 401, "invalid token");
+    }
+    req.user = { id: user.id, role: user.role };
     return next();
   } catch (error) {
     return sendError(res, 401, "invalid token");

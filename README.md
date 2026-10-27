@@ -1,5 +1,7 @@
 # CuproExpress
 
+后续优化与验收依据见 [CuproAgent 优化计划](../docs/optimization-plan.md)，包含认证安全、会话与流式状态、前端性能及 RAG 优化的优先级和进度。
+
 CuproExpress 是 CuproAgent 的后端服务，提供用户认证、会话管理、AI 对话编排、私有知识库 RAG 检索和可选联网搜索能力。项目使用 Express + MySQL 承载业务接口，通过 LangChain 调用多模型服务，并可自动启动本地 FastAPI RAG 服务。
 
 ## 功能概览
@@ -128,7 +130,8 @@ RAG 服务会读取 `RAG_DATA_DIR` 指向的本地知识库目录，启动时仅
 | `POST` | `/auth/login` | 登录并写入 refresh token cookie |
 | `POST` | `/auth/refresh` | 刷新 access token |
 | `POST` | `/auth/logout` | 退出并吊销 refresh token |
-| `POST` | `/auth/forgot-password` | 重置密码，生产环境默认只接受请求 |
+| `POST` | `/auth/forgot-password` | 用邮箱申请重置邮件，统一返回 202 |
+| `POST` | `/auth/reset-password` | 用一次性 Token 和新密码完成重置 |
 | `GET` | `/auth/me` | 获取当前用户 |
 
 管理员接口：
@@ -220,7 +223,26 @@ RAG 查询向量使用当前用户的百炼 Key，通过请求头传递给本机
 | `LANGCHAIN_SUMMARY_KEEP_MESSAGES` | `20` | 摘要后保留的最近消息数 |
 | `OBSERVE_CHAT_METRICS` | `1` | 是否开启对话指标记录 |
 | `OBSERVE_CHAT_VERBOSE` | `0` | 是否输出更详细观测信息 |
-| `ALLOW_INSECURE_PASSWORD_RESET` | 空 | 生产环境是否允许直接改密，设置 `1` 才开启 |
+| `MAIL_TRANSPORT` | `smtp` | `smtp` 发送邮件；非生产环境可显式设置 `json` 生成模拟邮件 |
+| `PASSWORD_RESET_URL` | 开发环境 `http://localhost:5173/login` | 前端重置入口；生产必须显式配置 HTTPS URL |
+| `MAIL_FROM` | 无 | SMTP 发件人，使用 SMTP 时必填 |
+| `SMTP_HOST` | 无 | SMTP 服务器，使用 SMTP 时必填 |
+| `SMTP_PORT` / `SMTP_SECURE` | `587` / `false` | 587 使用 STARTTLS；465 配置 `true` 使用隐式 TLS |
+| `SMTP_USER` / `SMTP_PASSWORD` | 无 | SMTP 登录凭据，依服务商要求配置 |
+
+## 密码找回与会话撤销
+
+配置参考 [password-reset.env.example](./password-reset.env.example)。开发测试显式设置 `MAIL_TRANSPORT=json` 后，邮件写入后端 `.local-mail/`，打开 JSON 的 `text` 中的链接即可走完整前端流程；该目录已忽略，不应提交或通过静态服务器公开，测试后可删除。生产环境强制 SMTP 和 HTTPS 重置入口，缺少配置时所有有效邮箱请求均返回 503；旧的 `ALLOW_INSECURE_PASSWORD_RESET` 已移除，不再允许直接凭邮箱改密。
+
+申请接口仅接受邮箱；已注册、未注册、发送冷却期内及邮件发送失败均采用相同的 202 响应。每个账户 60 秒内至多创建一次重置申请。SMTP 投递异步执行，失败删除本次凭据并记录不含敏感信息的日志；邮件任务目前未持久化，进程退出导致未投递时需重新申请。生产还应由网关按来源限制请求速率。
+
+重置凭据使用 32 字节密码学随机数，数据库仅存 SHA-256 哈希，15 分钟有效。链接通过 URL fragment 传递 Token，前端读取后立即移除 URL 中的凭据。`POST /auth/reset-password` 接收 `{ token, password }`，在同一 MySQL 事务内锁定用户、消费凭据、改密、递增会话版本并撤销 Refresh Token；并发提交仅一次成功，过期及重复凭据统一拒绝。
+
+首次执行数据库初始化会自动为已有 `users` 表添加 `session_version`（默认 0），并新建 `password_resets` 表，需具备相应建表和 ALTER 权限。所有鉴权读取用户当前角色及会话版本；旧 JWT 未携带版本时按 0 处理，密码重置或密码、邮箱、角色更新后旧凭据失效，删号后旧 Access Token 失效。该机制是 OPT-02 的基础，Refresh Token 原子轮换和前端统一刷新仍待后续实现。
+
+回退应先停用密码重置接口并使既有会话失效，再回退应用版本；仅回退代码会丢失会话版本校验，不应恢复旧的直接改密路径。新增表及列可保留，不需为了回退删除数据。
+
+验证：`npm test` 包含 HTTP 边界、模拟邮件、一次性消费、并发、过期、回滚和旧会话失效测试；`node tests/passwordReset.mysql.cjs` 使用当前配置的本机 MySQL 凭据创建独立的随机测试库，验证真实事务与迁移并自动清理，不操作业务库。真实 SMTP 投递需部署配置后联调。SMTP 配置依据 [Nodemailer 官方说明](https://nodemailer.com/smtp)，模拟邮件使用其 [JSON transport](https://nodemailer.com/transports/stream)。
 
 ## 前端联调
 

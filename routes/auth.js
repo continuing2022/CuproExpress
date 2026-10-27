@@ -1,5 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
+const { randomBytes } = require("node:crypto");
 const { userRepo, tokenRepo } = require("../repositories");
 const {
   signAccessToken,
@@ -26,6 +27,8 @@ const {
 } = require("../utils/validators");
 const { toPublicUser, toPublicUsers } = require("../utils/userMapper");
 
+const resetRepo = require("../repositories/passwordResetRepo");
+const resetMail = require("../services/passwordResetMail");
 const router = express.Router();
 
 function sendValidationError(res, fieldErrors) {
@@ -43,11 +46,6 @@ function normalizeUserId(value) {
 function normalizeUserIds(values) {
   if (!Array.isArray(values)) return [];
   return [...new Set(values.map(normalizeUserId).filter(Boolean))];
-}
-
-function allowDirectPasswordReset() {
-  if (process.env.NODE_ENV !== "production") return true;
-  return String(process.env.ALLOW_INSECURE_PASSWORD_RESET || "").trim() === "1";
 }
 
 router.post("/register", async (req, res) => {
@@ -94,42 +92,55 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/forgot-password", async (req, res) => {
+  const startedAt = Date.now();
+  const accepted = async () => {
+    // A common response and minimum duration reduce account enumeration signals.
+    await new Promise(resolve => setTimeout(resolve, Math.max(0, 300 - (Date.now() - startedAt))));
+    return res.status(202).json({ message: "If the account exists, a password reset email will be sent." });
+  };
   try {
-    if (!allowDirectPasswordReset()) {
-      return res.status(202).json({
-        message:
-          "password reset request accepted; verification is required in production",
-      });
-    }
-
     const email = normalizeEmail(req.body?.email);
-    const { password } = req.body;
-    const fieldErrors = {};
-
-    if (!email) {
-      fieldErrors.email = "email required";
-    } else if (!isValidEmail(email)) {
-      fieldErrors.email = "invalid email format";
+    if (!isValidEmail(email)) return sendValidationError(res, { email: "invalid email format" });
+    try {
+      resetMail.configuration();
+    } catch {
+      return sendError(res, 503, "password reset temporarily unavailable");
     }
-    if (!password) {
-      fieldErrors.password = "password required";
-    } else if (!validatePasswordLength(password)) {
-      fieldErrors.password = "password must be at least 6 characters";
-    }
-    if (Object.keys(fieldErrors).length > 0) {
-      return sendValidationError(res, fieldErrors);
-    }
-
     const user = await userRepo.getUserByEmail(email);
-    if (!user) {
-      return sendError(res, 404, "email not registered");
-    }
-
-    await userRepo.updateUser(user.id, {
-      password: await bcrypt.hash(password, 10),
+    if (!user) return await accepted();
+    const token = randomBytes(32).toString("hex");
+    const created = await resetRepo.create({
+      userId: user.id,
+      email,
+      token,
+      expiresAt: new Date(Date.now() + 15 * 60 * 1000),
     });
-    await tokenRepo.revokeRefreshTokensByUserId(user.id);
+    if (created) {
+      // SMTP duration/failure must not reveal whether the account exists.
+      void resetMail.send({ email, token }).catch(async () => {
+        await resetRepo.remove(token);
+        console.error("Password reset delivery failed");
+      }).catch(() => console.error("Password reset delivery cleanup failed"));
+    }
+    return await accepted();
+  } catch (error) {
+    return sendInternalError(res, error);
+  }
+});
 
+router.post("/reset-password", async (req, res) => {
+  res.setHeader("Cache-Control", "no-store");
+  try {
+    const { token, password } = req.body || {};
+    if (typeof token !== "string" || !/^[a-f0-9]{64}$/.test(token)) {
+      return sendError(res, 400, "invalid or expired reset token");
+    }
+    if (!validatePasswordLength(password)) {
+      return sendValidationError(res, { password: "password must be at least 6 characters" });
+    }
+    const consumed = await resetRepo.consume(token, await bcrypt.hash(password, 10));
+    if (!consumed) return sendError(res, 400, "invalid or expired reset token");
+    clearRefreshTokenCookie(res);
     return res.json({ message: "password reset successfully" });
   } catch (error) {
     return sendInternalError(res, error);
@@ -187,12 +198,9 @@ router.post("/login", async (req, res) => {
 });
 
 router.post("/refresh", async (req, res) => {
-  const refreshToken = readRefreshToken(req);
-  if (!refreshToken) {
-    return sendError(res, 401, "refresh token required");
-  }
-
   try {
+    const refreshToken = readRefreshToken(req);
+    if (!refreshToken) return sendError(res, 401, "refresh token required");
     // 刷新流程必须同时通过两层校验：
     // 1) JWT 签名与过期校验
     // 2) 服务端 token 记录未被撤销
@@ -210,7 +218,7 @@ router.post("/refresh", async (req, res) => {
     }
 
     const user = await userRepo.getUserById(payload.id);
-    if (!user) {
+    if (!user || (payload.sv ?? 0) !== (user.session_version || 0)) {
       return sendError(res, 401, "invalid refresh token");
     }
 
