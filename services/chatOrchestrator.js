@@ -11,6 +11,7 @@ async function run({
   observer,
   onRetrieved,
   onChunk,
+  signal,
 }) {
   const startedAt = Date.now();
 
@@ -24,6 +25,7 @@ async function run({
       observer,
       onRetrieved,
       onChunk,
+      signal,
     });
 
     const telemetry = buildTelemetry({

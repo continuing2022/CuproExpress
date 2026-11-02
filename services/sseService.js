@@ -8,48 +8,74 @@ function initSse(res) {
     res.flushHeaders();
   }
 }
-// writeEvent 函数用于向 SSE 客户端发送事件，事件数据会被 JSON.stringify 序列化后发送。
-function writeEvent(res, type, payload = {}) {
-  res.write(`data: ${JSON.stringify({ type, ...payload })}\n\n`);
-}
-// startKeepAlive 函数会定期发送一个注释行（以冒号开头）来保持 SSE 连接活跃，防止被代理服务器或浏览器关闭。
-function startKeepAlive(res, intervalMs = 15000) {
-  return setInterval(() => {
-    try {
-      res.write(": keep-alive\n\n");
-    } catch (error) {
-      // Ignore keep-alive write failures after the stream is gone.
+// A single bounded queue serializes data and heartbeats. Producers await drain
+// so slow clients cannot make model chunks accumulate without a limit.
+function createSseWriter(res, { signal, onFailure, maxPendingBytes = 1024 * 1024, drainTimeoutMs = 15000, keepAliveMs = 15000 } = {}) {
+  const externalSignal = signal;
+  const controller = new AbortController();
+  const forwardAbort = () => controller.abort(externalSignal.reason);
+  externalSignal?.addEventListener("abort", forwardAbort, { once: true });
+  if (externalSignal?.aborted) forwardAbort();
+  signal = controller.signal;
+  let tail = Promise.resolve(), pendingBytes = 0, failure = null, disposed = false;
+  function fail(error) {
+    if (!failure) { failure = error; if (!disposed) onFailure?.(error); }
+    return error;
+  }
+  function write(frame) {
+    const bytes = Buffer.byteLength(frame);
+    if (pendingBytes + bytes > maxPendingBytes) {
+      const rejected = Promise.reject(fail(new Error("SSE output queue exceeded")));
+      rejected.catch(() => {});
+      return rejected;
     }
-  }, intervalMs);
-}
-// attachCloseCleanup 函数用于在请求或响应关闭时执行清理操作，确保资源得到正确释放。
-function attachCloseCleanup(req, res, ...cleanups) {
-  let cleaned = false;
-
-  const runCleanups = () => {
-    if (cleaned) return;
-    cleaned = true;
-    cleanups.forEach((cleanup) => {
-      try {
-        cleanup();
-      } catch (error) {
-        // Ignore cleanup failures so stream shutdown can continue.
-      }
-    });
+    pendingBytes += bytes;
+    const task = tail.then(async () => {
+      if (failure) throw failure;
+      signal?.throwIfAborted();
+      if (disposed || res.destroyed || res.writableEnded) throw new Error("SSE connection closed");
+      if (res.write(frame)) return;
+      await new Promise((resolve, reject) => {
+        const cleanup = () => {
+          clearTimeout(timer);
+          res.removeListener("drain", onDrain);
+          res.removeListener("close", onClose);
+          res.removeListener("error", onError);
+          signal?.removeEventListener("abort", onAbort);
+        };
+        const done = error => { cleanup(); error ? reject(error) : resolve(); };
+        const onDrain = () => done();
+        const onClose = () => done(new Error("SSE connection closed"));
+        const onError = error => done(error);
+        const onAbort = () => done(signal.reason);
+        const timer = setTimeout(() => done(new Error("SSE client drain timed out")), drainTimeoutMs);
+        res.once("drain", onDrain);
+        res.once("close", onClose);
+        res.once("error", onError);
+        signal?.addEventListener("abort", onAbort, { once: true });
+        if (signal?.aborted) onAbort();
+        else if (res.destroyed) onClose();
+        else if (!res.writableNeedDrain) onDrain();
+      });
+    }).catch(error => { throw fail(error); }).finally(() => { pendingBytes -= bytes; });
+    tail = task;
+    task.catch(() => {});
+    return task;
+  }
+  const heartbeat = setInterval(() => {
+    if (!disposed && !pendingBytes && !failure) void write(": keep-alive\n\n");
+  }, keepAliveMs);
+  heartbeat.unref?.();
+  return {
+    event(type, payload = {}) { return write(`data: ${JSON.stringify({ type, ...payload })}\n\n`); },
+    flush() { return tail; },
+    dispose() {
+      disposed = true;
+      clearInterval(heartbeat);
+      controller.abort(new Error("SSE writer disposed"));
+      externalSignal?.removeEventListener("abort", forwardAbort);
+    },
   };
-
-  req.on("aborted", runCleanups);
-  req.on("close", () => {
-    if (req.aborted) {
-      runCleanups();
-    }
-  });
-  res.on("close", runCleanups);
 }
 
-module.exports = {
-  initSse,
-  writeEvent,
-  startKeepAlive,
-  attachCloseCleanup,
-};
+module.exports = { initSse, createSseWriter };

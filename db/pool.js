@@ -124,6 +124,15 @@ async function ensureTables() {
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
   `);
 
+  const [messageStatusColumns] = await pool.query("SHOW COLUMNS FROM messages LIKE 'status'");
+  if (!messageStatusColumns.length) {
+    try {
+      await pool.query("ALTER TABLE messages ADD COLUMN status VARCHAR(16) NOT NULL DEFAULT 'done'");
+    } catch (error) {
+      if (error.code !== "ER_DUP_FIELDNAME") throw error;
+    }
+  }
+
   await pool.query(`
     CREATE TABLE IF NOT EXISTS attachment_cleanup (
       object_key VARCHAR(512) PRIMARY KEY,

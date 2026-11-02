@@ -61,12 +61,12 @@ async function assertConversationOwner(userId, conversationId) {
   return { ok: true, conversation };
 }
 
-async function addMessage(conversationId, role, content) {
+async function addMessage(conversationId, role, content, { status = "done" } = {}) {
   await ready;
   const pool = await getPool();
   const [result] = await pool.execute(
-    "INSERT INTO messages (conversation_id, role, content) VALUES (?, ?, ?)",
-    [conversationId, role, content],
+    "INSERT INTO messages (conversation_id, role, content, status) VALUES (?, ?, ?, ?)",
+    [conversationId, role, content, status],
   );
   await pool.execute(
     "UPDATE conversations SET updated_at = CURRENT_TIMESTAMP WHERE conversation_id = ?",
@@ -77,7 +77,15 @@ async function addMessage(conversationId, role, content) {
     conversation_id: conversationId,
     role,
     content,
+    status,
   };
+}
+
+async function updateAssistantMessage(messageId, content, status) {
+  const pool = await getPool();
+  const [result] = await pool.execute("UPDATE messages SET content = ?, status = ? WHERE message_id = ? AND role = 'assistant' AND status = 'streaming'", [content, status, messageId]);
+  if (result.affectedRows !== 1) throw new Error("Assistant message is missing or already finalized");
+  return { message_id: messageId, content, status };
 }
 
 async function listConversations(userId, page = 1, pageSize = 20) {
@@ -157,7 +165,7 @@ async function getMessages(conversationId, limitOrOptions = null) {
 
   if (!safeLimit) {
     const [rows] = await pool.execute(
-      `SELECT message_id, role, content, created_at
+      `SELECT message_id, role, content, status, created_at
        FROM messages
        WHERE ${where.join(" AND ")}
        ORDER BY created_at ASC, message_id ASC`,
@@ -167,7 +175,7 @@ async function getMessages(conversationId, limitOrOptions = null) {
   }
 
   const [rows] = await pool.execute(
-    `SELECT message_id, role, content, created_at
+    `SELECT message_id, role, content, status, created_at
      FROM messages
      WHERE ${where.join(" AND ")}
      ORDER BY created_at DESC, message_id DESC
@@ -211,7 +219,7 @@ async function getMessagesAfter(
   const limitSql = limit ? ` LIMIT ${limit}` : "";
 
   const [rows] = await pool.execute(
-    `SELECT message_id, role, content, created_at
+    `SELECT message_id, role, content, status, created_at
        FROM messages
       WHERE ${where.join(" AND ")}
       ORDER BY created_at ASC, message_id ASC${limitSql}`,
@@ -317,6 +325,7 @@ module.exports = {
   getConversationById,
   assertConversationOwner,
   addMessage,
+  updateAssistantMessage,
   listConversations,
   getMessages,
   getMessagesAfter,

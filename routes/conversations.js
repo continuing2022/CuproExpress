@@ -4,7 +4,6 @@ const { authMiddleware } = require("../utils/auth");
 const { sendError, sendInternalError } = require("../utils/response");
 const { normalizePagination } = require("../utils/validators");
 const conversationService = require("../services/conversationService");
-const chatOrchestrator = require("../services/chatOrchestrator");
 const { createConversationObserver } = require("../services/observability");
 const attachmentRepo = require("../repositories/attachmentRepo");
 const attachmentStorage = require("../services/attachmentStorage");
@@ -12,12 +11,8 @@ const { normalizeAttachmentIds, buildMessageContent } = require("../services/att
 const { assertSupportedModel } = require("../services/modelRegistry");
 const userApiKeyRepo = require("../repositories/userApiKeyRepo");
 const { withCredentials, getRequestApiKey } = require("../services/userCredentials");
-const {
-  initSse,
-  writeEvent,
-  startKeepAlive,
-  attachCloseCleanup,
-} = require("../services/sseService");
+const { createRequestScope, abortable } = require("../utils/cancellation");
+const { runConversationStream } = require("../services/conversationStream");
 
 const router = express.Router();
 
@@ -45,7 +40,9 @@ function normalizePositiveInteger(value, options = {}) {
 
 router.post("/", authMiddleware, async (req, res) => {
   let observer = null;
+  const scope = createRequestScope(req, res);
   try {
+    scope.signal.throwIfAborted();
     const userId = req.user.id;
     const {
       conversation_id: conversationId,
@@ -65,16 +62,17 @@ router.post("/", authMiddleware, async (req, res) => {
     const normalizedTitle = normalizeOptionalText(title);
     const normalizedModel = normalizeOptionalText(model) || "qwen-plus";
     const modelConfig = assertSupportedModel(normalizedModel);
-    const userKeys = await userApiKeyRepo.load(userId);
+    const userKeys = await abortable(userApiKeyRepo.load(userId), scope.signal);
     withCredentials(userKeys, () => getRequestApiKey(modelConfig.provider));
     if (ids.length && modelConfig.provider !== "dashscope") return sendError(res, 400, "附件仅使用阿里云模型分析，请选择 Qwen 系列模型");
     const attachments = [];
     for (const id of ids) {
-      const file = await attachmentRepo.getOwned(id, userId);
+      const file = await abortable(attachmentRepo.getOwned(id, userId), scope.signal);
       if (!file || file.message_id) return sendError(res, 400, "附件不存在、已发送或无权访问，请重新上传");
-      if (file.mimeType.startsWith("image/")) file.data = await attachmentStorage.get(file.object_key);
+      if (file.mimeType.startsWith("image/")) file.data = await abortable(attachmentStorage.get(file.object_key), scope.signal);
       attachments.push(file);
     }
+    scope.signal.throwIfAborted();
     const modelContent = buildMessageContent(normalizedContent, attachments);
     if (attachments.some((file) => file.mimeType.startsWith("image/")) && !modelConfig.supportsVision) {
       return sendError(res, 400, "图片需要使用视觉模型，请选择 Qwen3-VL-Plus");
@@ -92,12 +90,12 @@ router.post("/", authMiddleware, async (req, res) => {
       networkSearchEnabled: Boolean(normalizedNetworkConfig.search),
     });
 
-    const ensuredConversation = await conversationService.ensureConversation({
+    const ensuredConversation = await abortable(conversationService.ensureConversation({
       userId,
       conversationId,
       title: normalizedTitle,
       content: normalizedContent,
-    });
+    }), scope.signal);
 
     if (!ensuredConversation.ok) {
       observer.fail({
@@ -112,12 +110,13 @@ router.post("/", authMiddleware, async (req, res) => {
     }
 
     const currentConversationId = ensuredConversation.conversationId;
-    if (modelConfig.provider !== "dashscope" && await attachmentRepo.conversationHasAttachments(currentConversationId)) {
+    if (modelConfig.provider !== "dashscope" && await abortable(attachmentRepo.conversationHasAttachments(currentConversationId), scope.signal)) {
       return sendError(res, 400, "此会话包含附件，请选择 Qwen 系列模型继续对话");
     }
-    if (!modelConfig.supportsVision && await attachmentRepo.conversationHasImages(currentConversationId)) {
+    if (!modelConfig.supportsVision && await abortable(attachmentRepo.conversationHasImages(currentConversationId), scope.signal)) {
       return sendError(res, 400, "此会话包含图片，请选择 Qwen3-VL-Plus 继续对话");
     }
+    scope.signal.throwIfAborted();
     observer.setConversationId(currentConversationId);
     const userMessage = await attachmentRepo.addUserMessage(
       currentConversationId,
@@ -126,121 +125,18 @@ router.post("/", authMiddleware, async (req, res) => {
       ids,
     );
 
-    initSse(res);
-    observer.markSseOpened();
-    writeEvent(res, "started", {
-      started: true,
-      conversation_id: currentConversationId,
-      user_message_id: userMessage.message_id,
-    });
-    // 保持连接活跃，防止中间件或代理服务器关闭连接
-    const keepAlive = startKeepAlive(res);
-    let fullResponse = "";
-    let assistantSaved = false;
-    let assistantSavePromise = null;
-    let streamClosed = false;
-
-    async function saveAssistantMessage() {
-      if (assistantSaved || !fullResponse) return null;
-      if (assistantSavePromise) return assistantSavePromise;
-      assistantSavePromise = (async () => {
-        const assistantMessage = await conversationService.addAssistantMessage(
-          currentConversationId,
-          fullResponse,
-        );
-        assistantSaved = true;
-        return assistantMessage;
-      })();
-      try {
-        return await assistantSavePromise;
-      } finally {
-        assistantSavePromise = null;
-      }
-    }
-
-    attachCloseCleanup(req, res, () => {
-      streamClosed = true;
-      clearInterval(keepAlive);
-      observer.abort({
-        reason: req.aborted ? "request_aborted" : "client_closed",
-      });
-      saveAssistantMessage().catch(() => {});
-    });
-
-    const result = await withCredentials(userKeys, () => chatOrchestrator.run({
+    await runConversationStream({
+      req, res, scope, userKeys, observer,
       conversationId: currentConversationId,
-      content: modelContent,
-      model: normalizedModel,
-      networkConfig: normalizedNetworkConfig,
-      pendingMessageId: userMessage.message_id,
-      observer,
-      onRetrieved(retrievalResult) {
-        if (streamClosed) return;
-        const retrievalMeta = retrievalResult.meta || {};
-        const shouldTrackRetrieval =
-          retrievalResult.mode !== "direct_chat" ||
-          Object.keys(retrievalMeta).length > 0;
-        if (shouldTrackRetrieval) {
-          observer.markRetrieved({
-            mode: retrievalResult.mode,
-            meta: retrievalMeta,
-          });
-        }
-        writeEvent(res, "retrieved", {
-          retrieved: true,
-          mode: retrievalResult.mode,
-          meta: retrievalMeta,
-          context_profile: retrievalResult.diagnostics?.contextProfile || {},
-        });
-      },
-      onChunk(chunk) {
-        if (streamClosed) return;
-        const safeChunk = String(chunk || "");
-        if (!safeChunk) return;
-        observer.markFirstChunk(safeChunk);
-        observer.markChunk(safeChunk);
-        fullResponse += safeChunk;
-        writeEvent(res, "chunk", { chunk: safeChunk });
-      },
-    }));
-
-    if (!fullResponse && result.fullResponse) {
-      fullResponse = String(result.fullResponse);
-    }
-
-    const assistantMessage = await saveAssistantMessage();
-
-    clearInterval(keepAlive);
-    if (streamClosed) {
-      observer.finish({
-        fullResponse,
-        mode: result.mode,
-        retrievalMeta: result.retrievalMeta,
-        telemetry: result.telemetry,
-        streamClosedEarly: true,
-        assistantMessageId: assistantMessage?.message_id,
-      });
-      return res.end();
-    }
-
-    writeEvent(res, "done", {
-      done: true,
-      conversation_id: currentConversationId,
-      message_id: assistantMessage?.message_id,
-      mode: result.mode,
-      meta: result.retrievalMeta,
-      diagnostics: result.telemetry,
+      userMessage, content: modelContent,
+      model: normalizedModel, networkConfig: normalizedNetworkConfig,
     });
-    observer.finish({
-      fullResponse,
-      mode: result.mode,
-      retrievalMeta: result.retrievalMeta,
-      telemetry: result.telemetry,
-      streamClosedEarly: false,
-      assistantMessageId: assistantMessage?.message_id,
-    });
-    return res.end();
   } catch (error) {
+    if (res.destroyed) return;
+    if (scope.signal.reason?.code === "chat_timeout" && !res.headersSent) {
+      observer?.fail({ error: new Error("chat timeout"), stage: "conversation_preparation" });
+      return sendError(res, 504, "回答超时，请重试");
+    }
     const statusCode =
       Number.isInteger(error?.statusCode) && error.statusCode >= 400
         ? error.statusCode
@@ -263,8 +159,12 @@ router.post("/", authMiddleware, async (req, res) => {
       }
       return sendError(res, statusCode, publicMessage);
     }
-    writeEvent(res, "error", { error: publicMessage });
-    return res.end();
+    if (!res.destroyed && !res.writableEnded) res.end();
+  } finally {
+    scope.dispose();
+    // Observer terminal methods are idempotent. Cover early validation exits
+    // and disconnects during preparation as well as the normal stream path.
+    observer?.fail({ error: new Error("request ended before stream completion"), stage: "conversation_cleanup", streamClosedEarly: res.headersSent });
   }
 });
 

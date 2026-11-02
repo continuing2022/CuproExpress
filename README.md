@@ -171,7 +171,19 @@ RAG 服务会读取 `RAG_DATA_DIR` 指向的本地知识库目录，启动时仅
 }
 ```
 
-SSE 事件包括 `started`、`retrieved`、`chunk`、`done` 和 `error`。
+SSE 事件包括 `started`、`retrieved`、`chunk`、`done`、`error` 和 `cancelled`。成功、失败和取消均为终态，后续事件被忽略；未收到终态即 EOF 时，前端报告连接中断并释放输入框。
+
+### 流式回答的取消、超时与持久化
+
+`started` 事件包含用户及助手消息 ID。服务端先创建状态为 `streaming` 的助手消息，最终只更新该行：成功为 `done`，断连为 `aborted`，超时为 `timeout`，生成失败为 `error`。中断时保留已生成的部分文本，即使没有正文也保留终态记录；不会把半截回答当作正常完成。历史接口返回 `status`，前端显示未完成标识。模型已完成且已持久化后发生的终止事件投递失败，不回退数据库中的 `done`。
+
+数据库初始化为 `messages` 新增 `status VARCHAR(16) NOT NULL DEFAULT 'done'`，历史消息保持兼容；部署需要 ALTER 权限。进程崩溃或数据库写入失败可能留下 `streaming` 记录，界面会标识为未完成，自动修复和运行恢复归入 OPT-05。异常 Agent checkpoint 会丢弃，重建上下文时跳过未完成的助手消息；长会话恢复边界仍按 OPT-04 继续优化。
+
+认证后的请求默认总时限 120 秒，可用 `CHAT_DEADLINE_MS` 调整；前端传输总时限为 180 秒。断连、手动停止或时限到达会向 LangGraph、摘要模型、搜索 Axios 和 RAG fetch 传播取消信号。RAG 的独立超时包含响应体读取，取消后不重试，重试等待也可取消。前端等待共享认证刷新时仍可立即停止，不取消其他请求共用的刷新。
+
+SSE 写入经过单一队列：`res.write()` 返回 false 时等待 `drain`，Agent 的输出回调会等待写入完成；排队帧限制 1 MiB，等待 drain 默认最多 15 秒，心跳在有待发数据时跳过。关闭时清理监听器和定时器；终态投递单独限时 1 秒，仍失败时销毁连接。LangGraph/模型 SDK 可能有内部预取；提供商是否停止已开始的服务端计算由其取消实现决定。关闭本机 RAG HTTP 请求也不能强制中断 Python 中已经执行的同步检索线程。
+
+验证：`npm test` 包含断连、超时、终态唯一性、部分回答保存、背压/队列限制，以及 Agent、搜索和 RAG 取消测试；`node tests/ssePersistence.mysql.cjs` 使用随机 `cupro_sse_test_*` 本机测试库验证新增列、默认值、终态更新和历史读取，完成后自动清理，不操作业务数据库。
 
 ## 支持的模型
 

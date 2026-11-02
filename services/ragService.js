@@ -7,9 +7,12 @@ const DEFAULT_RAG_URL =
   process.env.RAG_SERVICE_URL || "http://localhost:8001/rag/retrieve";
 const LOCAL_HOSTS = new Set(["localhost", "127.0.0.1", "::1"]);
 const { getRequestApiKey } = require("./userCredentials");
+const { abortable } = require("../utils/cancellation");
 
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+async function sleep(ms, signal) {
+  let timer;
+  try { await abortable(new Promise(resolve => { timer = setTimeout(resolve, ms); }), signal); }
+  finally { clearTimeout(timer); }
 }
 
 function isLocalRagUrl(rawUrl) {
@@ -40,28 +43,36 @@ function isRetryableLocalFetchError(error) {
   return /fetch failed|network/i.test(String(error?.message || ""));
 }
 
-async function fetchWithTimeout(fetchImpl, url, payload, timeoutMs, apiKey) {
+async function fetchWithTimeout(fetchImpl, url, payload, timeoutMs, apiKey, signal) {
   const controller =
     typeof AbortController !== "undefined" ? new AbortController() : null;
   const timer = controller
     ? setTimeout(() => controller.abort(), timeoutMs)
     : null;
+  const onAbort = () => controller?.abort(signal.reason);
+  signal?.addEventListener("abort", onAbort, { once: true });
 
   try {
-    return await fetchImpl(url, {
+    signal?.throwIfAborted();
+    const response = await abortable(fetchImpl(url, {
       method: "POST",
       headers: { "Content-Type": "application/json", "X-Dashscope-Api-Key": apiKey },
       redirect: "error",
       body: JSON.stringify(payload),
       signal: controller?.signal,
-    });
+    }), controller?.signal);
+    if (!response.ok) throw new Error(`知识库检索暂不可用（${response.status}），请检查个人百炼 Key 和知识库索引`);
+    // Keep the deadline active while consuming the body, not only headers.
+    return await abortable(response.json(), controller?.signal);
   } finally {
+    signal?.removeEventListener("abort", onAbort);
     if (timer) clearTimeout(timer);
   }
 }
 
 // 提供一个函数 retrieveContext 来调用 RAG 服务，获取与用户查询相关的上下文信息
-async function retrieveContext({ query, history, options = {} }) {
+async function retrieveContext({ query, history, options = {}, signal = options.signal }) {
+  signal?.throwIfAborted();
   const apiKey = getRequestApiKey("dashscope", false);
   if (!apiKey) return {
     mode: "direct_chat", contextText: "",
@@ -82,19 +93,15 @@ async function retrieveContext({ query, history, options = {} }) {
   for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
     try {
       // 向 RAG 服务发送 POST 请求，包含用户的查询和对话历史
-      const response = await fetchWithTimeout(
+      const data = await fetchWithTimeout(
         fetchImpl,
         ragUrl,
         { query, history },
         timeoutMs,
         apiKey,
+        signal,
       );
-
-      if (!response.ok) {
-        throw new Error(`知识库检索暂不可用（${response.status}），请检查个人百炼 Key 和知识库索引`);
-      }
-
-      const data = await response.json();
+      signal?.throwIfAborted();
       return {
         mode: data.mode || "local_rag",
         contextText: data.contextText || "",
@@ -104,12 +111,13 @@ async function retrieveContext({ query, history, options = {} }) {
         },
       };
     } catch (error) {
+      signal?.throwIfAborted();
       const shouldRetry =
         attempt < maxAttempts &&
         isLocalRagUrl(ragUrl) &&
         isRetryableLocalFetchError(error);
       if (!shouldRetry) throw error;
-      if (retryDelayMs > 0) await sleep(retryDelayMs);
+      if (retryDelayMs > 0) await sleep(retryDelayMs, signal);
     }
   }
 }

@@ -43,8 +43,8 @@ async function addUserMessage(conversationId, content) {
   return conversationRepo.addMessage(conversationId, "user", String(content || ""));
 }
 
-async function addAssistantMessage(conversationId, content) {
-  return conversationRepo.addMessage(conversationId, "assistant", String(content || ""));
+async function addAssistantMessage(conversationId, content, options) {
+  return conversationRepo.addMessage(conversationId, "assistant", String(content || ""), options);
 }
 
 async function getHistory(conversationId, limit = 10) {
@@ -55,5 +55,6 @@ module.exports = {
   ensureConversation,
   addUserMessage,
   addAssistantMessage,
+  updateAssistantMessage: (...args) => conversationRepo.updateAssistantMessage(...args),
   getHistory,
 };

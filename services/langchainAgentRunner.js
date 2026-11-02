@@ -48,11 +48,13 @@ function createSummaryMiddleware(
   triggerTokens,
   keepMessages,
   observer,
+  signal,
 ) {
   return summarizationMiddleware({
     model: createInstrumentedSummaryModel(summaryModelName, observer, {
       triggerTokens,
       keepMessages,
+      signal,
     }),
     trigger: { tokens: triggerTokens },
     keep: { messages: keepMessages },
@@ -69,6 +71,7 @@ function createConfiguredAgent({
   keepMessages,
   observer,
   tools = [],
+  signal,
 }) {
   return createAgent({
     model: getLangChainModelForName(modelName, {
@@ -85,12 +88,13 @@ function createConfiguredAgent({
         triggerTokens,
         keepMessages,
         observer,
+        signal,
       ),
     ],
   });
 }
 
-async function run({
+async function executeRun({
   conversationId,
   content,
   model,
@@ -99,7 +103,9 @@ async function run({
   observer,
   onRetrieved,
   onChunk,
+  signal,
 }) {
+  signal?.throwIfAborted();
   const historyLimit = readIntEnv(
     "LANGCHAIN_HISTORY_LIMIT",
     DEFAULT_HISTORY_LIMIT,
@@ -119,6 +125,7 @@ async function run({
     { min: 4, max: 20 },
   );
   const runConfig = {
+    signal,
     configurable: {
       thread_id: String(conversationId),
     },
@@ -126,6 +133,7 @@ async function run({
 
   const state =
     await conversationStateRepo.ensureConversationState(conversationId);
+  signal?.throwIfAborted();
   const persistedSummary = String(state?.running_summary || "").trim();
   const summaryModelName = resolveSummaryModelName(model);
   const networkSearchEnabled = Boolean(networkConfig?.search);
@@ -138,6 +146,7 @@ async function run({
     keepMessages: summaryKeepMessages,
     observer,
     tools: [],
+    signal,
   });
   // 恢复当前对话的记忆
   await ensureThreadSeeded({
@@ -168,12 +177,14 @@ async function run({
     summaryUsed,
     recentCount: recentMessageCount,
   });
-  retrievalTracker.reportInitial();
+  signal?.throwIfAborted();
+  await retrievalTracker.reportInitial();
   const tools = createRetrievalTools({
     historyForTools,
     networkSearchEnabled,
     retrievalTracker,
     observer,
+    signal,
   });
   const runAgent = createConfiguredAgent({
     modelName: model,
@@ -183,6 +194,7 @@ async function run({
     keepMessages: summaryKeepMessages,
     observer,
     tools,
+    signal,
   });
 
   let fullResponse = "";
@@ -198,6 +210,7 @@ async function run({
   );
   // 处理流式输出，提取消息块、最新状态和使用情况，并通过 onChunk 回调增量返回响应内容
   for await (const event of stream) {
+    signal?.throwIfAborted();
     if (!Array.isArray(event) || event.length < 2) continue;
     const [mode, payload] = event;
     if (mode === "messages") {
@@ -205,7 +218,7 @@ async function run({
       const chunk = extractAssistantChunk(message, metadata);
       if (chunk) {
         fullResponse += chunk;
-        onChunk(chunk);
+        await onChunk?.(chunk);
       }
 
       const usageSnapshot = extractUsage(message);
@@ -220,6 +233,7 @@ async function run({
     }
   }
 
+  signal?.throwIfAborted();
   if (!fullResponse) {
     const fallbackResponse = extractFinalAssistantText(
       latestState?.messages || [],
@@ -227,7 +241,7 @@ async function run({
     if (fallbackResponse) {
       fullResponse = fallbackResponse;
       if (typeof onChunk === "function") {
-        onChunk(fallbackResponse);
+        await onChunk(fallbackResponse);
       }
     }
   }
@@ -242,6 +256,7 @@ async function run({
   const summaryText =
     summaryPayload?.summaryText || summaryFromState?.summaryText || "";
   // 持久化总结到数据库，并返回是否更新了总结
+  signal?.throwIfAborted();
   const summaryRefreshed = await persistSummary({
     conversationId,
     pendingMessageId,
@@ -285,6 +300,7 @@ function createRetrievalTools({
   networkSearchEnabled,
   retrievalTracker,
   observer,
+  signal,
 }) {
   const localRagTool = tool(
     async ({ query }) => {
@@ -292,8 +308,10 @@ function createRetrievalTools({
         query,
         historyForTools,
         observer,
+        signal,
       });
-      retrievalTracker.capture(retrieval);
+      signal?.throwIfAborted();
+      await retrievalTracker.capture(retrieval);
       return formatToolResult(retrieval);
     },
     {
@@ -316,8 +334,10 @@ function createRetrievalTools({
         query,
         historyForTools,
         observer,
+        signal,
       });
-      retrievalTracker.capture(retrieval);
+      signal?.throwIfAborted();
+      await retrievalTracker.capture(retrieval);
       return formatToolResult(retrieval);
     },
     {
@@ -333,13 +353,14 @@ function createRetrievalTools({
   return [localRagTool, webSearchTool];
 }
 
-async function runLocalRagRetrieval({ query, historyForTools, observer }) {
+async function runLocalRagRetrieval({ query, historyForTools, observer, signal }) {
   const startedAt = Date.now();
   try {
     const result = await ragService.retrieveContext({
       query,
       history: historyForTools,
-      options: {},
+      options: { signal },
+      signal,
     });
     const normalized = normalizeRetrievalResult(result, "local_rag");
     observer?.recordToolCall({
@@ -353,6 +374,7 @@ async function runLocalRagRetrieval({ query, historyForTools, observer }) {
     });
     return normalized;
   } catch (error) {
+    signal?.throwIfAborted();
     observer?.recordToolCall({
       toolName: "local_rag_retrieve",
       query,
@@ -374,13 +396,14 @@ async function runLocalRagRetrieval({ query, historyForTools, observer }) {
   }
 }
 
-async function runWebSearchRetrieval({ query, historyForTools, observer }) {
+async function runWebSearchRetrieval({ query, historyForTools, observer, signal }) {
   const startedAt = Date.now();
   try {
     const result = await searchTool.retrieveContext({
       query,
       history: historyForTools,
-      options: {},
+      options: { signal },
+      signal,
     });
     const normalized = normalizeRetrievalResult(result, "web_search");
     observer?.recordToolCall({
@@ -394,6 +417,7 @@ async function runWebSearchRetrieval({ query, historyForTools, observer }) {
     });
     return normalized;
   } catch (error) {
+    signal?.throwIfAborted();
     observer?.recordToolCall({
       toolName: "web_search_retrieve",
       query,
@@ -454,7 +478,7 @@ function formatToolResult(retrieval) {
 function createInstrumentedSummaryModel(
   summaryModelName,
   observer,
-  { triggerTokens, keepMessages },
+  { triggerTokens, keepMessages, signal },
 ) {
   const model = getLangChainModelForName(summaryModelName, {
     temperature: 0.1,
@@ -470,7 +494,9 @@ function createInstrumentedSummaryModel(
   model.invoke = async (...args) => {
     const startedAt = Date.now();
     try {
-      const result = await originalInvoke(...args);
+      signal?.throwIfAborted();
+      const result = await originalInvoke(args[0], { ...args[1], signal });
+      signal?.throwIfAborted();
       observer?.recordSummaryCall({
         success: true,
         durationMs: Date.now() - startedAt,
@@ -509,15 +535,15 @@ function createRetrievalTracker({ onRetrieved, summaryUsed, recentCount }) {
     mode: "direct_chat",
     meta: {},
     contextTokens: 0,
-    reportInitial() {
+    async reportInitial() {
       if (typeof onRetrieved !== "function") return;
-      onRetrieved({
+      await onRetrieved({
         mode: this.mode,
         meta: this.meta,
         diagnostics: { contextProfile },
       });
     },
-    capture(retrieval) {
+    async capture(retrieval) {
       const mode = String(retrieval?.mode || "direct_chat");
       const meta = isPlainObject(retrieval?.meta) ? retrieval.meta : {};
       const contextText = String(retrieval?.contextText || "");
@@ -533,7 +559,7 @@ function createRetrievalTracker({ onRetrieved, summaryUsed, recentCount }) {
       this.meta = meta;
 
       if (typeof onRetrieved === "function") {
-        onRetrieved({
+        await onRetrieved({
           mode,
           meta,
           diagnostics: {
@@ -587,6 +613,7 @@ async function ensureThreadSeeded({
   historyLimit,
 }) {
   const existingState = await safeGetThreadState(agent, runConfig);
+  runConfig.signal?.throwIfAborted();
   if (getStateMessages(existingState).length > 0) {
     return;
   }
@@ -604,6 +631,8 @@ async function ensureThreadSeeded({
     seedMessages.push(buildSummaryMessage(persistedSummary));
   }
   for (const message of historicalMessages) {
+    runConfig.signal?.throwIfAborted();
+    if (message.role === "assistant" && message.status && message.status !== "done") continue;
     seedMessages.push({
       role: message.role,
       content: buildMessageContent(message.content, await attachmentRepo.forMessages([message.message_id], true)),
@@ -614,6 +643,7 @@ async function ensureThreadSeeded({
     return;
   }
 
+  runConfig.signal?.throwIfAborted();
   await agent.updateState(runConfig, { messages: seedMessages });
 }
 
@@ -823,6 +853,7 @@ async function safeGetThreadState(agent, runConfig) {
   try {
     return await agent.getState(runConfig);
   } catch (error) {
+    runConfig.signal?.throwIfAborted();
     return { values: { messages: [] } };
   }
 }
@@ -896,6 +927,17 @@ function isPlainObject(value) {
 
 function escapeRegExp(value) {
   return String(value || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+async function run(options) {
+  try {
+    return await executeRun(options);
+  } catch (error) {
+    // Discard interrupted tool/checkpoint state. The next request seeds from
+    // persisted summary and completed messages rather than a partial tool call.
+    await sharedCheckpointer.deleteThread(String(options.conversationId));
+    throw error;
+  }
 }
 
 module.exports = {

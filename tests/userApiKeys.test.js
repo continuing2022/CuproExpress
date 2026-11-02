@@ -40,6 +40,7 @@ let messageWrites = 0;
 let captured = [];
 conversationService.ensureConversation = async () => ({ ok: true, conversationId: "test-conversation" });
 conversationService.addAssistantMessage = async () => ({ message_id: 2 });
+conversationService.updateAssistantMessage = async () => ({});
 attachmentRepo.conversationHasAttachments = async () => false;
 attachmentRepo.conversationHasImages = async () => false;
 attachmentRepo.addUserMessage = async () => { messageWrites++; return { message_id: 1 }; };

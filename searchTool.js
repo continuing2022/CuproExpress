@@ -20,7 +20,8 @@ function normalizeResults(payload) {
   return [];
 }
 
-async function retrieveContext({ query }) {
+async function retrieveContext({ query, signal }) {
+  signal?.throwIfAborted();
   const apiKey = getBochaApiKey();
   const startedAt = Date.now();
   if (!apiKey) {
@@ -40,12 +41,15 @@ async function retrieveContext({ query }) {
     { query, count: 5 },
     {
       timeout: 15000,
+      signal,
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${apiKey}`,
       },
     },
   );
+
+  signal?.throwIfAborted();
 
   const results = normalizeResults(response.data);
   const contextText = results

@@ -94,6 +94,7 @@ repo.forMessages = async (ids) => [...records.values()].filter(item => ids.inclu
 storage.get = async key => objects.get(key);
 service.ensureConversation = async () => ({ ok: true, conversationId: "test-conversation" });
 service.addAssistantMessage = async () => ({ message_id: 99 });
+service.updateAssistantMessage = async () => ({});
 conversationRepo.assertConversationOwner = async (userId) => userId === 1 ? { ok: true } : { ok: false, status: 403, error: "forbidden" };
 conversationRepo.getMessages = async () => [{ message_id: 1, role: "user", content: "" }];
 conversationRepo.countMessagesAfter = async () => 0;
