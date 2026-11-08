@@ -36,13 +36,23 @@ test("RAG timeout covers response body and retry waits respect cancellation", as
 test("web search forwards the request signal to Axios", async () => {
   const axios = require("axios");
   const original = axios.post, key = process.env.BOCHA_API_KEY;
-  process.env.BOCHA_API_KEY = "test-search-key";
+  process.env.BOCHA_API_KEY = "platform-search-key";
   const controller = new AbortController();
   axios.post = async (_, __, options) => {
     assert.equal(options.signal, controller.signal);
+    assert.equal(options.headers.Authorization, "Bearer test-search-key");
+    assert.equal(options.maxRedirects, 0);
     controller.abort(abortError());
     return abortable(new Promise(() => {}), options.signal);
   };
-  try { await assert.rejects(require("../searchTool").retrieveContext({ query: "copper", signal: controller.signal })); }
+  try {
+    const { retrieveContext } = require("../searchTool");
+    const missing = await retrieveContext({ query: "copper" });
+    assert.equal(missing.meta.reason, "missing_bocha_api_key");
+    await assert.rejects(
+      withCredentials({ bocha: "test-search-key" }, () => retrieveContext({ query: "copper", signal: controller.signal })),
+      { name: "AbortError" },
+    );
+  }
   finally { axios.post = original; if (key === undefined) delete process.env.BOCHA_API_KEY; else process.env.BOCHA_API_KEY = key; }
 });

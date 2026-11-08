@@ -2,14 +2,14 @@ const { AsyncLocalStorage } = require("node:async_hooks");
 const { randomBytes, createCipheriv, createDecipheriv } = require("node:crypto");
 
 const credentials = new AsyncLocalStorage();
-const PROVIDERS = Object.freeze({ dashscope: "阿里云百炼", deepseek: "DeepSeek" });
+const PROVIDERS = Object.freeze({ dashscope: "阿里云百炼", deepseek: "DeepSeek", bocha: "博查联网搜索" });
 
 function credentialError(message, statusCode = 400, code = "INVALID_API_KEY") {
   return Object.assign(new Error(message), { statusCode, code });
 }
 
 function assertProvider(provider) {
-  if (!Object.hasOwn(PROVIDERS, provider)) throw credentialError("仅支持阿里云百炼和 DeepSeek", 400, "UNSUPPORTED_PROVIDER");
+  if (!Object.hasOwn(PROVIDERS, provider)) throw credentialError("仅支持阿里云百炼、DeepSeek 和博查", 400, "UNSUPPORTED_PROVIDER");
   return provider;
 }
 

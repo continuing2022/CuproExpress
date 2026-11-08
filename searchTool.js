@@ -1,11 +1,8 @@
 const axios = require("axios");
+const { getRequestApiKey } = require("./services/userCredentials");
 
 const BOCHA_SEARCH_URL =
   process.env.BOCHA_SEARCH_URL || "https://api.bochaai.com/v1/web-search";
-
-function getBochaApiKey() {
-  return (process.env.BOCHA_API_KEY || "").trim();
-}
 
 function normalizeResults(payload) {
   if (Array.isArray(payload?.results)) return payload.results;
@@ -22,7 +19,7 @@ function normalizeResults(payload) {
 
 async function retrieveContext({ query, signal }) {
   signal?.throwIfAborted();
-  const apiKey = getBochaApiKey();
+  const apiKey = getRequestApiKey("bocha", false);
   const startedAt = Date.now();
   if (!apiKey) {
     return {
@@ -31,6 +28,7 @@ async function retrieveContext({ query, signal }) {
       meta: {
         fallbackFrom: "web_search",
         reason: "missing_bocha_api_key",
+        message: "请在「模型服务设置」中配置个人博查 API Key 以使用联网搜索。",
         searchLatencyMs: Date.now() - startedAt,
       },
     };
@@ -41,6 +39,7 @@ async function retrieveContext({ query, signal }) {
     { query, count: 5 },
     {
       timeout: 15000,
+      maxRedirects: 0,
       signal,
       headers: {
         "Content-Type": "application/json",
@@ -73,5 +72,4 @@ async function retrieveContext({ query, signal }) {
 
 module.exports = {
   retrieveContext,
-  getBochaApiKey,
 };

@@ -73,7 +73,6 @@ REFRESH_SECRET=change_me_refresh_secret
 
 USER_API_KEY_ENCRYPTION_KEY=replace_with_64_hex_characters
 
-BOCHA_API_KEY=
 BOCHA_SEARCH_URL=https://api.bochaai.com/v1/web-search
 
 RAG_SERVICE_URL=http://localhost:8001/rag/retrieve
@@ -203,13 +202,13 @@ SSE 写入经过单一队列：`res.write()` 返回 false 时等待 `drain`，Ag
    ```
 
 2. 重启后端，首次数据库初始化会自动创建 `user_api_keys` 表，已有用户不需要迁移账号。
-3. 用户登录后，通过个人菜单或聊天框下方的“模型服务设置”分别填写自己的百炼、DeepSeek Key。保存仅做格式检查，服务商的有效性、权限与余额在实际调用时判断。
+3. 用户登录后，通过个人菜单或聊天框下方的“模型服务设置”分别填写自己的百炼、DeepSeek 或博查 Key。保存仅做格式检查，服务商的有效性、权限与余额在实际调用时判断。
 4. 生产环境通过 HTTPS 提供前后端。Key 不保存到浏览器持久存储、不写入 JWT；AES-256-GCM 密文与用户 ID、服务商绑定，只有该账号可操作，管理员没有读取他人 Key 的接口。加密主密钥丢失或被替换后，用户必须重新填写 Key。
 
 设置接口（均需登录，身份来自 JWT，不接受请求体中的用户 ID）：
 
-- `GET /model-settings`：仅返回两种服务商的配置状态和 Key 尾号。
-- `PUT /model-settings/:provider`：保存/更换 `{ "apiKey": "..." }`，provider 为 `dashscope` 或 `deepseek`。
+- `GET /model-settings`：仅返回三个服务的配置状态和 Key 尾号。
+- `PUT /model-settings/:provider`：保存/更换 `{ "apiKey": "..." }`，provider 为 `dashscope`、`deepseek` 或 `bocha`。
 - `DELETE /model-settings/:provider`：删除当前用户对应 Key。
 
 ### 知识库与其他服务费用
@@ -218,7 +217,7 @@ RAG 查询向量使用当前用户的百炼 Key，通过请求头传递给本机
 
 索引加载不调用付费模型。没有可用索引或知识库内容发生变化时，需要运维显式向本机 `POST /rag/rebuild`，使用 `X-Dashscope-Api-Key` 请求头提供用于本次构建的百炼 Key，构建费用由该 Key 对应账户承担。用户聊天不会自动触发全库向量化。Python `/rag/retrieve`、`/rag/stream` 也必须提供此请求头；未提供时不会使用任何平台 Key。
 
-联网搜索仍由平台 `BOCHA_API_KEY` 提供，附件存储仍使用平台 OSS 配置；它们是独立基础服务，不属于本次两种模型 Key 设置。
+联网搜索使用当前用户的博查 Key。未配置时提示用户前往模型服务设置，旧的 `BOCHA_API_KEY` 环境变量不再用于联网搜索。附件存储使用平台 OSS 配置。
 
 验证用户凭据：运行 `npm test`；安装 Python RAG 依赖及 `httpx` 后，运行 `.venv/Scripts/python -B -m unittest discover -s tests -p test_rag_credentials.py`。测试使用模拟模型与临时索引，不调用付费 API。数据库接口在测试中模拟，部署时还需验证真实 MySQL 建表和实际服务商调用。
 
