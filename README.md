@@ -241,6 +241,11 @@ RAG 查询向量使用当前用户的百炼 Key，通过请求头传递给本机
 | `SMTP_PORT` / `SMTP_SECURE` | `587` / `false` | 587 使用 STARTTLS；465 配置 `true` 使用隐式 TLS |
 | `SMTP_USER` / `SMTP_PASSWORD` | 无 | SMTP 登录凭据，依服务商要求配置 |
 
+Agent checkpoint 缺失时，后端用已验证的对话摘要和摘要之后最近的历史消息恢复上下文。没有可信摘要时，恢复最近的原文。恢复查询排除本轮提问及未完成的助手回答。摘要模型接收本次压缩的完整消息前缀，调用失败时保留压缩前的上下文。
+
+启动时会为 `conversation_states` 增加 `summary_boundary_verified`，已有摘要及水位保留，旧水位默认未经验证。部署需要数据库账号具备 `ALTER` 权限。回退到旧后端时可以保留该列。如果旧后端在回退期间提供过服务，重新升级前应停止写入并把该列的值重置为 `FALSE`，让新版本重新建立可信水位。
+
+
 ## 密码找回与会话撤销
 
 配置参考 [password-reset.env.example](./password-reset.env.example)。开发测试显式设置 `MAIL_TRANSPORT=json` 后，邮件写入后端 `.local-mail/`，打开 JSON 的 `text` 中的链接即可走完整前端流程；该目录已忽略，不应提交或通过静态服务器公开，测试后可删除。生产环境强制 SMTP 和 HTTPS 重置入口，缺少配置时所有有效邮箱请求均返回 503；旧的 `ALLOW_INSECURE_PASSWORD_RESET` 已移除，不再允许直接凭邮箱改密。

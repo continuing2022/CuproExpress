@@ -5,7 +5,7 @@ async function getConversationState(conversationId) {
   const pool = await getPool();
   const [rows] = await pool.execute(
     `SELECT conversation_id, running_summary, summary_version,
-            last_summarized_message_id, last_summary_at, memory_facts_json,
+            last_summarized_message_id, summary_boundary_verified, last_summary_at, memory_facts_json,
             updated_at
        FROM conversation_states
       WHERE conversation_id = ?`,
@@ -38,36 +38,24 @@ async function ensureConversationState(conversationId) {
   return getConversationState(conversationId);
 }
 
-async function upsertConversationState({
+async function updateConversationSummary({
   conversationId,
   runningSummary,
   summaryVersion,
   lastSummarizedMessageId,
-  memoryFacts,
 }) {
   await ready;
   const pool = await getPool();
-  await pool.execute(
-    `INSERT INTO conversation_states
-      (conversation_id, running_summary, summary_version,
-       last_summarized_message_id, last_summary_at, memory_facts_json)
-     VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, CAST(? AS JSON))
-     ON DUPLICATE KEY UPDATE
-       running_summary = VALUES(running_summary),
-       summary_version = VALUES(summary_version),
-       last_summarized_message_id = VALUES(last_summarized_message_id),
-       last_summary_at = VALUES(last_summary_at),
-       memory_facts_json = VALUES(memory_facts_json)`,
-    [
-      conversationId,
-      runningSummary || "",
-      Number(summaryVersion) || 0,
-      Number(lastSummarizedMessageId) || 0,
-      JSON.stringify(Array.isArray(memoryFacts) ? memoryFacts : []),
-    ],
+  const [result] = await pool.execute(
+    `UPDATE conversation_states
+        SET running_summary = ?, summary_version = summary_version + 1,
+            last_summarized_message_id = ?, summary_boundary_verified = TRUE,
+            last_summary_at = CURRENT_TIMESTAMP
+      WHERE conversation_id = ? AND summary_version = ?
+        AND (summary_boundary_verified = FALSE OR last_summarized_message_id <= ?)`,
+    [runningSummary, lastSummarizedMessageId, conversationId, summaryVersion, lastSummarizedMessageId],
   );
-
-  return getConversationState(conversationId);
+  return result.affectedRows === 1;
 }
 
 function normalizeJsonField(value) {
@@ -87,5 +75,5 @@ function normalizeJsonField(value) {
 module.exports = {
   getConversationState,
   ensureConversationState,
-  upsertConversationState,
+  updateConversationSummary,
 };

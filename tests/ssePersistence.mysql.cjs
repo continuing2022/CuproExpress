@@ -29,6 +29,29 @@ let admin, pool;
       assert.equal((await conversationRepo.getMessagesAfter(id, message.message_id - 1))[0].status, status);
     }
     assert.equal((await conversationRepo.getMessages(id)).length, 5);
+    const history = await conversationRepo.getMessages(id);
+    const recovered = await conversationRepo.getMessagesAfter(id, 0, {
+      beforeMessageId: history.at(-1).message_id,
+      limit: 2,
+      forRecovery: true,
+    });
+    assert.deepEqual(recovered.map(row => row.message_id), history.slice(0, 2).map(row => row.message_id));
+    const latest = await conversationRepo.getMessagesAfter(id, 0, { limit: 1, forRecovery: true });
+    assert.equal(latest[0].message_id, history[1].message_id);
+    const { conversationStateRepo } = require("../repositories");
+    assert.equal((await conversationStateRepo.ensureConversationState(id)).summary_boundary_verified, 0);
+    const update = {
+      conversationId: id,
+      runningSummary: "verified",
+      summaryVersion: 0,
+      lastSummarizedMessageId: history[0].message_id,
+    };
+    assert.equal(await conversationStateRepo.updateConversationSummary(update), true);
+    assert.equal(await conversationStateRepo.updateConversationSummary(update), false);
+    const state = await conversationStateRepo.getConversationState(id);
+    assert.equal(state.summary_boundary_verified, 1);
+    assert.equal(state.last_summarized_message_id, history[0].message_id);
+    console.log("MySQL history recovery passed: eligibility before LIMIT, ordering, verified boundary and stale update rejection.");
     console.log("MySQL SSE persistence passed: status migration/default, streaming placeholder, all terminal states, partial content and history queries.");
   } finally {
     await pool?.end();

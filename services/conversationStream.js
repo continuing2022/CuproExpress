@@ -34,7 +34,8 @@ async function runConversationStream({ req, res, scope, userKeys, conversationId
     });
     const result = await abortable(withCredentials(userKeys, () => orchestrator.run({
       conversationId, content, model, networkConfig,
-      pendingMessageId: userMessage.message_id, observer, signal,
+      pendingMessageId: userMessage.message_id, assistantMessageId: assistant.message_id,
+      observer, signal,
       async onRetrieved(retrieval) {
         if (signal.aborted) return;
         const meta = retrieval.meta || {};

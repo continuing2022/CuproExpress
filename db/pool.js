@@ -146,6 +146,7 @@ async function ensureTables() {
       running_summary LONGTEXT NULL,
       summary_version INT NOT NULL DEFAULT 0,
       last_summarized_message_id BIGINT NOT NULL DEFAULT 0,
+      summary_boundary_verified BOOLEAN NOT NULL DEFAULT FALSE,
       last_summary_at TIMESTAMP NULL DEFAULT NULL,
       memory_facts_json JSON NULL,
       updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -155,6 +156,19 @@ async function ensureTables() {
         ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
   `);
+
+  const [summaryBoundaryColumns] = await pool.query(
+    "SHOW COLUMNS FROM conversation_states LIKE 'summary_boundary_verified'",
+  );
+  if (!summaryBoundaryColumns.length) {
+    try {
+      await pool.query(
+        "ALTER TABLE conversation_states ADD COLUMN summary_boundary_verified BOOLEAN NOT NULL DEFAULT FALSE",
+      );
+    } catch (error) {
+      if (error.code !== "ER_DUP_FIELDNAME") throw error;
+    }
+  }
 
   await pool.query(`
     CREATE TABLE IF NOT EXISTS refresh_tokens (

@@ -199,8 +199,11 @@ async function getMessagesAfter(
     defaultValue: 0,
   });
 
+  const { forRecovery = false } = options;
   const params = [conversationId, safeAfterMessageId];
   const where = ["conversation_id = ?", "message_id > ?"];
+
+  if (forRecovery) where.push("(role <> 'assistant' OR status = 'done')");
 
   const beforeMessageId = toFiniteInteger(options.beforeMessageId, {
     min: 1,
@@ -218,15 +221,16 @@ async function getMessagesAfter(
   });
   const limitSql = limit ? ` LIMIT ${limit}` : "";
 
+  const order = forRecovery ? "message_id DESC" : "created_at ASC, message_id ASC";
   const [rows] = await pool.execute(
     `SELECT message_id, role, content, status, created_at
        FROM messages
       WHERE ${where.join(" AND ")}
-      ORDER BY created_at ASC, message_id ASC${limitSql}`,
+      ORDER BY ${order}${limitSql}`,
     params,
   );
 
-  return rows;
+  return forRecovery ? rows.reverse() : rows;
 }
 
 async function countMessagesAfter(

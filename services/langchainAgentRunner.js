@@ -50,7 +50,7 @@ function createSummaryMiddleware(
   observer,
   signal,
 ) {
-  return summarizationMiddleware({
+  const middleware = summarizationMiddleware({
     model: createInstrumentedSummaryModel(summaryModelName, observer, {
       triggerTokens,
       keepMessages,
@@ -60,7 +60,40 @@ function createSummaryMiddleware(
     keep: { messages: keepMessages },
     summaryPrefix: SUMMARY_PREFIX,
     summaryPrompt: DEFAULT_SUMMARY_PROMPT,
+    // A verified boundary requires the whole compacted prefix in the prompt.
+    trimTokensToSummarize: Number.MAX_SAFE_INTEGER,
   });
+  const summarize = middleware.beforeModel;
+  return {
+    ...middleware,
+    async beforeModel(state, runtime) {
+      const update = await summarize(state, runtime);
+      signal?.throwIfAborted();
+      if (!update?.messages) return update;
+
+      const [, summary, ...retained] = update.messages;
+      const text = stripSummaryPrefix(normalizeMessageContent(summary.content));
+      if (!text || /^(Error generating summary:|Previous conversation was too long to summarize\.|No previous conversation history\.)/i.test(text)) {
+        return;
+      }
+
+      const retainedIds = new Set(retained.map(message => message.id));
+      const coveredIds = state.messages
+        .filter(message => !retainedIds.has(message.id))
+        .map(message => Math.max(
+          message.additional_kwargs?.history_message_id || 0,
+          message.additional_kwargs?.summary_boundary || 0,
+        ));
+      const firstRetainedId = Math.min(...retained
+        .map(message => message.additional_kwargs?.history_message_id)
+        .filter(id => id > 0));
+      summary.additional_kwargs.summary_boundary = Math.max(
+        0,
+        ...coveredIds.filter(id => id < firstRetainedId),
+      );
+      return update;
+    },
+  };
 }
 // 创建配置化的Agent实例
 function createConfiguredAgent({
@@ -71,6 +104,7 @@ function createConfiguredAgent({
   keepMessages,
   observer,
   tools = [],
+  assistantMessageId,
   signal,
 }) {
   return createAgent({
@@ -90,6 +124,20 @@ function createConfiguredAgent({
         observer,
         signal,
       ),
+      {
+        name: "HistoryMessageTracking",
+        afterAgent(state) {
+          const message = state.messages.at(-1);
+          if (!assistantMessageId || !AIMessage.isInstance(message) || !message.id) return;
+          return { messages: [new AIMessage({
+            ...message,
+            additional_kwargs: {
+              ...message.additional_kwargs,
+              history_message_id: Number(assistantMessageId),
+            },
+          })] };
+        },
+      },
     ],
   });
 }
@@ -100,6 +148,7 @@ async function executeRun({
   model,
   networkConfig,
   pendingMessageId,
+  assistantMessageId,
   observer,
   onRetrieved,
   onChunk,
@@ -134,7 +183,12 @@ async function executeRun({
   const state =
     await conversationStateRepo.ensureConversationState(conversationId);
   signal?.throwIfAborted();
-  const persistedSummary = String(state?.running_summary || "").trim();
+  const summaryBoundary = state?.summary_boundary_verified
+    ? Number(state.last_summarized_message_id) || 0
+    : 0;
+  const persistedSummary = summaryBoundary > 0
+    ? String(state?.running_summary || "").trim()
+    : "";
   const summaryModelName = resolveSummaryModelName(model);
   const networkSearchEnabled = Boolean(networkConfig?.search);
   // 创建种子agent 用于恢复对话状态和记忆，并提供给工具使用
@@ -155,6 +209,7 @@ async function executeRun({
     conversationId,
     pendingMessageId,
     persistedSummary,
+    summaryBoundary,
     historyLimit,
   });
   // 线程的状态
@@ -194,6 +249,7 @@ async function executeRun({
     keepMessages: summaryKeepMessages,
     observer,
     tools,
+    assistantMessageId,
     signal,
   });
 
@@ -202,7 +258,10 @@ async function executeRun({
   let usage = null;
 
   const stream = await runAgent.stream(
-    { messages: [{ role: "user", content }] },
+    { messages: [new HumanMessage({
+      content,
+      additional_kwargs: { history_message_id: Number(pendingMessageId) || 0 },
+    })] },
     {
       ...runConfig,
       streamMode: ["messages", "values"],
@@ -259,9 +318,8 @@ async function executeRun({
   signal?.throwIfAborted();
   const summaryRefreshed = await persistSummary({
     conversationId,
-    pendingMessageId,
     currentState: state,
-    summaryText,
+    summary: summaryPayload,
   });
   const threadMessagesAfter = getStateMessages(latestState);
   const finalRecentCount = buildToolHistoryFromThreadMessages(
@@ -595,11 +653,12 @@ function buildSystemPrompt({ networkSearchEnabled }) {
   ].join("\n");
 }
 
-function buildSummaryMessage(summaryText) {
+function buildSummaryMessage(summaryText, summaryBoundary) {
   return new HumanMessage({
     content: `${SUMMARY_PREFIX}\n\n${summaryText}`,
     additional_kwargs: {
       lc_source: "summarization",
+      summary_boundary: summaryBoundary,
     },
   });
 }
@@ -610,6 +669,7 @@ async function ensureThreadSeeded({
   conversationId,
   pendingMessageId,
   persistedSummary,
+  summaryBoundary,
   historyLimit,
 }) {
   const existingState = await safeGetThreadState(agent, runConfig);
@@ -618,25 +678,23 @@ async function ensureThreadSeeded({
     return;
   }
 
-  const hasPending = Number.isFinite(Number(pendingMessageId));
-  const historicalMessages = hasPending
-    ? await conversationRepo.getMessagesAfter(conversationId, 0, {
-        beforeMessageId: Number(pendingMessageId),
-        limit: historyLimit,
-      })
-    : await conversationRepo.getMessages(conversationId, historyLimit);
+  const historicalMessages = await conversationRepo.getMessagesAfter(
+    conversationId,
+    persistedSummary ? summaryBoundary : 0,
+    { beforeMessageId: pendingMessageId, limit: historyLimit, forRecovery: true },
+  );
 
   const seedMessages = [];
   if (persistedSummary) {
-    seedMessages.push(buildSummaryMessage(persistedSummary));
+    seedMessages.push(buildSummaryMessage(persistedSummary, summaryBoundary));
   }
   for (const message of historicalMessages) {
     runConfig.signal?.throwIfAborted();
-    if (message.role === "assistant" && message.status && message.status !== "done") continue;
-    seedMessages.push({
-      role: message.role,
+    const Message = message.role === "assistant" ? AIMessage : HumanMessage;
+    seedMessages.push(new Message({
       content: buildMessageContent(message.content, await attachmentRepo.forMessages([message.message_id], true)),
-    });
+      additional_kwargs: { history_message_id: Number(message.message_id) },
+    }));
   }
 
   if (seedMessages.length === 0) {
@@ -647,31 +705,20 @@ async function ensureThreadSeeded({
   await agent.updateState(runConfig, { messages: seedMessages });
 }
 
-async function persistSummary({
-  conversationId,
-  pendingMessageId,
-  currentState,
-  summaryText,
-}) {
-  const nextSummary = String(summaryText || "").trim();
-  if (!nextSummary) return false;
+async function persistSummary({ conversationId, currentState, summary }) {
+  if (!summary?.summaryText || !summary.boundary) return false;
+  if (currentState?.summary_boundary_verified &&
+      currentState.running_summary?.trim() === summary.summaryText &&
+      Number(currentState.last_summarized_message_id) === summary.boundary) {
+    return false;
+  }
 
-  const previousSummary = String(currentState?.running_summary || "").trim();
-  if (previousSummary === nextSummary) return false;
-
-  await conversationStateRepo.upsertConversationState({
+  return conversationStateRepo.updateConversationSummary({
     conversationId,
-    runningSummary: nextSummary,
-    summaryVersion: (Number(currentState?.summary_version) || 0) + 1,
-    lastSummarizedMessageId: Number.isFinite(Number(pendingMessageId))
-      ? Number(pendingMessageId)
-      : Number(currentState?.last_summarized_message_id) || 0,
-    memoryFacts: Array.isArray(currentState?.memory_facts_json)
-      ? currentState.memory_facts_json
-      : [],
+    runningSummary: summary.summaryText,
+    summaryVersion: Number(currentState?.summary_version) || 0,
+    lastSummarizedMessageId: summary.boundary,
   });
-
-  return true;
 }
 
 function extractLatestSummaryMessage(messages = []) {
@@ -680,13 +727,11 @@ function extractLatestSummaryMessage(messages = []) {
     const content = normalizeMessageContent(message?.content).trim();
     if (!content) continue;
 
-    const isSummaryMessage =
-      message?.additional_kwargs?.lc_source === "summarization" ||
-      content.startsWith(SUMMARY_PREFIX);
+    const isSummaryMessage = message?.additional_kwargs?.lc_source === "summarization";
 
     if (!isSummaryMessage) continue;
     return {
-      raw: content,
+      boundary: message.additional_kwargs.summary_boundary,
       summaryText: stripSummaryPrefix(content),
     };
   }
