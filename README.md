@@ -188,7 +188,7 @@ SSE 写入经过单一队列：`res.write()` 返回 false 时等待 `drain`，Ag
 
 | 模型 | 服务商 | 凭据来源 |
 | --- | --- | --- |
-| `qwen3-vl-plus`、`qwen-plus`、`qwen-math-turbo`、`qwen-flash`、`qwen-max` | 阿里云百炼 | 当前用户保存的百炼 Key |
+| `qwen3-vl-plus`、`qwen-plus`、`qwen-flash` | 阿里云百炼 | 当前用户保存的百炼 Key |
 | `deepseek-v4-pro` | DeepSeek | 当前用户保存的 DeepSeek Key |
 
 仅支持以上两个服务商。旧的 `DASHSCOPE_API_KEY`、`DEEPSEEK_API_KEY`、`KIMI_API_KEY` 环境变量不再用于模型调用。没有个人 Key 时会提示配置，不会回退到平台 Key；Key 失效或额度不足也不会回退。摘要限制为与主模型相同的服务商。

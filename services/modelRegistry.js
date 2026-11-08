@@ -24,19 +24,7 @@ const MODEL_REGISTRY = {
     contextWindow: 131072,
     preferredOutputTokens: 4000,
   },
-  "qwen-math-turbo": {
-    provider: "dashscope",
-    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
-    contextWindow: 32768,
-    preferredOutputTokens: 4000,
-  },
   "qwen-flash": {
-    provider: "dashscope",
-    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
-    contextWindow: 32768,
-    preferredOutputTokens: 4000,
-  },
-  "qwen-max": {
     provider: "dashscope",
     baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
     contextWindow: 32768,
